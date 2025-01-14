@@ -6,8 +6,12 @@ import css from './App.module.css'
 
 const App = () => {
   const { toggleSiteStatus, removeSite, sites } = useContext(DataMessageContext)
+  // const [sortedSites, setSortedSites] = useState<ISiteItemList>([])
 
-  useEffect(() => {}, [sites])
+  useEffect(() => {
+    // const sorted = sites.sort(siteSorter)
+    // setSortedSites(sorted)
+  }, [sites])
   return (
     <div className={css.container}>
       {sites.map((site) => (

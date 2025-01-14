@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useContext, useEffect, useState } from 'react'
 import type { ISiteItem, IListViewStyle } from '@/models/base'
 import { DataMessageContext } from '@/contexts/DataMessageContextProvider'
@@ -16,6 +16,7 @@ const App = () => {
   const [search, setSearch] = useState<string>('')
   const [filteredSites, setFilteredSites] = useState<ISiteItem[]>([])
 
+  const dragItem = useRef(null)
   const createSite = (domain: string) => {
     addSite({ domain, status: 'none' })
   }
@@ -25,11 +26,10 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (search.trim() === '') {
-      setFilteredSites(sites)
-      return
+    let filtered = sites
+    if (search.trim() !== '') {
+      filtered = sites.filter((site) => site.domain.includes(search))
     }
-    const filtered = sites.filter((site) => site.domain.includes(search))
     setFilteredSites(filtered)
   }, [search, sites])
 
