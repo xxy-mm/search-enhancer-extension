@@ -5,6 +5,19 @@
   justify-content: flex-start;
   align-content: start;
   font-size: 14px;
-  padding: 8px;
+  padding: 6px;
   text-align: center;
+  border-radius: 10px;
+  max-height: 14px;
+  overflow: hidden;
+  background-color: transparent;
+  transition: all 0.2s ease-out;
+}
+
+.container:hover {
+  background-color: rgb(251, 188, 4);
+  max-height: 200px;
+  overflow: scroll;
+  transition: all 0.15s ease-in;
+
 }

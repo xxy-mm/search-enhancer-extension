@@ -3,30 +3,48 @@ export type ISiteItem = {
   domain: string
   status: SiteItemStatus
 }
+export type ISiteItemList = ISiteItem[]
 
 export type SiteItemStatus = 'none' | 'include' | 'exclude'
 
-export type IDataAction = 'C' | 'U' | 'R' | 'D'
+export enum IDataAction {
+  CREATE = 'C',
+  UPDATE = 'U',
+  QUERY = 'R',
+  DELETE = 'D',
+  UPDATED = 'updated',
+}
 
+// messages
 export type IMessage =
   | {
-      type: 'R'
+      type: IDataAction.QUERY
     }
   | {
-      type: Exclude<IDataAction, 'R'>
+      type: IDataAction.CREATE | IDataAction.DELETE | IDataAction.UPDATE
       data: ISiteItem
     }
+  | {
+      type: IDataAction.UPDATED
+      data: ISiteItemList
+    }
 
-export const readMessage = (): IMessage => ({ type: 'R' })
-export const updateMessage = (data: ISiteItem): IMessage => ({
-  type: 'U',
+// message creator
+export const queryMessage = (): IMessage => ({ type: IDataAction.QUERY })
+export const toggleMessage = (data: ISiteItem): IMessage => ({
+  type: IDataAction.UPDATE,
   data,
 })
-export const deleteMessage = (data: ISiteItem): IMessage => ({
-  type: 'D',
+export const removeMessage = (data: ISiteItem): IMessage => ({
+  type: IDataAction.DELETE,
   data,
 })
-export const createMessage = (data: ISiteItem): IMessage => ({
-  type: 'C',
+export const addMessage = (data: ISiteItem): IMessage => ({
+  type: IDataAction.CREATE,
+  data,
+})
+
+export const notifyUpdate = (data: ISiteItemList): IMessage => ({
+  type: IDataAction.UPDATED,
   data,
 })

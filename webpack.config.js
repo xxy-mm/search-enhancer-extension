@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
@@ -18,6 +19,9 @@ module.exports = {
       title: 'Search Enhancer',
       filename: 'popup.html',
       chunks: ['popup'],
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
     }),
   ],
   output: {

@@ -48,7 +48,6 @@
 .site-list {
   display: flex;
   padding: 16px;
-  ;
   height: 322px;
   overflow: scroll;
   flex-wrap: wrap;

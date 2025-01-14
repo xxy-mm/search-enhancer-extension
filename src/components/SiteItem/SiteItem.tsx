@@ -8,10 +8,12 @@ type SiteItemProps = {
   item: ISiteItem
   onRemove: (siteItem: ISiteItem) => void
   onToggle: (siteItem: ISiteItem) => void
+  size?: 'sm'
 }
 
-const SiteItem = ({ item, onRemove, onToggle }: SiteItemProps) => {
-  const remove = () => {
+const SiteItem = ({ item, onRemove, onToggle, size }: SiteItemProps) => {
+  const remove: React.MouseEventHandler = (e) => {
+    e.stopPropagation()
     onRemove(item)
   }
 
@@ -21,7 +23,9 @@ const SiteItem = ({ item, onRemove, onToggle }: SiteItemProps) => {
 
   return (
     <div
-      className={`${css.siteListItem} ${css[item.status] || ''}`}
+      className={`${css.siteListItem} ${size === 'sm' ? css.sm : ''} ${
+        css[item.status] || ''
+      }`}
       onClick={toggleStatus}>
       {item.domain}
       <img

@@ -1,29 +1,22 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import { readMessage, type ISiteItem } from '@/models/base'
+import React, { useContext, useEffect } from 'react'
+import { DataMessageContext } from '@/contexts/DataMessageContextProvider'
 import SiteItem from '@/components/SiteItem/SiteItem'
 
 import css from './App.module.css'
 
-interface IApp {}
+const App = () => {
+  const { toggleSiteStatus, removeSite, sites } = useContext(DataMessageContext)
 
-const App = ({}: IApp) => {
-  const [siteItems, setSiteItems] = useState<ISiteItem[]>([])
-
-  useEffect(() => {
-    browser.runtime
-      .sendMessage(readMessage())
-      .then((list) => setSiteItems(list))
-  }, [])
-
+  useEffect(() => {}, [sites])
   return (
     <div className={css.container}>
-      {siteItems.map((siteItem) => (
+      {sites.map((site) => (
         <SiteItem
-          item={siteItem}
-          key={siteItem.domain}
-          onRemove={() => {}}
-          onToggle={() => {}}
+          item={site}
+          key={site.domain}
+          onRemove={removeSite}
+          onToggle={toggleSiteStatus}
+          size='sm'
         />
       ))}
     </div>

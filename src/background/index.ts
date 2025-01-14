@@ -1,19 +1,46 @@
-import { ExtensionStorageManagerImpl } from '@/models/extensionStorageManagerImpl'
-import type { IMessage } from '@/models/base'
+import { StorageManagerImpl } from '@/models/storageManagerImpl'
+import {
+  IDataAction,
+  notifyUpdate,
+  type IMessage,
+  type ISiteItemList,
+} from '@/models/base'
 
-const manager = new ExtensionStorageManagerImpl()
+const manager = new StorageManagerImpl()
 
-browser.runtime.onMessage.addListener((message: IMessage) => {
+browser.runtime.onMessage.addListener(async (message: IMessage) => {
   switch (message.type) {
-    case 'C':
-      manager.addSite(message.data.domain)
+    case IDataAction.QUERY:
       break
-    case 'D':
-      manager.removeSite(message.data.domain)
+    case IDataAction.CREATE:
+      await manager.addSite(message.data)
       break
-    case 'U':
-      manager.toggleSiteStatus(message.data.domain)
+    case IDataAction.DELETE:
+      await manager.removeSite(message.data)
       break
+    case IDataAction.UPDATE:
+      await manager.toggleSiteStatus(message.data)
+      break
+    default:
+      throw `Unknown message: ${message}`
   }
-  return manager.getSiteList()
+  const data = await manager.getSiteList()
+  await notify(data)
 })
+
+async function notify(data: ISiteItemList) {
+  browser.runtime.sendMessage(notifyUpdate(data))
+  notifyTabs(data)
+}
+
+async function notifyTabs(data: ISiteItemList) {
+  const tabs = await browser.tabs.query({
+    currentWindow: true,
+    active: true,
+  })
+  const id = tabs[0]?.id
+  if (id === undefined) return
+  browser.tabs.sendMessage(id, notifyUpdate(data)).then(() => {
+    console.log('send data', data)
+  })
+}

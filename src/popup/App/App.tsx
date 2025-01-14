@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import type { ISiteItem, IListViewStyle } from '@/models/base'
-import { PopupContext } from '@/contexts/PopupContext'
+import { DataMessageContext } from '@/contexts/DataMessageContextProvider'
 import SiteListViewSwitcher from '@/components/SiteListViewSwitcher/SiteListViewSwitcher'
 import SiteItem from '@/components/SiteItem/SiteItem'
 import IconInput from '@/components/IconInput/IconInput'
@@ -11,11 +11,14 @@ import css from './App.module.css'
 import addIcon from './add.svg'
 
 const App = () => {
-  const { addSite, siteItems, removeSite, toggleSiteStatus } =
-    useContext(PopupContext)
+  const { addSite, sites, removeSite, toggleSiteStatus } =
+    useContext(DataMessageContext)
   const [search, setSearch] = useState<string>('')
   const [filteredSites, setFilteredSites] = useState<ISiteItem[]>([])
 
+  const createSite = (domain: string) => {
+    addSite({ domain, status: 'none' })
+  }
   const switchListViewStyle = (style: IListViewStyle): void => {
     //todo: switch view style
     console.log('current style:', style)
@@ -23,53 +26,39 @@ const App = () => {
 
   useEffect(() => {
     if (search.trim() === '') {
-      setFilteredSites(siteItems)
+      setFilteredSites(sites)
       return
     }
-    const filtered = siteItems.filter((siteItem) =>
-      siteItem.domain.includes(search)
-    )
+    const filtered = sites.filter((site) => site.domain.includes(search))
     setFilteredSites(filtered)
-  }, [search, siteItems])
+  }, [search, sites])
 
   return (
     <div className={css.container}>
-      {/* header */}
       <h1 className={css.title}>Search Enhancer</h1>
-
-      {/* top action group */}
       <div className={css.actionGroup}>
-        {/* compact/grouped select */}
         <SiteListViewSwitcher onSwitch={switchListViewStyle} />
-        {/* search */}
         <IconInput
           placeholder='Search'
           icon={searchIcon}
           onChange={setSearch}
         />
       </div>
-
-      {/* site list */}
       <div className={css.siteList}>
-        {/* site list item */}
         {filteredSites.map((siteItem) => (
           <SiteItem
             item={siteItem}
             key={siteItem.domain}
-            onRemove={(site) => removeSite(site.domain)}
-            onToggle={(site) => toggleSiteStatus(site.domain)}
+            onRemove={removeSite}
+            onToggle={toggleSiteStatus}
           />
         ))}
       </div>
-
-      {/* bottom action group */}
       <div className={`${css.actionGroup} ${css.flexEnd}`}>
-        {/* input for add site */}
-
         <IconInput
           placeholder='Input the site then press enter'
           icon={addIcon}
-          onEnter={addSite}
+          onEnter={createSite}
         />
       </div>
     </div>
