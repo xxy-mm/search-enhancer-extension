@@ -1,5 +1,6 @@
 import React, { useId } from 'react'
 import { FunctionComponent } from 'react'
+
 import css from './IconInput.module.css'
 
 interface IconInputProps {
@@ -18,7 +19,7 @@ const IconInput: FunctionComponent<IconInputProps> = ({
   const inputId = useId()
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
-    event,
+    event
   ) => {
     if (event.key === 'Enter') {
       const input = event.target as HTMLInputElement
@@ -36,6 +37,7 @@ const IconInput: FunctionComponent<IconInputProps> = ({
   return (
     <div className={css.iconInput}>
       <input
+        className={css.textInput}
         type='text'
         id={inputId}
         placeholder={placeholder}

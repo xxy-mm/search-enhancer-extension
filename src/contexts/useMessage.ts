@@ -8,14 +8,17 @@ import {
   ISiteItemList,
   type IMessage,
   IDataAction,
+  type ISiteFilter,
+  changeFilterMessage,
 } from '@/models/base'
 
 export function useMessage() {
   const [sites, setSites] = useState<ISiteItemList>([])
-
+  const [filters, setFilters] = useState<ISiteFilter[]>([])
   const listener = (message: IMessage) => {
     if (message.type === IDataAction.UPDATED) {
-      setSites(message.data)
+      setSites(message.data.sites)
+      setFilters(message.data.filters)
     }
   }
   const add = (item: ISiteItem) => {
@@ -28,6 +31,10 @@ export function useMessage() {
 
   const toggle = (item: ISiteItem) => {
     browser.runtime.sendMessage(toggleMessage(item))
+  }
+
+  const changeFilter = (filter: ISiteFilter) => {
+    browser.runtime.sendMessage(changeFilterMessage(filter))
   }
 
   useEffect(() => {
@@ -43,6 +50,8 @@ export function useMessage() {
     add,
     remove,
     toggle,
+    changeFilter,
     sites,
+    filters,
   }
 }

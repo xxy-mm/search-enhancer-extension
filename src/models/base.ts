@@ -1,21 +1,48 @@
 export type IListViewStyle = 'grouped' | 'compact'
+
+// site item
 export type ISiteItem = {
   domain: string
-  status: SiteItemStatus
+  status: ISiteItemStatus
 }
 export type ISiteItemList = ISiteItem[]
 
-export type SiteItemStatus = 'none' | 'include' | 'exclude'
-
-export enum IDataAction {
-  CREATE = 'C',
-  UPDATE = 'U',
-  QUERY = 'R',
-  DELETE = 'D',
-  UPDATED = 'updated',
+export type ISiteItemStatus = 'none' | 'include' | 'exclude'
+// filters
+export enum IFilterType {
+  FILE_TYPE,
 }
 
+export type ISiteFilter = {
+  type: IFilterType
+  value: string
+}
+
+// file type filter
+
+export type IFileType = 'all' | 'pdf' | 'doc' | 'xls' | 'ppt'
+export const fileTypeFilterOptions: { label: string; value: IFileType }[] = [
+  { label: 'All', value: 'all' },
+  { label: 'PDF', value: 'pdf' },
+  { label: 'WORD', value: 'doc' },
+  { label: 'EXCEL', value: 'xls' },
+  { label: 'PPT', value: 'ppt' },
+]
+
 // messages
+export enum IDataAction {
+  CREATE = 'create',
+  UPDATE = 'update',
+  QUERY = 'query',
+  DELETE = 'delete',
+  UPDATED = 'updated',
+  UPDATE_FILTER = 'update_filter',
+}
+
+export type IUpdatedData = {
+  sites: ISiteItemList
+  filters: ISiteFilter[]
+}
 export type IMessage =
   | {
       type: IDataAction.QUERY
@@ -26,7 +53,14 @@ export type IMessage =
     }
   | {
       type: IDataAction.UPDATED
-      data: ISiteItemList
+      data: {
+        sites: ISiteItemList
+        filters: ISiteFilter[]
+      }
+    }
+  | {
+      type: IDataAction.UPDATE_FILTER
+      data: ISiteFilter
     }
 
 // message creator
@@ -44,7 +78,12 @@ export const addMessage = (data: ISiteItem): IMessage => ({
   data,
 })
 
-export const notifyUpdate = (data: ISiteItemList): IMessage => ({
+export const notifyUpdate = (data: IUpdatedData): IMessage => ({
   type: IDataAction.UPDATED,
   data,
+})
+
+export const changeFilterMessage = (filter: ISiteFilter): IMessage => ({
+  type: IDataAction.UPDATE_FILTER,
+  data: filter,
 })

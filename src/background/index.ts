@@ -3,7 +3,7 @@ import {
   IDataAction,
   notifyUpdate,
   type IMessage,
-  type ISiteItemList,
+  type IUpdatedData,
 } from '@/models/base'
 
 const manager = new StorageManagerImpl()
@@ -21,19 +21,26 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
     case IDataAction.UPDATE:
       await manager.toggleSiteStatus(message.data)
       break
+    case IDataAction.UPDATE_FILTER:
+      await manager.updateFilter(message.data)
+      break
     default:
       throw `Unknown message: ${message}`
   }
-  const data = await manager.getSiteList()
-  await notify(data)
+  const sites = await manager.getSiteList()
+  const filters = await manager.getSiteFilters()
+  await notify({
+    sites,
+    filters,
+  })
 })
 
-async function notify(data: ISiteItemList) {
+async function notify(data: IUpdatedData) {
   browser.runtime.sendMessage(notifyUpdate(data))
   notifyTabs(data)
 }
 
-async function notifyTabs(data: ISiteItemList) {
+async function notifyTabs(data: IUpdatedData) {
   const tabs = await browser.tabs.query({
     currentWindow: true,
     active: true,

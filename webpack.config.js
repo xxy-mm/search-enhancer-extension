@@ -9,6 +9,7 @@ module.exports = {
     popup: './src/popup/index.tsx',
     content: './src/content/index.tsx',
     background: './src/background/index.ts',
+    demo: './src/main.tsx',
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -19,6 +20,11 @@ module.exports = {
       title: 'Search Enhancer',
       filename: 'popup.html',
       chunks: ['popup'],
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Demo',
+      filename: 'demo.html',
+      chunks: ['demo'],
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),

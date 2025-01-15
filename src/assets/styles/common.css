@@ -1,5 +1,5 @@
 :root {
-    color-scheme: light;
+    color-scheme: light dark;
     --primary-color: #007aff;
     --secondary-color: #ffffff;
     --destructive-color: #ff3b30;
@@ -16,13 +16,8 @@
     --radius: 5px;
     --radius-lg: 10px;
     --font-dark-color: rgba(0, 0, 0, 0.85);
+    --dark-bg: #1f1f1f;
 }
-
-::-webkit-scrollbar {
-    display: none;
-}
-
-
 
 body {
     font-family: system-ui;

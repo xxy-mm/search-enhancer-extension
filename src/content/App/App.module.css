@@ -12,12 +12,27 @@
   overflow: hidden;
   background-color: transparent;
   transition: all 0.2s ease-out;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  background: white;
 }
 
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+
 .container:hover {
-  background-color: rgb(251, 188, 4);
   max-height: 200px;
   overflow: scroll;
   transition: all 0.15s ease-in;
 
+}
+
+@media (prefers-color-scheme: dark) {
+
+  /* Dark Mode styles go here. */
+  .container {
+    background: var(--dark-bg);
+  }
 }

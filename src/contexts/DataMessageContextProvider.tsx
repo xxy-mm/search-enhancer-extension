@@ -9,7 +9,7 @@ export const DataMessageContext = createContext<IDataContext>(
 )
 
 const DataMessageContextProvider = ({ children }: React.PropsWithChildren) => {
-  const { add, remove, toggle, sites } = useMessage()
+  const { add, remove, toggle, sites, changeFilter, filters } = useMessage()
 
   return (
     <DataMessageContext.Provider
@@ -17,7 +17,9 @@ const DataMessageContextProvider = ({ children }: React.PropsWithChildren) => {
         addSite: add,
         removeSite: remove,
         toggleSiteStatus: toggle,
+        changeFilter,
         sites,
+        filters,
       }}>
       {children}
     </DataMessageContext.Provider>

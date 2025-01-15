@@ -54,7 +54,7 @@
 }
 
 .site-list-item .delete-icon:hover {
-  scale: 1.5;
+  scale: 1.3;
 }
 
 @keyframes grow {

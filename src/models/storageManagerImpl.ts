@@ -1,9 +1,9 @@
 import { IStorageManager } from './storageManager.interface'
-import { ISiteItem } from './base'
+import { ISiteItem, type ISiteFilter } from './base'
 
 export class StorageManagerImpl implements IStorageManager {
   private key = 'siteList'
-
+  private filterKey = 'filters'
   addSite = async (site: ISiteItem): Promise<boolean> => {
     const siteList = await this.getSiteList()
     const index = siteList.findIndex((item) => item.domain === site.domain)
@@ -52,5 +52,25 @@ export class StorageManagerImpl implements IStorageManager {
 
     await this.setSiteList(siteList)
     return true
+  }
+
+  setFilters = async (filters: ISiteFilter[]) => {
+    await browser.storage.local.set({ [this.filterKey]: filters })
+  }
+
+  getSiteFilters = async (): Promise<ISiteFilter[]> => {
+    const data = await browser.storage.local.get(this.filterKey)
+    return data.filters || []
+  }
+
+  updateFilter = async (filter: ISiteFilter) => {
+    const filters = await this.getSiteFilters()
+    const found = filters.find((f) => f.type === filter.type)
+    if (found) {
+      found.value = filter.value
+    } else {
+      filters.push(filter)
+    }
+    this.setFilters(filters)
   }
 }

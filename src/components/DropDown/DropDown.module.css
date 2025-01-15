@@ -1,0 +1,27 @@
+.dropdown {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 300;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
+    0 0 0 0.5px var(--shadow-color-light);
+  cursor: pointer;
+  background: var(--primary-color);
+  color: var(--white-color);
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  max-width: 100%;
+  border: none;
+}
+
+.dropdown.sm {
+  font-size: 10px;
+}
+
+.dropdown.inactive {
+  background: unset;
+  color: unset;
+  border: 1px dashed #333;
+}
