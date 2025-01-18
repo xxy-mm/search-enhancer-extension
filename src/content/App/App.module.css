@@ -14,7 +14,9 @@
   transition: all 0.2s ease-out;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background: white;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .container::-webkit-scrollbar {
@@ -26,13 +28,8 @@
   max-height: 200px;
   overflow: scroll;
   transition: all 0.15s ease-in;
+  background-color: rgba(0, 0, 0, 0.1);
 
 }
 
-@media (prefers-color-scheme: dark) {
-
-  /* Dark Mode styles go here. */
-  .container {
-    background: var(--dark-bg);
-  }
-}
+@media (prefers-color-scheme: dark) {}

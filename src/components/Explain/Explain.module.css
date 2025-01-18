@@ -1,0 +1,6 @@
+.Explain-component {
+  display: flex;
+  gap: 10px;
+  padding-left: 4px;
+  justify-content: flex-end;
+}

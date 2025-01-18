@@ -15,6 +15,7 @@
   position: relative;
   max-width: 100%;
   word-break: break-all;
+  border: none;
 }
 
 .site-list-item.sm {

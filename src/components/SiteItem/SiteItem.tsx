@@ -6,34 +6,37 @@ import { ISiteItem } from '../../models/base'
 
 type SiteItemProps = {
   item: ISiteItem
-  onRemove: (siteItem: ISiteItem) => void
-  onToggle: (siteItem: ISiteItem) => void
+  onRemove?: (siteItem: ISiteItem) => void
+  onToggle?: (siteItem: ISiteItem) => void
   size?: 'sm'
 }
 
 const SiteItem = ({ item, onRemove, onToggle, size }: SiteItemProps) => {
   const remove: React.MouseEventHandler = (e) => {
     e.stopPropagation()
-    onRemove(item)
+    if (onRemove) onRemove(item)
   }
 
   const toggleStatus = () => {
-    onToggle(item)
+    if (onToggle) onToggle(item)
   }
 
   return (
-    <div
+    <button
+      type='button'
       className={`${css.siteListItem} ${size === 'sm' ? css.sm : ''} ${
         css[item.status] || ''
       }`}
       onClick={toggleStatus}>
       {item.domain}
-      <img
-        className={css.deleteIcon}
-        src={browser.runtime.getURL(deleteIcon)}
-        onClick={remove}
-      />
-    </div>
+      {onRemove ? (
+        <img
+          className={css.deleteIcon}
+          src={browser.runtime.getURL(deleteIcon)}
+          onClick={remove}
+        />
+      ) : null}
+    </button>
   )
 }
 

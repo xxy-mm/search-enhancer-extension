@@ -12,16 +12,20 @@ export type ISiteItemStatus = 'none' | 'include' | 'exclude'
 export enum IFilterType {
   FILE_TYPE,
 }
-
+export type IFilterOption = {
+  label: string
+  value: string
+}
 export type ISiteFilter = {
   type: IFilterType
   value: string
+  options: IFilterOption[]
 }
 
 // file type filter
 
 export type IFileType = 'all' | 'pdf' | 'doc' | 'xls' | 'ppt'
-export const fileTypeFilterOptions: { label: string; value: IFileType }[] = [
+export const fileTypeFilterOptions: IFilterOption[] = [
   { label: 'All', value: 'all' },
   { label: 'PDF', value: 'pdf' },
   { label: 'WORD', value: 'doc' },

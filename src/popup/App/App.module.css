@@ -18,6 +18,11 @@
   text-shadow: 0 0.5px 0.5px var(--shadow-color-light);
 }
 
+.explain {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .action-group {
   display: flex;
   justify-content: space-between;

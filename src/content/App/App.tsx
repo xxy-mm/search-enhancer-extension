@@ -11,7 +11,7 @@ import DropDown from '@/components/DropDown/DropDown'
 import css from './App.module.css'
 
 const App = () => {
-  const { toggleSiteStatus, removeSite, sites, changeFilter, filters } =
+  const { toggleSiteStatus, sites, changeFilter, filters } =
     useContext(DataMessageContext)
 
   const filter = (filters.find((f) => f.type === IFilterType.FILE_TYPE) ||
@@ -22,7 +22,11 @@ const App = () => {
       <DropDown
         isActive={filter.value != 'all'}
         onSelect={(value) => {
-          changeFilter({ type: IFilterType.FILE_TYPE, value })
+          changeFilter({
+            type: IFilterType.FILE_TYPE,
+            value,
+            options: fileTypeFilterOptions,
+          })
         }}
         value={filter.value}
         options={fileTypeFilterOptions}
@@ -31,7 +35,6 @@ const App = () => {
         <SiteItem
           item={site}
           key={site.domain}
-          onRemove={removeSite}
           onToggle={toggleSiteStatus}
           size='sm'
         />

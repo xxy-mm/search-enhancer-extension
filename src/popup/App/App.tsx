@@ -9,6 +9,7 @@ import {
 import { DataMessageContext } from '@/contexts/DataMessageContextProvider'
 import SiteItem from '@/components/SiteItem/SiteItem'
 import IconInput from '@/components/IconInput/IconInput'
+import Explain from '@/components/Explain/Explain'
 import DropDown from '@/components/DropDown/DropDown'
 
 import searchIcon from './search.svg'
@@ -26,6 +27,7 @@ const App = () => {
   } = useContext(DataMessageContext)
   const [search, setSearch] = useState<string>('')
   const [filteredSites, setFilteredSites] = useState<ISiteItem[]>([])
+
   const filter = (filters.find((f) => f.type === IFilterType.FILE_TYPE) ||
     {}) as ISiteFilter
   const createSite = (domain: string) => {
@@ -40,21 +42,30 @@ const App = () => {
     setFilteredSites(filtered)
   }, [search, sites])
 
+  useEffect(() => {}, [filteredSites])
+
   return (
     <div className={css.container}>
       <h1 className={css.title}>Search Enhancer</h1>
-      <div className={`${css.actionGroup} ${css.flexEnd}`}>
+
+      <div className={`${css.actionGroup}`}>
+        <Explain />
         <IconInput
           placeholder='Search'
           icon={searchIcon}
           onChange={setSearch}
         />
       </div>
+
       <div className={css.siteList}>
         <DropDown
           isActive={filter.value != 'all'}
           onSelect={(value) => {
-            changeFilter({ type: IFilterType.FILE_TYPE, value })
+            changeFilter({
+              type: IFilterType.FILE_TYPE,
+              value,
+              options: fileTypeFilterOptions,
+            })
           }}
           value={filter.value}
           options={fileTypeFilterOptions}

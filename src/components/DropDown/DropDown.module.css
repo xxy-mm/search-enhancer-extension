@@ -23,5 +23,4 @@
 .dropdown.inactive {
   background: unset;
   color: unset;
-  border: 1px dashed #333;
 }
