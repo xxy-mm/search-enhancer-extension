@@ -40,17 +40,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/i,
+        test: /\.s[ac]ss$/i,
         use: [
           'style-loader',
           {
             loader: 'css-loader',
             options: {
+              importLoaders: 1,
               modules: {
                 namedExport: false,
               },
             },
           },
+          'postcss-loader',
+          'sass-loader',
         ],
       },
       {

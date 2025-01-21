@@ -1,3 +1,1 @@
-import SiteItem from './SiteItem';
-
-export default SiteItem;
+export * from './SiteItem';

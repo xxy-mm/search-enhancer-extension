@@ -1,53 +1,63 @@
 import { StorageManagerImpl } from '@/models/storageManagerImpl'
 import {
+  FILETYPE_FILTER_OPTIONS,
   IDataAction,
+  IFilterName,
   notifyUpdate,
+  SiteItemType,
+  type IFilter,
   type IMessage,
-  type IUpdatedData,
+  type ISiteItemList,
 } from '@/models/base'
 
 const manager = new StorageManagerImpl()
+
+const fileTypeFileter: IFilter = {
+  name: IFilterName.FILE_TYPE,
+  options: FILETYPE_FILTER_OPTIONS,
+  type: SiteItemType.FILTER,
+  value: 'all',
+}
 
 browser.runtime.onMessage.addListener(async (message: IMessage) => {
   switch (message.type) {
     case IDataAction.QUERY:
       break
-    case IDataAction.CREATE:
+    case IDataAction.CREATE_SITE:
       await manager.addSite(message.data)
       break
-    case IDataAction.DELETE:
+    case IDataAction.DELETE_SITE:
       await manager.removeSite(message.data)
       break
-    case IDataAction.UPDATE:
+    case IDataAction.UPDATE_SITE:
       await manager.toggleSiteStatus(message.data)
       break
     case IDataAction.UPDATE_FILTER:
-      await manager.updateFilter(message.data)
+      await manager.setFilter(message.data)
       break
     default:
       throw `Unknown message: ${message}`
   }
-  const sites = await manager.getSiteList()
-  const filters = await manager.getSiteFilters()
-  await notify({
-    sites,
-    filters,
-  })
+  const siteItems = await manager.getSiteItemList()
+  if (siteItems.length === 0) {
+    await manager.setFilter(fileTypeFileter)
+    notify([fileTypeFileter])
+  } else {
+    notify(siteItems)
+  }
 })
 
-async function notify(data: IUpdatedData) {
+async function notify(data: ISiteItemList) {
   browser.runtime.sendMessage(notifyUpdate(data))
   notifyTabs(data)
 }
 
-async function notifyTabs(data: IUpdatedData) {
+async function notifyTabs(data: ISiteItemList) {
   const tabs = await browser.tabs.query({
     currentWindow: true,
     active: true,
   })
   const id = tabs[0]?.id
   if (id === undefined) return
-  browser.tabs.sendMessage(id, notifyUpdate(data)).then(() => {
-    console.log('send data', data)
-  })
+  browser.tabs.sendMessage(id, notifyUpdate(data))
 }

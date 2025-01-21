@@ -1,14 +1,10 @@
-import {
-  type ISiteFilter,
-  type ISiteItem,
-  type ISiteItemList,
-} from '../models/base'
+import { type IFilter, type ISite, type ISiteItemList } from '../models/base'
 
 export interface IDataContext {
-  addSite: (site: ISiteItem) => void
-  removeSite: (site: ISiteItem) => void
-  toggleSiteStatus: (site: ISiteItem) => void
-  sites: ISiteItemList
-  changeFilter: (filter: ISiteFilter) => void
-  filters: ISiteFilter[]
+  addSite: (site: ISite) => void
+  removeSite: (site: ISite) => void
+  toggleSite: (site: ISite) => void
+  siteItems: ISiteItemList
+  changeFilter: (filter: IFilter) => void
+  sort: (siteItems: ISiteItemList) => void
 }

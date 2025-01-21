@@ -1,44 +1,27 @@
-import React, { useContext } from 'react'
-import {
-  fileTypeFilterOptions,
-  IFilterType,
-  type ISiteFilter,
-} from '@/models/base'
-import { DataMessageContext } from '@/contexts/DataMessageContextProvider'
-import SiteItem from '@/components/SiteItem/SiteItem'
-import DropDown from '@/components/DropDown/DropDown'
+import { SiteItemType } from '@/models/base'
+import { useMessage } from '@/hooks/useMessage'
+import { SiteItem } from '@/components'
 
-import css from './App.module.css'
+import css from './App.module.scss'
 
 const App = () => {
-  const { toggleSiteStatus, sites, changeFilter, filters } =
-    useContext(DataMessageContext)
-
-  const filter = (filters.find((f) => f.type === IFilterType.FILE_TYPE) ||
-    {}) as ISiteFilter
-
+  const { siteItems } = useMessage()
   return (
     <div className={css.container}>
-      <DropDown
-        isActive={filter.value != 'all'}
-        onSelect={(value) => {
-          changeFilter({
-            type: IFilterType.FILE_TYPE,
-            value,
-            options: fileTypeFilterOptions,
-          })
-        }}
-        value={filter.value}
-        options={fileTypeFilterOptions}
-      />
-      {sites.map((site) => (
-        <SiteItem
-          item={site}
-          key={site.domain}
-          onToggle={toggleSiteStatus}
-          size='sm'
-        />
-      ))}
+      {siteItems.map((siteItem) => {
+        const key =
+          siteItem.type === SiteItemType.FILTER
+            ? siteItem.name
+            : siteItem.domain
+        return (
+          <SiteItem
+            siteItem={siteItem}
+            canToggleSite={true}
+            key={key}
+            size='sm'
+          />
+        )
+      })}
     </div>
   )
 }

@@ -1,10 +1,10 @@
-import React, { useId } from 'react'
+import React, { useId, useState, type ChangeEvent } from 'react'
 import { FunctionComponent } from 'react'
 
-import css from './IconInput.module.css'
+import css from './IconInput.module.scss'
 
 interface IconInputProps {
-  icon?: string
+  icon: string
   placeholder?: string
   onChange?: (value: string) => void
   onEnter?: (value: string) => void
@@ -18,21 +18,16 @@ const IconInput: FunctionComponent<IconInputProps> = ({
 }) => {
   const inputId = useId()
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    if (event.key === 'Enter') {
-      const input = event.target as HTMLInputElement
-      const value = input.value
-      if (onEnter) {
-        onEnter(value)
-        input.value = ''
-      }
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === 'Enter' && onEnter) {
+      const inputElement = e.target as HTMLInputElement
+      onEnter(inputElement.value)
+      inputElement.value = ''
     }
   }
 
-  const onValueChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (onChange) onChange(event.target.value)
+  const onValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) onChange(e.target.value)
   }
   return (
     <div className={css.iconInput}>

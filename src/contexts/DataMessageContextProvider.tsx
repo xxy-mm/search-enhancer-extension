@@ -1,25 +1,26 @@
 import { createContext } from 'react'
 import * as React from 'react'
 
-import { useMessage } from './useMessage'
 import { IDataContext } from './DataContext.interface'
+import { useMessage } from '../hooks/useMessage'
 
 export const DataMessageContext = createContext<IDataContext>(
   {} as IDataContext
 )
 
 const DataMessageContextProvider = ({ children }: React.PropsWithChildren) => {
-  const { add, remove, toggle, sites, changeFilter, filters } = useMessage()
+  const { addSite, removeSite, toggleSite, siteItems, changeFilter, sort } =
+    useMessage()
 
   return (
     <DataMessageContext.Provider
       value={{
-        addSite: add,
-        removeSite: remove,
-        toggleSiteStatus: toggle,
+        addSite,
+        removeSite,
+        toggleSite,
         changeFilter,
-        sites,
-        filters,
+        sort,
+        siteItems,
       }}>
       {children}
     </DataMessageContext.Provider>

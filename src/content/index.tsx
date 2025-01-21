@@ -1,5 +1,3 @@
-import '../assets/styles/common.css'
-
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import DataMessageContextProvider from '@/contexts/DataMessageContextProvider'

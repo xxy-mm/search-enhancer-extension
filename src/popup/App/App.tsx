@@ -1,48 +1,25 @@
-import React from 'react'
-import { useContext, useEffect, useState } from 'react'
-import {
-  type ISiteItem,
-  type ISiteFilter,
-  IFilterType,
-  fileTypeFilterOptions,
-} from '@/models/base'
-import { DataMessageContext } from '@/contexts/DataMessageContextProvider'
-import SiteItem from '@/components/SiteItem/SiteItem'
+import { SiteStatus, SiteItemType } from '@/models/base'
+import { useSearch } from '@/hooks/useSearch'
+import { useMessage } from '@/hooks/useMessage'
 import IconInput from '@/components/IconInput/IconInput'
 import Explain from '@/components/Explain/Explain'
-import DropDown from '@/components/DropDown/DropDown'
+import { SiteItem } from '@/components'
 
 import searchIcon from './search.svg'
-import css from './App.module.css'
+import css from './App.module.scss'
 import addIcon from './add.svg'
 
 const App = () => {
-  const {
-    addSite,
-    sites,
-    removeSite,
-    toggleSiteStatus,
-    changeFilter,
-    filters,
-  } = useContext(DataMessageContext)
-  const [search, setSearch] = useState<string>('')
-  const [filteredSites, setFilteredSites] = useState<ISiteItem[]>([])
+  const { addSite } = useMessage()
+  const { setSearch, filtered } = useSearch()
 
-  const filter = (filters.find((f) => f.type === IFilterType.FILE_TYPE) ||
-    {}) as ISiteFilter
   const createSite = (domain: string) => {
-    addSite({ domain, status: 'none' })
+    addSite({
+      domain,
+      status: SiteStatus.NONE,
+      type: SiteItemType.SITE,
+    })
   }
-
-  useEffect(() => {
-    let filtered = sites
-    if (search.trim() !== '') {
-      filtered = sites.filter((site) => site.domain.includes(search))
-    }
-    setFilteredSites(filtered)
-  }, [search, sites])
-
-  useEffect(() => {}, [filteredSites])
 
   return (
     <div className={css.container}>
@@ -58,30 +35,24 @@ const App = () => {
       </div>
 
       <div className={css.siteList}>
-        <DropDown
-          isActive={filter.value != 'all'}
-          onSelect={(value) => {
-            changeFilter({
-              type: IFilterType.FILE_TYPE,
-              value,
-              options: fileTypeFilterOptions,
-            })
-          }}
-          value={filter.value}
-          options={fileTypeFilterOptions}
-        />
-        {filteredSites.map((siteItem) => (
-          <SiteItem
-            item={siteItem}
-            key={siteItem.domain}
-            onRemove={removeSite}
-            onToggle={toggleSiteStatus}
-          />
-        ))}
+        {filtered.map((siteItem) => {
+          const key =
+            siteItem.type === SiteItemType.FILTER
+              ? siteItem.name
+              : siteItem.domain
+          return (
+            <SiteItem
+              siteItem={siteItem}
+              key={key}
+              canRemoveSite={true}
+              canToggleSite={true}
+            />
+          )
+        })}
       </div>
       <div className={`${css.actionGroup} ${css.flexEnd}`}>
         <IconInput
-          placeholder='Input the site then press enter'
+          placeholder='Input a site then press enter'
           icon={addIcon}
           onEnter={createSite}
         />

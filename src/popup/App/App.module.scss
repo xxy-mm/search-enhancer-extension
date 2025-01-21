@@ -1,3 +1,5 @@
+@use '@/assets/styles/common.scss';
+
 .container {
   width: 650px;
   max-height: 500px;
@@ -28,7 +30,6 @@
   justify-content: space-between;
 }
 
-
 .site-list {
   display: flex;
   padding: 16px;
@@ -40,12 +41,7 @@
   align-content: start;
   border-radius: var(--radius-lg);
   border: 1px dotted red;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.site-list::-webkit-scrollbar {
-  display: none;
+  @include common.scrollbar-hidden;
 }
 
 .flex-end {

@@ -1,76 +1,82 @@
 import { IStorageManager } from './storageManager.interface'
-import { ISiteItem, type ISiteFilter } from './base'
+import {
+  ISite,
+  SiteItemType,
+  SiteStatus,
+  type IFilter,
+  type ISiteItemList,
+} from './base'
 
 export class StorageManagerImpl implements IStorageManager {
-  private key = 'siteList'
-  private filterKey = 'filters'
-  addSite = async (site: ISiteItem): Promise<boolean> => {
-    const siteList = await this.getSiteList()
-    const index = siteList.findIndex((item) => item.domain === site.domain)
+  private key = 'siteItemList'
+
+  addSite = async (site: ISite): Promise<boolean> => {
+    const siteItemList = await this.getSiteItemList()
+    const index = siteItemList.findIndex(
+      (item) => item.type === SiteItemType.SITE && item.domain === site.domain
+    )
     if (index !== -1) return false
-    siteList.push(site)
-    await this.setSiteList(siteList)
+    siteItemList.push(site)
+    await this.setSiteItemList(siteItemList)
     return true
   }
 
-  removeSite = async (site: ISiteItem): Promise<boolean> => {
-    const siteList = await this.getSiteList()
-    const index = siteList.findIndex((item) => item.domain === site.domain)
+  removeSite = async (site: ISite): Promise<boolean> => {
+    const siteList = await this.getSiteItemList()
+    const index = siteList.findIndex(
+      (item) => item.type === SiteItemType.SITE && item.domain === site.domain
+    )
     if (index === -1) return false
     siteList.splice(index, 1)
-    await this.setSiteList(siteList)
+    await this.setSiteItemList(siteList)
     return true
   }
 
-  getSiteList = async (): Promise<ISiteItem[]> => {
+  getSiteItemList = async (): Promise<ISiteItemList> => {
     const data = await browser.storage.local.get(this.key)
-    return data.siteList || []
+    return data[this.key] || []
   }
 
-  setSiteList = async (siteList: ISiteItem[]): Promise<void> => {
-    await browser.storage.local.set({ [this.key]: siteList })
+  setSiteItemList = async (siteItemList: ISiteItemList): Promise<void> => {
+    await browser.storage.local.set({ [this.key]: siteItemList })
   }
 
-  toggleSiteStatus = async (site: ISiteItem): Promise<boolean> => {
-    const siteList = await this.getSiteList()
-    const siteItem = siteList.find((item) => item.domain === site.domain)
+  toggleSiteStatus = async (site: ISite): Promise<boolean> => {
+    const siteItemList = await this.getSiteItemList()
+    const siteItem = siteItemList.find(
+      (item) => item.type === SiteItemType.SITE && item.domain === site.domain
+    ) as ISite | undefined
     if (!siteItem) {
       return false
     }
     switch (siteItem.status) {
-      case 'include':
-        siteItem.status = 'none'
+      case SiteStatus.EXCLUDE:
+        siteItem.status = SiteStatus.NONE
         break
-      case 'exclude':
-        siteItem.status = 'include'
+      case SiteStatus.NONE:
+        siteItem.status = SiteStatus.INCLUDE
         break
-      case 'none':
-        siteItem.status = 'exclude'
+      case SiteStatus.INCLUDE:
+        siteItem.status = SiteStatus.EXCLUDE
         break
       default:
     }
 
-    await this.setSiteList(siteList)
+    await this.setSiteItemList(siteItemList)
     return true
   }
 
-  setFilters = async (filters: ISiteFilter[]) => {
-    await browser.storage.local.set({ [this.filterKey]: filters })
-  }
-
-  getSiteFilters = async (): Promise<ISiteFilter[]> => {
-    const data = await browser.storage.local.get(this.filterKey)
-    return data.filters || []
-  }
-
-  updateFilter = async (filter: ISiteFilter) => {
-    const filters = await this.getSiteFilters()
-    const found = filters.find((f) => f.type === filter.type)
+  setFilter = async (filter: IFilter): Promise<boolean> => {
+    const siteItemList = await this.getSiteItemList()
+    const found = siteItemList.find(
+      (f) => f.type === SiteItemType.FILTER && f.name === filter.name
+    ) as IFilter | undefined
     if (found) {
       found.value = filter.value
     } else {
-      filters.push(filter)
+      siteItemList.push(filter)
     }
-    this.setFilters(filters)
+    await this.setSiteItemList(siteItemList)
+    return true
   }
 }

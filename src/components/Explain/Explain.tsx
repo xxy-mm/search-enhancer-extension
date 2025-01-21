@@ -1,30 +1,21 @@
-import * as React from 'react'
-import type { ISiteItemList } from '@/models/base'
+import { SiteItemType, SiteStatus, type ISite } from '@/models/base'
+import SiteBox from '@/components/SiteBox'
 
-import css from './Explain.module.css'
-import SiteItem from '../SiteItem/SiteItem'
+import css from './Explain.module.scss'
 
-const explainItems: ISiteItemList = [
-  {
-    domain: 'Included',
-    status: 'include',
-  },
-  {
-    domain: 'Excluded',
-    status: 'exclude',
-  },
-  {
-    domain: 'No Effect',
-    status: 'none',
-  },
+const explainItems: ISite[] = [
+  { type: SiteItemType.SITE, domain: 'Included', status: SiteStatus.INCLUDE },
+  { type: SiteItemType.SITE, domain: 'Excluded', status: SiteStatus.EXCLUDE },
+  { type: SiteItemType.SITE, domain: 'No Effect', status: SiteStatus.NONE },
 ]
 const Explain = () => {
   return (
     <div className={css.explainComponent}>
+      <legend>Legend:</legend>
       {explainItems.map((item) => (
-        <SiteItem
+        <SiteBox
           size='sm'
-          item={item}
+          site={item}
           key={item.domain}
         />
       ))}

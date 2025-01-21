@@ -1,9 +1,10 @@
-import { ISiteItem } from './base'
+import { ISite, type IFilter, type ISiteItemList } from './base'
 
 export interface IStorageManager {
-  getSiteList(): Promise<ISiteItem[]>
-  setSiteList(siteList: ISiteItem[]): Promise<void>
-  addSite(site: ISiteItem): Promise<boolean>
-  removeSite(site: ISiteItem): Promise<boolean>
-  toggleSiteStatus(site: ISiteItem): Promise<boolean>
+  getSiteItemList(): Promise<ISiteItemList>
+  setSiteItemList(siteItemList: ISiteItemList): Promise<void>
+  addSite(site: ISite): Promise<boolean>
+  removeSite(site: ISite): Promise<boolean>
+  toggleSiteStatus(site: ISite): Promise<boolean>
+  setFilter(filter: IFilter): Promise<boolean>
 }

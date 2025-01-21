@@ -1,3 +1,5 @@
+@use '@/assets/styles/common';
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -12,24 +14,23 @@
   overflow: hidden;
   background-color: transparent;
   transition: all 0.2s ease-out;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
   background-color: transparent;
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  @include common.scrollbar-hidden;
 }
-
-.container::-webkit-scrollbar {
-  display: none;
-}
-
 
 .container:hover {
   max-height: 200px;
   overflow: scroll;
   transition: all 0.15s ease-in;
   background-color: rgba(0, 0, 0, 0.1);
-
 }
 
-@media (prefers-color-scheme: dark) {}
+/* hide the dropdown border of google search */
+.xtSCL {
+  border: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+}
