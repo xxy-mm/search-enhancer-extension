@@ -15,13 +15,12 @@
   max-width: 100%;
   border: none;
 }
-
 .dropdown.sm {
   font-size: 10px;
   height: 17px;
 }
 
 .dropdown.inactive {
-  background: unset;
-  color: unset;
+  background: var(--gray-color);
+  color: var(--font-dark-color);
 }

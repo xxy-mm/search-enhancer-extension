@@ -19,7 +19,7 @@ export type ISite = {
 export type IFilter = {
   type: SiteItemType.FILTER
   name: IFilterName
-  value?: string
+  value: string
   options: IFilterOptions
 }
 

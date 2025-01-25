@@ -1,6 +1,5 @@
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import DataMessageContextProvider from '@/contexts/DataMessageContextProvider'
 
 import App from './App/App'
 
@@ -19,13 +18,12 @@ function injectCustomElement() {
 
     createRoot(customElement).render(
       <StrictMode>
-        <DataMessageContextProvider>
-          <App />
-        </DataMessageContextProvider>
+        <App />
       </StrictMode>
     )
   }
 }
+
 // Check if DOM is already loaded
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', injectCustomElement)

@@ -1,17 +1,17 @@
 import { SiteStatus, SiteItemType } from '@/models/base'
-import { useSearch } from '@/hooks/useSearch'
+import { useSiteFilter } from '@/hooks/useSiteFilter'
 import { useMessage } from '@/hooks/useMessage'
 import IconInput from '@/components/IconInput/IconInput'
 import Explain from '@/components/Explain/Explain'
 import { SiteItem } from '@/components'
 
-import searchIcon from './search.svg'
+import FilterIcon from './search.svg'
 import css from './App.module.scss'
 import addIcon from './add.svg'
 
 const App = () => {
   const { addSite } = useMessage()
-  const { setSearch, filtered } = useSearch()
+  const { setFilterText, filtered } = useSiteFilter()
 
   const createSite = (domain: string) => {
     addSite({
@@ -28,9 +28,9 @@ const App = () => {
       <div className={`${css.actionGroup}`}>
         <Explain />
         <IconInput
-          placeholder='Search'
-          icon={searchIcon}
-          onChange={setSearch}
+          placeholder='Filter'
+          icon={FilterIcon}
+          onChange={setFilterText}
         />
       </div>
 

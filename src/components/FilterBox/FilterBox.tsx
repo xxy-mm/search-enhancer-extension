@@ -23,6 +23,7 @@ const FilterBox = ({ onSelect, filter, size }: FilterBoxProps) => {
   return (
     <select
       value={value}
+      multiple
       onChange={onChange}
       className={styles}>
       {options.map((opt) => (
