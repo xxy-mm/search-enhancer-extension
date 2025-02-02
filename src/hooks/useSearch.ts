@@ -5,7 +5,7 @@ import { useMessage } from './useMessage'
 
 const siteRegexp = /(-?site:[^\s]+)/gi
 const fileRegexp = /(filetype:[^\s]+)/gi
-
+const orRegexp = /(site:\S+|filetype:\S+)\s+(OR)\s*/g
 export default function useSearch() {
   const { siteItems } = useMessage()
 
@@ -30,9 +30,10 @@ export default function useSearch() {
 
       const originalInput = input.value
       const value = originalInput
+        .replace(orRegexp, '')
         .replace(siteRegexp, '')
         .replace(fileRegexp, '')
-        .replace(/OR/g, '')
+
         .trim()
 
       const query = [
@@ -42,12 +43,7 @@ export default function useSearch() {
         filters.join(' OR '),
       ].join(' ')
 
-      console.log('original value', originalInput)
-      console.log('query', query)
       input.value = query
-      console.log('input value: ', query)
-
-      form.submit()
     },
     [siteItems]
   )

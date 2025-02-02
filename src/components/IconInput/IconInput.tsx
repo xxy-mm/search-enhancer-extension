@@ -1,4 +1,4 @@
-import React, { useId, useState, type ChangeEvent } from 'react'
+import React, { useId, type ChangeEvent } from 'react'
 import { FunctionComponent } from 'react'
 
 import css from './IconInput.module.scss'
@@ -38,6 +38,11 @@ const IconInput: FunctionComponent<IconInputProps> = ({
         placeholder={placeholder}
         onChange={onValueChange}
         onKeyDown={handleKeyDown}
+        autoComplete='off'
+        autoCorrect='off'
+        autoCapitalize='off'
+        autoFocus
+        spellCheck='false'
       />
       <label htmlFor={inputId}>
         <img

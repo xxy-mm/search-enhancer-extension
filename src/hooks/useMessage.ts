@@ -11,6 +11,7 @@ import {
   type IFilter,
   changeFilterMessage,
   sortMessage,
+  updateAllMessage,
 } from '@/models/base'
 
 export function useMessage() {
@@ -37,6 +38,10 @@ export function useMessage() {
     browser.runtime.sendMessage(changeFilterMessage(filter))
   }
 
+  const updateSiteItems = (siteItems: ISiteItemList) => {
+    browser.runtime.sendMessage(updateAllMessage(siteItems))
+  }
+
   const sort = (siteItems: ISiteItemList) => {
     browser.runtime.sendMessage(sortMessage(siteItems))
   }
@@ -57,5 +62,6 @@ export function useMessage() {
     changeFilter,
     siteItems,
     sort,
+    updateSiteItems,
   }
 }

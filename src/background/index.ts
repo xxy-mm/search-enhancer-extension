@@ -12,7 +12,7 @@ import {
 
 const manager = new StorageManagerImpl()
 
-const fileTypeFileter: IFilter = {
+const fileTypeFilter: IFilter = {
   name: IFilterName.FILE_TYPE,
   options: FILETYPE_FILTER_OPTIONS,
   type: SiteItemType.FILTER,
@@ -35,13 +35,16 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
     case IDataAction.UPDATE_FILTER:
       await manager.setFilter(message.data)
       break
+    case IDataAction.UPDATE_ALL:
+      await manager.setSiteItemList(message.data)
+      break
     default:
       throw `Unknown message: ${message}`
   }
   const siteItems = await manager.getSiteItemList()
   if (siteItems.length === 0) {
-    await manager.setFilter(fileTypeFileter)
-    notify([fileTypeFileter])
+    await manager.setFilter(fileTypeFilter)
+    notify([fileTypeFilter])
   } else {
     notify(siteItems)
   }

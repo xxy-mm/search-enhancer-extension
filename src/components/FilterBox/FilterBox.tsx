@@ -10,7 +10,7 @@ export type FilterBoxProps = {
   size?: 'sm'
 }
 const FilterBox = ({ onSelect, filter, size }: FilterBoxProps) => {
-  const { name, value, options } = filter
+  const { value, options } = filter
   const onChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const value = e.target.value
     onSelect({ ...filter, value })
@@ -23,7 +23,6 @@ const FilterBox = ({ onSelect, filter, size }: FilterBoxProps) => {
   return (
     <select
       value={value}
-      multiple
       onChange={onChange}
       className={styles}>
       {options.map((opt) => (

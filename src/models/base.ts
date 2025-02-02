@@ -53,6 +53,7 @@ export enum IDataAction {
   SORT = 'sort',
   // updated message is post from background
   UPDATED = 'updated',
+  UPDATE_ALL = 'updateAll',
 }
 
 export type IMessage =
@@ -78,6 +79,10 @@ export type IMessage =
     }
   | {
       type: IDataAction.SORT
+      data: ISiteItemList
+    }
+  | {
+      type: IDataAction.UPDATE_ALL
       data: ISiteItemList
     }
 
@@ -110,5 +115,10 @@ export const changeFilterMessage = (filter: IFilter): IMessage => ({
 
 export const sortMessage = (siteItems: ISiteItemList): IMessage => ({
   type: IDataAction.SORT,
+  data: siteItems,
+})
+
+export const updateAllMessage = (siteItems: ISiteItemList): IMessage => ({
+  type: IDataAction.UPDATE_ALL,
   data: siteItems,
 })
