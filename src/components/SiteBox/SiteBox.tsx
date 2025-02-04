@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classNames from 'classnames'
 
-import css from './SiteBox.module.scss'
+import css from './SiteBox.module.css'
 import deleteIcon from './delete.svg'
 import { ISite, SiteStatus } from '../../models/base'
 
@@ -24,7 +24,7 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
 
   const styles = classNames(css.siteBox, {
     [css.sm]: size === 'sm',
-    [css.exclude]: site.status === SiteStatus.EXCLUDE,
+    // [css.exclude]: site.status === SiteStatus.EXCLUDE,
     [css.include]: site.status === SiteStatus.INCLUDE,
   })
 

@@ -6,7 +6,7 @@ import Explain from '@/components/Explain/Explain'
 import { SiteItem } from '@/components'
 
 import FilterIcon from './search.svg'
-import css from './App.module.scss'
+import css from './App.module.css'
 import addIcon from './add.svg'
 
 const App = () => {

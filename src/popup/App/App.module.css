@@ -1,4 +1,4 @@
-@use '@/assets/styles/common.scss';
+@import '@/assets/styles/common.css';
 
 .container {
   width: 650px;
@@ -41,7 +41,6 @@
   align-content: start;
   border-radius: var(--radius-lg);
   border: 1px dotted red;
-  @include common.scrollbar-hidden;
 }
 
 .flex-end {

@@ -1,7 +1,7 @@
 import React, { useId, type ChangeEvent } from 'react'
 import { FunctionComponent } from 'react'
 
-import css from './IconInput.module.scss'
+import css from './IconInput.module.css'
 
 interface IconInputProps {
   icon: string

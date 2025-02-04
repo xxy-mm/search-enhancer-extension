@@ -2,7 +2,7 @@ import * as React from 'react'
 import classNames from 'classnames'
 import type { IFilter } from '@/models/base'
 
-import css from './FilterBox.module.scss'
+import css from './FilterBox.module.css'
 
 export type FilterBoxProps = {
   onSelect: (filter: IFilter) => void
@@ -20,6 +20,7 @@ const FilterBox = ({ onSelect, filter, size }: FilterBoxProps) => {
     [css.inactive]: value === 'all',
     [css.sm]: size === 'sm',
   })
+
   return (
     <select
       value={value}

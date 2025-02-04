@@ -14,15 +14,12 @@ export default function useSearch() {
       event.preventDefault()
       const filters: string[] = []
       const sitesIncluded: string[] = []
-      const sitesExcluded: string[] = []
 
       siteItems.forEach((item) => {
         if (item.type === SiteItemType.FILTER && item.value !== 'all') {
           filters.push(`filetype:${item.value}`)
         } else if (item.type === SiteItemType.SITE) {
-          if (item.status === SiteStatus.EXCLUDE) {
-            sitesExcluded.push(`-site:${item.domain}`)
-          } else if (item.status === SiteStatus.INCLUDE) {
+          if (item.status === SiteStatus.INCLUDE) {
             sitesIncluded.push(`site:${item.domain}`)
           }
         }
@@ -39,7 +36,6 @@ export default function useSearch() {
       const query = [
         value,
         sitesIncluded.join(' OR '),
-        sitesExcluded.join(' '),
         filters.join(' OR '),
       ].join(' ')
 

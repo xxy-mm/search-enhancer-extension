@@ -5,7 +5,7 @@ import { ISite, SiteStatus } from './base'
 // to sort the site manually.
 const sortSequence: SiteStatus[] = [
   SiteStatus.INCLUDE,
-  SiteStatus.EXCLUDE,
+  // SiteStatus.EXCLUDE,
   SiteStatus.NONE,
 ]
 export function siteSorter(a: ISite, b: ISite) {

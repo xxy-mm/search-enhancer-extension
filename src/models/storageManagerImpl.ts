@@ -50,14 +50,11 @@ export class StorageManagerImpl implements IStorageManager {
       return false
     }
     switch (siteItem.status) {
-      case SiteStatus.EXCLUDE:
-        siteItem.status = SiteStatus.NONE
-        break
       case SiteStatus.NONE:
         siteItem.status = SiteStatus.INCLUDE
         break
       case SiteStatus.INCLUDE:
-        siteItem.status = SiteStatus.EXCLUDE
+        siteItem.status = SiteStatus.NONE
         break
       default:
     }

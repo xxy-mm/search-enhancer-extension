@@ -30,16 +30,18 @@ export type ISiteItemList = ISiteItem[]
 export enum SiteStatus {
   NONE = 'No Effect',
   INCLUDE = 'Included',
-  EXCLUDE = 'Excluded',
 }
 
 // filter options
 export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [
   { label: 'File Type', value: 'all' },
-  { label: 'PDF', value: 'pdf' },
-  { label: 'WORD', value: 'doc' },
-  { label: 'EXCEL', value: 'xls' },
-  { label: 'PPT', value: 'ppt' },
+  { label: 'PDF(.pdf)', value: 'pdf' },
+  { label: 'Word(.doc,.docx)', value: 'doc,docx' },
+  { label: 'Excel(.xls,.xlsx)', value: 'xlsx' },
+  { label: 'PPT(.ppt,.pptx)', value: 'ppt,pptx' },
+  { label: 'Adobe Postscript(.ps)', value: 'ps' },
+  { label: 'Rich Text Format(.rtf)', value: 'rtf' },
+  { label: 'Google Earth KML(.kml)', value: 'kml' },
 ]
 
 // messages

@@ -1,74 +1,13 @@
-import { useCallback, useEffect } from 'react'
-import { hasChanged } from '@/models/utils'
-import {
-  IFilterName,
-  SiteItemType,
-  SiteStatus,
-  type IFilter,
-  type ISite,
-  type ISiteItemList,
-} from '@/models/base'
+import { useEffect } from 'react'
+import { getComputedItems } from '@/models/utils'
+import { reset, SiteItemType, SiteStatus } from '@/models/base'
 
 import { useMessage } from './useMessage'
 
-const fileTypeRegexp = /filetype:([\S]+)/gi
-const includedSiteRegexp = /\bsite:([\S]+)/gi
-const excludedSiteRegexp = /-site:([\S]+)/gi
 const siteItemRegexp = /(-?site:\S+|filetype:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
   const { updateSiteItems, siteItems, resetSiteItems } = useMessage()
-
-  const getComputedItems = useCallback(
-    (value: string, items: ISiteItemList) => {
-      console.log('effect run: getComputedItems')
-      if (items.length < 1) return
-
-      const copy = [...items].map((item) => {
-        if (item.type === SiteItemType.FILTER) {
-          item.value = 'all'
-        } else {
-          item.status = SiteStatus.NONE
-        }
-        return item
-      })
-      const included = value.matchAll(includedSiteRegexp) || []
-      const excluded = value.matchAll(excludedSiteRegexp) || []
-      const fileTypes = value.matchAll(fileTypeRegexp) || []
-
-      for (const match of included) {
-        const domain = match[1]
-        const found = copy.find(
-          (item) => item.type === SiteItemType.SITE && item.domain === domain
-        ) as ISite
-        if (!found) continue
-        found.status = SiteStatus.INCLUDE
-      }
-      for (const match of excluded) {
-        const domain = match[1]
-        const found = copy.find(
-          (item) => item.type === SiteItemType.SITE && item.domain === domain
-        ) as ISite
-        if (!found) continue
-        found.status = SiteStatus.EXCLUDE
-      }
-      for (const match of fileTypes) {
-        const fileType = match[1]
-        const found = copy.find(
-          (item) =>
-            item.type === SiteItemType.FILTER &&
-            item.name === IFilterName.FILE_TYPE
-        ) as IFilter
-        if (!found) continue
-        found.value = fileType
-      }
-
-      if (hasChanged(items, copy)) {
-        return copy
-      }
-    },
-    []
-  )
 
   useEffect(() => {
     const activeItems = siteItems.filter((item) => {
@@ -82,22 +21,19 @@ export function useInputSync() {
     if (activeItems.length) {
       const fileTypeFilters: string[] = []
       const includeSites: string[] = []
-      const excludedSites: string[] = []
+
       activeItems.forEach((item) => {
         if (item.type === SiteItemType.FILTER) {
           fileTypeFilters.push(`filetype:${item.value}`)
         } else {
           if (item.status === SiteStatus.INCLUDE) {
             includeSites.push(`site:${item.domain}`)
-          } else {
-            excludedSites.push(`-site:${item.domain}`)
           }
         }
       })
       queryStringArray.push(
         fileTypeFilters.join(' OR '),
-        includeSites.join(' OR '),
-        excludedSites.join(' ')
+        includeSites.join(' OR ')
       )
     }
     queryStringArray = queryStringArray.filter((str) => str.length > 0)
@@ -108,9 +44,8 @@ export function useInputSync() {
       'textarea[name="q"]'
     ) as HTMLTextAreaElement
     const words = searchTextArea.value.replace(siteItemRegexp, '').trimStart()
-    if (words === '') {
-      resetSiteItems()
-      searchTextArea.value = ''
+    if (words === '' && activeItems.length > 0) {
+      return
     } else {
       queryStringArray.push(words)
       searchTextArea.value = queryStringArray.join(' ')
@@ -134,11 +69,9 @@ export function useInputSync() {
     ) as HTMLTextAreaElement
 
     searchTextArea.addEventListener('input', searchListener)
-    searchTextArea.addEventListener('change', searchListener)
 
     return () => {
       searchTextArea.removeEventListener('input', searchListener)
-      searchTextArea.removeEventListener('change', searchListener)
     }
-  }, [getComputedItems, siteItems, updateSiteItems])
+  }, [siteItems, updateSiteItems])
 }

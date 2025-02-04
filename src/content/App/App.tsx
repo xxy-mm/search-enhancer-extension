@@ -1,10 +1,9 @@
 import { SiteItemType } from '@/models/base'
-import useSearch from '@/hooks/useSearch'
 import { useMessage } from '@/hooks/useMessage'
 import { useInputSync } from '@/hooks/useInputSync'
 import { SiteItem } from '@/components'
 
-import css from './App.module.scss'
+import css from './App.module.css'
 
 const App = () => {
   const { siteItems } = useMessage()

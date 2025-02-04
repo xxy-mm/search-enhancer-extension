@@ -2,8 +2,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
+const isProd = process.env.NODE_ENV === 'prod' ? true : false
 module.exports = {
-  mode: 'development',
+  mode: isProd ? 'production' : 'development',
 
   entry: {
     popup: './src/popup/index.tsx',
@@ -11,7 +12,7 @@ module.exports = {
     background: './src/background/index.ts',
     demo: './src/main.tsx',
   },
-  devtool: 'inline-source-map',
+  devtool: isProd ? undefined : 'inline-source-map',
   devServer: {
     static: './dist',
   },
@@ -27,7 +28,9 @@ module.exports = {
       chunks: ['demo'],
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development'),
+      'process.env.NODE_ENV': JSON.stringify(
+        isProd ? 'production' : 'development'
+      ),
     }),
   ],
   output: {
@@ -40,7 +43,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.css$/i,
         use: [
           'style-loader',
           {
@@ -53,7 +56,6 @@ module.exports = {
             },
           },
           'postcss-loader',
-          'sass-loader',
         ],
       },
       {

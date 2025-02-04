@@ -1,4 +1,4 @@
-@use '@/assets/styles/common';
+@import '@/assets/styles/common.css';
 
 .container {
   display: flex;
@@ -17,7 +17,6 @@
 
   background-color: transparent;
   backdrop-filter: blur(10px);
-  @include common.scrollbar-hidden;
 }
 
 .container:hover {
@@ -32,5 +31,4 @@
   border: none !important;
 }
 
-@media (prefers-color-scheme: dark) {
-}
+@media (prefers-color-scheme: dark) {}
