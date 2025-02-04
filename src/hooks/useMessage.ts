@@ -12,6 +12,7 @@ import {
   changeFilterMessage,
   sortMessage,
   updateAllMessage,
+  reset,
 } from '@/models/base'
 
 export function useMessage() {
@@ -46,6 +47,10 @@ export function useMessage() {
     browser.runtime.sendMessage(sortMessage(siteItems))
   }
 
+  const resetSiteItems = () => {
+    browser.runtime.sendMessage(reset())
+  }
+
   useEffect(() => {
     browser.runtime.sendMessage(queryMessage())
   }, [])
@@ -63,5 +68,6 @@ export function useMessage() {
     siteItems,
     sort,
     updateSiteItems,
+    resetSiteItems,
   }
 }

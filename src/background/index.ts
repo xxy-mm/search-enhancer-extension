@@ -38,6 +38,9 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
     case IDataAction.UPDATE_ALL:
       await manager.setSiteItemList(message.data)
       break
+    case IDataAction.RESET:
+      await manager.reset()
+      break
     default:
       throw `Unknown message: ${message}`
   }

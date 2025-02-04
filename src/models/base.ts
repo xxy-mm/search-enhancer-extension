@@ -54,6 +54,7 @@ export enum IDataAction {
   // updated message is post from background
   UPDATED = 'updated',
   UPDATE_ALL = 'updateAll',
+  RESET = 'reset',
 }
 
 export type IMessage =
@@ -84,6 +85,9 @@ export type IMessage =
   | {
       type: IDataAction.UPDATE_ALL
       data: ISiteItemList
+    }
+  | {
+      type: IDataAction.RESET
     }
 
 // message creator
@@ -121,4 +125,8 @@ export const sortMessage = (siteItems: ISiteItemList): IMessage => ({
 export const updateAllMessage = (siteItems: ISiteItemList): IMessage => ({
   type: IDataAction.UPDATE_ALL,
   data: siteItems,
+})
+
+export const reset = (): IMessage => ({
+  type: IDataAction.RESET,
 })

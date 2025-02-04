@@ -79,4 +79,16 @@ export class StorageManagerImpl implements IStorageManager {
     await this.setSiteItemList(siteItemList)
     return true
   }
+
+  reset = async () => {
+    const siteItems = await this.getSiteItemList()
+    siteItems.forEach((item) => {
+      if (item.type === SiteItemType.FILTER) {
+        item.value = 'all'
+      } else {
+        item.status = SiteStatus.NONE
+      }
+    })
+    await this.setSiteItemList(siteItems)
+  }
 }

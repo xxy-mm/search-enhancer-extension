@@ -11,13 +11,13 @@ import {
 
 import { useMessage } from './useMessage'
 
-const fileTypeRegexp = /filetype:([^\s]+)/gi
-const includedSiteRegexp = /[^-]site:([^\s]+)/gi
-const excludedSiteRegexp = /-site:([^\s]+)/gi
+const fileTypeRegexp = /filetype:([\S]+)/gi
+const includedSiteRegexp = /\bsite:([\S]+)/gi
+const excludedSiteRegexp = /-site:([\S]+)/gi
 const siteItemRegexp = /(-?site:\S+|filetype:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
-  const { updateSiteItems, siteItems } = useMessage()
+  const { updateSiteItems, siteItems, resetSiteItems } = useMessage()
 
   const getComputedItems = useCallback(
     (value: string, items: ISiteItemList) => {
@@ -78,7 +78,7 @@ export function useInputSync() {
         return item.status !== SiteStatus.NONE
       }
     })
-    const filterString: string[] = []
+    let queryStringArray: string[] = []
     if (activeItems.length) {
       const fileTypeFilters: string[] = []
       const includeSites: string[] = []
@@ -94,22 +94,28 @@ export function useInputSync() {
           }
         }
       })
-      filterString.push(
-        ' ' + fileTypeFilters.join(' OR '),
-        ' ' + includeSites.join(' OR '),
-        ' ' + excludedSites.join(' ')
+      queryStringArray.push(
+        fileTypeFilters.join(' OR '),
+        includeSites.join(' OR '),
+        excludedSites.join(' ')
       )
     }
-
+    queryStringArray = queryStringArray.filter((str) => str.length > 0)
     const searchForm = document.querySelector(
       'form[action="/search"]'
     ) as HTMLFormElement
     const searchTextArea = searchForm.querySelector(
       'textarea[name="q"]'
     ) as HTMLTextAreaElement
-    filterString.push(searchTextArea.value.replace(siteItemRegexp, ''))
-    searchTextArea.value = filterString.join('')
-  }, [siteItems])
+    const words = searchTextArea.value.replace(siteItemRegexp, '').trimStart()
+    if (words === '') {
+      resetSiteItems()
+      searchTextArea.value = ''
+    } else {
+      queryStringArray.push(words)
+      searchTextArea.value = queryStringArray.join(' ')
+    }
+  }, [resetSiteItems, siteItems])
 
   useEffect(() => {
     console.log('effect run: add search event')

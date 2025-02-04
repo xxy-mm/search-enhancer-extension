@@ -28,10 +28,15 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
     [css.include]: site.status === SiteStatus.INCLUDE,
   })
 
+  const showMenu: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    alert('hehe')
+  }
   return (
     <button
       type='button'
       className={styles}
+      onContextMenu={showMenu}
       onClick={toggleStatus}>
       {site.domain}
       {onRemove ? (
