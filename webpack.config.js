@@ -25,7 +25,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Demo',
       filename: 'demo.html',
-      chunks: ['demo'],
+      chunks: ['demo', 'runtime'],
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(

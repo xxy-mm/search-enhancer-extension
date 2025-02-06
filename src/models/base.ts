@@ -34,7 +34,7 @@ export enum SiteStatus {
 
 // filter options
 export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [
-  { label: 'File Type', value: 'all' },
+  { label: 'All File Types', value: 'all' },
   { label: 'PDF(.pdf)', value: 'pdf' },
   { label: 'Word(.doc,.docx)', value: 'doc,docx' },
   { label: 'Excel(.xls,.xlsx)', value: 'xlsx' },

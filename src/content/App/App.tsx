@@ -1,14 +1,15 @@
 import { SiteItemType } from '@/models/base'
 import { useMessage } from '@/hooks/useMessage'
 import { useInputSync } from '@/hooks/useInputSync'
-import { SiteItem } from '@/components'
+import { Button, SiteItem } from '@/components'
 
+import addIcon from './plus.circle.svg'
 import css from './App.module.css'
 
 const App = () => {
   const { siteItems } = useMessage()
   useInputSync()
-  // useSearch()
+
   return (
     <div className={css.container}>
       {siteItems.map((siteItem) => {

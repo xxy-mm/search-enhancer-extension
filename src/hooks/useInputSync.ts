@@ -1,56 +1,45 @@
 import { useEffect } from 'react'
 import { getComputedItems } from '@/models/utils'
-import { reset, SiteItemType, SiteStatus } from '@/models/base'
 
+import { useSearchInput } from './useSearchInput'
 import { useMessage } from './useMessage'
+import { useActiveItems } from './useActiveItems'
 
+const placeholder = '🔍'
 const siteItemRegexp = /(-?site:\S+|filetype:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
   const { updateSiteItems, siteItems, resetSiteItems } = useMessage()
-
+  const { searchInput } = useSearchInput()
+  const { fileTypes, includedSites } = useActiveItems()
   useEffect(() => {
-    const activeItems = siteItems.filter((item) => {
-      if (item.type === SiteItemType.FILTER) {
-        return item.value !== 'all'
-      } else {
-        return item.status !== SiteStatus.NONE
-      }
-    })
-    let queryStringArray: string[] = []
-    if (activeItems.length) {
-      const fileTypeFilters: string[] = []
-      const includeSites: string[] = []
+    if (!searchInput) return
 
-      activeItems.forEach((item) => {
-        if (item.type === SiteItemType.FILTER) {
-          fileTypeFilters.push(`filetype:${item.value}`)
-        } else {
-          if (item.status === SiteStatus.INCLUDE) {
-            includeSites.push(`site:${item.domain}`)
-          }
-        }
-      })
-      queryStringArray.push(
-        fileTypeFilters.join(' OR '),
-        includeSites.join(' OR ')
-      )
-    }
+    let queryStringArray: string[] = []
+
+    const fileTypeFilters: string[] = []
+    const included: string[] = []
+    fileTypes.forEach((item) => {
+      const types = item.value.split(',')
+      types.forEach((t) => fileTypeFilters.push(`filetype:${t}`))
+    })
+    includedSites.forEach((item) => {
+      included.push(`site:${item.domain}`)
+    })
+
+    queryStringArray.push(fileTypeFilters.join(' OR '), included.join(' OR '))
+
     queryStringArray = queryStringArray.filter((str) => str.length > 0)
-    const searchForm = document.querySelector(
-      'form[action="/search"]'
-    ) as HTMLFormElement
-    const searchTextArea = searchForm.querySelector(
-      'textarea[name="q"]'
-    ) as HTMLTextAreaElement
-    const words = searchTextArea.value.replace(siteItemRegexp, '').trimStart()
-    if (words === '' && activeItems.length > 0) {
-      return
-    } else {
-      queryStringArray.push(words)
-      searchTextArea.value = queryStringArray.join(' ')
+
+    let words = searchInput.value.replace(siteItemRegexp, '').trimStart()
+    if (words === '') {
+      words = placeholder
+    } else if (words.trim() !== placeholder && words.includes(placeholder)) {
+      words = words.replace(placeholder, '')
     }
-  }, [resetSiteItems, siteItems])
+    queryStringArray.push(words)
+    searchInput.value = queryStringArray.join(' ')
+  }, [resetSiteItems, searchInput, includedSites, fileTypes])
 
   useEffect(() => {
     console.log('effect run: add search event')

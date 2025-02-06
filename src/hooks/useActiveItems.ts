@@ -8,7 +8,7 @@ import {
 
 import { useMessage } from './useMessage'
 
-export function useActiveSiteItems() {
+export function useActiveItems() {
   const { siteItems } = useMessage()
   const [fileTypes, setFileTypes] = useState<IFilter[]>([])
   const [includedSites, setIncludedSites] = useState<ISite[]>([])

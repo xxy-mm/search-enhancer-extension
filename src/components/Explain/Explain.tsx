@@ -4,13 +4,13 @@ import SiteBox from '@/components/SiteBox'
 import css from './Explain.module.css'
 
 const explainItems: ISite[] = [
-  { type: SiteItemType.SITE, domain: 'Included', status: SiteStatus.INCLUDE },
-  { type: SiteItemType.SITE, domain: 'No Effect', status: SiteStatus.NONE },
+  { type: SiteItemType.SITE, domain: 'Activate', status: SiteStatus.INCLUDE },
+  { type: SiteItemType.SITE, domain: 'Inactivate', status: SiteStatus.NONE },
 ]
 const Explain = () => {
   return (
     <div className={css.explainComponent}>
-      <legend>Legend:</legend>
+      <legend>Status:</legend>
       {explainItems.map((item) => (
         <SiteBox
           size='sm'

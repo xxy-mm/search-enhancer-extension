@@ -3,6 +3,7 @@ import { useMessage } from '@/hooks/useMessage'
 
 import SiteBox from '../SiteBox'
 import FilterBox from '../FilterBox'
+import { Dropdown } from '../Dropdown'
 
 export type SiteItemProps = {
   siteItem: ISiteItem
@@ -18,11 +19,12 @@ export function SiteItem({
   size,
 }: SiteItemProps) {
   const { changeFilter, toggleSite, removeSite } = useMessage()
+
   const siteItemComponent = () => {
     switch (siteItem.type) {
       case SiteItemType.FILTER:
         return (
-          <FilterBox
+          <Dropdown
             size={size}
             filter={siteItem}
             onSelect={changeFilter}

@@ -1,0 +1,46 @@
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 300;
+    padding: 3px 5px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
+        0 0 0 0.5px var(--shadow-color-light);
+    cursor: pointer;
+    background: var(--gray-color);
+    color: var(--font-dark-color);
+    user-select: none;
+    position: relative;
+    max-width: 100%;
+    word-break: break-all;
+    border: none;
+
+    img {
+
+        height: 12px;
+        object-fit: contain;
+    }
+
+    &.sm {
+        font-size: 10px;
+
+        img {
+
+            height: 10px;
+        }
+    }
+
+    &.primary {
+        background: var(--primary-color);
+        color: var(--white-color);
+    }
+
+    &.warning {
+        background: #d26e68;
+        color: var(--white-color);
+    }
+
+
+}

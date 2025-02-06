@@ -8,6 +8,7 @@ interface IconInputProps {
   placeholder?: string
   onChange?: (value: string) => void
   onEnter?: (value: string) => void
+  autoFocus?: boolean
 }
 
 const IconInput: FunctionComponent<IconInputProps> = ({
@@ -15,6 +16,7 @@ const IconInput: FunctionComponent<IconInputProps> = ({
   placeholder = '',
   onChange,
   onEnter,
+  autoFocus = false,
 }) => {
   const inputId = useId()
 
@@ -41,7 +43,7 @@ const IconInput: FunctionComponent<IconInputProps> = ({
         autoComplete='off'
         autoCorrect='off'
         autoCapitalize='off'
-        autoFocus
+        autoFocus={autoFocus}
         spellCheck='false'
       />
       <label htmlFor={inputId}>

@@ -1,17 +1,15 @@
 import { SiteStatus, SiteItemType } from '@/models/base'
-import { useSiteFilter } from '@/hooks/useSiteFilter'
+// import { useSiteFilter } from '@/hooks/useSiteFilter'
 import { useMessage } from '@/hooks/useMessage'
 import IconInput from '@/components/IconInput/IconInput'
-import Explain from '@/components/Explain/Explain'
 import { SiteItem } from '@/components'
 
-import FilterIcon from './search.svg'
+import addIcon from './plus.circle.svg'
 import css from './App.module.css'
-import addIcon from './add.svg'
 
 const App = () => {
-  const { addSite } = useMessage()
-  const { setFilterText, filtered } = useSiteFilter()
+  const { addSite, siteItems } = useMessage()
+  // const { setFilterText, filtered } = useSiteFilter()
 
   const createSite = (domain: string) => {
     addSite({
@@ -25,17 +23,16 @@ const App = () => {
     <div className={css.container}>
       <h1 className={css.title}>Search Enhancer</h1>
 
-      <div className={`${css.actionGroup}`}>
-        <Explain />
+      {/* <div className={`${css.actionGroup} ${css.flexEnd}`}>
         <IconInput
           placeholder='Filter'
           icon={FilterIcon}
           onChange={setFilterText}
         />
-      </div>
+      </div> */}
 
       <div className={css.siteList}>
-        {filtered.map((siteItem) => {
+        {siteItems.map((siteItem) => {
           const key =
             siteItem.type === SiteItemType.FILTER
               ? siteItem.name

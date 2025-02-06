@@ -1,8 +1,9 @@
 @import '@/assets/styles/common.css';
 
 .container {
-  width: 650px;
+  width: 350px;
   max-height: 500px;
+  height: auto;
   padding: var(--page-padding);
   display: flex;
   flex-direction: column;
@@ -33,7 +34,7 @@
 .site-list {
   display: flex;
   padding: 16px;
-  height: 322px;
+  min-height: 100px;
   overflow: scroll;
   flex-wrap: wrap;
   gap: 8px;
