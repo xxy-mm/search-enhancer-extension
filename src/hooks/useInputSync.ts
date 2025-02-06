@@ -42,7 +42,6 @@ export function useInputSync() {
   }, [resetSiteItems, searchInput, includedSites, fileTypes])
 
   useEffect(() => {
-    console.log('effect run: add search event')
     function searchListener(e: Event) {
       const value = (e.target as HTMLTextAreaElement).value
       const newSiteItems = getComputedItems(value, siteItems)

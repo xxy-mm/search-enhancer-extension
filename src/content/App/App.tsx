@@ -1,9 +1,8 @@
 import { SiteItemType } from '@/models/base'
 import { useMessage } from '@/hooks/useMessage'
 import { useInputSync } from '@/hooks/useInputSync'
-import { Button, SiteItem } from '@/components'
+import { SiteItem } from '@/components'
 
-import addIcon from './plus.circle.svg'
 import css from './App.module.css'
 
 const App = () => {

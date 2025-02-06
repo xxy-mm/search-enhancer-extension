@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import classNames from 'classnames'
 import { type IFilter, type IFilterOption } from '@/models/base'
+import { useSearchInput } from '@/hooks/useSearchInput'
 
 import styles from './Dropdown.module.css'
 import lightArrow from './arrow-down-light.svg'
@@ -17,6 +18,7 @@ export interface DropdownProps {
 
 export function Dropdown({ onSelect, filter, size }: DropdownProps) {
   const { value, options } = filter
+  const { searchInput } = useSearchInput()
   const dropDownRef = useRef<HTMLDivElement | null>(null)
   const [show, setShow] = useState(false)
   const [top, setTop] = useState(0)
@@ -26,6 +28,9 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
     const value = newOption.value
     onSelect({ ...filter, value })
     setShow(false)
+    if (searchInput) {
+      searchInput.focus()
+    }
   }
   const toggleDropdown = () => {
     const nextState = !show

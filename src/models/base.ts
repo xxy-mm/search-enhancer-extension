@@ -1,4 +1,4 @@
-export enum IFilterName {
+export enum FilterNames {
   FILE_TYPE = 'File Type',
 }
 
@@ -18,7 +18,7 @@ export type ISite = {
 }
 export type IFilter = {
   type: SiteItemType.FILTER
-  name: IFilterName
+  name: FilterNames
   value: string
   options: IFilterOptions
 }
@@ -37,7 +37,7 @@ export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [
   { label: 'All File Types', value: 'all' },
   { label: 'PDF(.pdf)', value: 'pdf' },
   { label: 'Word(.doc,.docx)', value: 'doc,docx' },
-  { label: 'Excel(.xls,.xlsx)', value: 'xlsx' },
+  { label: 'Excel(.xls,.xlsx)', value: 'xls,xlsx' },
   { label: 'PPT(.ppt,.pptx)', value: 'ppt,pptx' },
   { label: 'Adobe Postscript(.ps)', value: 'ps' },
   { label: 'Rich Text Format(.rtf)', value: 'rtf' },

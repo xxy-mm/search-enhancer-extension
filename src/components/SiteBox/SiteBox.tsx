@@ -1,5 +1,6 @@
 import * as React from 'react'
 import classNames from 'classnames'
+import { useSearchInput } from '@/hooks/useSearchInput'
 
 import css from './SiteBox.module.css'
 import deleteIcon from './delete.svg'
@@ -13,6 +14,7 @@ export type SiteBoxProps = {
 }
 
 const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
+  const { searchInput } = useSearchInput()
   const remove: React.MouseEventHandler = (e) => {
     e.stopPropagation()
     if (onRemove) onRemove(site)
@@ -20,6 +22,7 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
 
   const toggleStatus = () => {
     if (onToggle) onToggle(site)
+    if (searchInput) searchInput.focus()
   }
 
   const styles = classNames(css.siteBox, {
@@ -28,15 +31,10 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
     [css.include]: site.status === SiteStatus.INCLUDE,
   })
 
-  const showMenu: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault()
-    alert('hehe')
-  }
   return (
     <button
       type='button'
       className={styles}
-      onContextMenu={showMenu}
       onClick={toggleStatus}>
       {site.domain}
       {onRemove ? (
