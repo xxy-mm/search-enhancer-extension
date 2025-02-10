@@ -14,7 +14,7 @@ export enum SiteItemType {
 export type ISite = {
   type: SiteItemType.SITE
   domain: string
-  status: SiteStatus
+  isActive: boolean
 }
 export type IFilter = {
   type: SiteItemType.FILTER
@@ -26,11 +26,6 @@ export type IFilter = {
 export type ISiteItem = ISite | IFilter
 
 export type ISiteItemList = ISiteItem[]
-
-export enum SiteStatus {
-  NONE = 'No Effect',
-  INCLUDE = 'Included',
-}
 
 // filter options
 export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [

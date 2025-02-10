@@ -1,4 +1,4 @@
-import { SiteStatus, SiteItemType } from '@/models/base'
+import { SiteItemType } from '@/models/base'
 // import { useSiteFilter } from '@/hooks/useSiteFilter'
 import { useMessage } from '@/hooks/useMessage'
 import IconInput from '@/components/IconInput/IconInput'
@@ -14,7 +14,7 @@ const App = () => {
   const createSite = (domain: string) => {
     addSite({
       domain,
-      status: SiteStatus.NONE,
+      isActive: false,
       type: SiteItemType.SITE,
     })
   }

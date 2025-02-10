@@ -8,7 +8,6 @@ import {
   FILETYPE_FILTER_OPTIONS,
   FilterNames,
   SiteItemType,
-  SiteStatus,
   type ISiteItemList,
 } from './base'
 
@@ -26,16 +25,20 @@ describe('compute filters from string', () => {
       value: 'doc,docx',
     },
     {
-      status: SiteStatus.INCLUDE,
+      isActive: true,
       type: SiteItemType.SITE,
       domain: 'reddit.com',
     },
     {
-      status: SiteStatus.INCLUDE,
+      isActive: true,
       type: SiteItemType.SITE,
       domain: 'x.com',
     },
-    { status: SiteStatus.INCLUDE, type: SiteItemType.SITE, domain: 'abc.com' },
+    {
+      isActive: true,
+      type: SiteItemType.SITE,
+      domain: 'abc.com',
+    },
   ]
 
   describe('makeCopy', () => {
@@ -45,7 +48,7 @@ describe('compute filters from string', () => {
         if (c.type === SiteItemType.FILTER) {
           expect(c.value === 'all')
         } else {
-          expect(c.status === SiteStatus.NONE)
+          expect(c.isActive === false)
         }
       })
     })
@@ -102,7 +105,7 @@ describe('compute filters from string', () => {
       })
       expect(result).toContainEqual({
         domain: 'reddit.com',
-        status: SiteStatus.INCLUDE,
+        isActive: true,
         type: SiteItemType.SITE,
       })
     })
@@ -118,12 +121,12 @@ describe('compute filters from string', () => {
       })
       expect(result).toContainEqual({
         domain: 'reddit.com',
-        status: SiteStatus.INCLUDE,
+        isActive: true,
         type: SiteItemType.SITE,
       })
       expect(result).toContainEqual({
         domain: 'abc.com',
-        status: SiteStatus.INCLUDE,
+        isActive: true,
         type: SiteItemType.SITE,
       })
     })
@@ -138,17 +141,17 @@ describe('compute filters from string', () => {
       })
       expect(result).toContainEqual({
         domain: 'reddit.com',
-        status: SiteStatus.INCLUDE,
+        isActive: true,
         type: SiteItemType.SITE,
       })
       expect(result).toContainEqual({
         domain: 'abc.com',
-        status: SiteStatus.INCLUDE,
+        isActive: true,
         type: SiteItemType.SITE,
       })
       expect(result).toContainEqual({
         domain: 'x.com',
-        status: SiteStatus.INCLUDE,
+        isActive: true,
         type: SiteItemType.SITE,
       })
     })

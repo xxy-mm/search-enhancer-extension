@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import { SiteItemType, SiteStatus } from '@/models/base'
+import { SiteItemType } from '@/models/base'
 
 import { useMessage } from './useMessage'
 
@@ -19,7 +19,7 @@ export default function useSearch() {
         if (item.type === SiteItemType.FILTER && item.value !== 'all') {
           filters.push(`filetype:${item.value}`)
         } else if (item.type === SiteItemType.SITE) {
-          if (item.status === SiteStatus.INCLUDE) {
+          if (item.isActive) {
             sitesIncluded.push(`site:${item.domain}`)
           }
         }

@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  SiteItemType,
-  SiteStatus,
-  type IFilter,
-  type ISite,
-} from '@/models/base'
+import { SiteItemType, type IFilter, type ISite } from '@/models/base'
 
 import { useMessage } from './useMessage'
 
@@ -24,7 +19,7 @@ export function useActiveItems() {
             fileTypeFilters.push(item)
           }
         } else {
-          if (item.status === SiteStatus.INCLUDE) {
+          if (item.isActive) {
             includeSites.push(item)
           }
         }

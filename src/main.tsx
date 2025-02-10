@@ -2,9 +2,8 @@ import '@/assets/styles/common.css'
 
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Dropdown } from '@/components'
 
-import { SiteItemType, SiteStatus } from './models/base'
+import { SiteItemType } from './models/base'
 import SiteBox from './components/SiteBox'
 
 const rootElement = document.createElement('div')
@@ -16,7 +15,7 @@ createRoot(rootElement).render(
       site={{
         type: SiteItemType.SITE,
         domain: 'abc.com',
-        status: SiteStatus.NONE,
+        isActive: false,
       }}
     />
   </StrictMode>

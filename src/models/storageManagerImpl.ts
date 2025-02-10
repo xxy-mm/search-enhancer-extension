@@ -1,11 +1,5 @@
 import { IStorageManager } from './storageManager.interface'
-import {
-  ISite,
-  SiteItemType,
-  SiteStatus,
-  type IFilter,
-  type ISiteItemList,
-} from './base'
+import { ISite, SiteItemType, type IFilter, type ISiteItemList } from './base'
 
 export class StorageManagerImpl implements IStorageManager {
   private key = 'siteItemList'
@@ -49,15 +43,7 @@ export class StorageManagerImpl implements IStorageManager {
     if (!siteItem) {
       return false
     }
-    switch (siteItem.status) {
-      case SiteStatus.NONE:
-        siteItem.status = SiteStatus.INCLUDE
-        break
-      case SiteStatus.INCLUDE:
-        siteItem.status = SiteStatus.NONE
-        break
-      default:
-    }
+    siteItem.isActive = !siteItem.isActive
 
     await this.setSiteItemList(siteItemList)
     return true
@@ -83,7 +69,7 @@ export class StorageManagerImpl implements IStorageManager {
       if (item.type === SiteItemType.FILTER) {
         item.value = 'all'
       } else {
-        item.status = SiteStatus.NONE
+        item.isActive = false
       }
     })
     await this.setSiteItemList(siteItems)

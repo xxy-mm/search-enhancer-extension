@@ -7,9 +7,12 @@ import deleteIcon from '@/assets/images/delete.svg'
 import css from './App.module.css'
 
 const App = () => {
-  const { siteItems } = useMessage()
+  const { siteItems, resetSiteItems } = useMessage()
   useInputSync()
 
+  const reset = () => {
+    resetSiteItems()
+  }
   return (
     <div className={css.container}>
       {siteItems.map((siteItem) => {
@@ -29,6 +32,7 @@ const App = () => {
       <Button
         size='sm'
         type='warning'
+        onClick={reset}
         rounded>
         <img src={browser.runtime.getURL(deleteIcon)} />
       </Button>

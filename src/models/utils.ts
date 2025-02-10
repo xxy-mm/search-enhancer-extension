@@ -1,7 +1,6 @@
 import {
   FILETYPE_FILTER_OPTIONS,
   SiteItemType,
-  SiteStatus,
   type ISiteItemList,
 } from './base'
 
@@ -10,10 +9,10 @@ export function objectKeyMap(obj: ISiteItemList) {
     if (current.type === SiteItemType.FILTER) {
       prev[current.name] = current.value
     } else if (current.type === SiteItemType.SITE) {
-      prev[current.domain] = current.status
+      prev[current.domain] = current.isActive
     }
     return prev
-  }, {} as { [prop: string]: string })
+  }, {} as { [prop: string]: string | boolean })
 }
 
 export function hasChanged(source: ISiteItemList, obj: ISiteItemList) {
@@ -39,7 +38,7 @@ export const getComputedItems = (value: string, items: ISiteItemList) => {
       c.value = activeFileType
     } else {
       if (activeDomains.find((domain) => domain === c.domain)) {
-        c.status = SiteStatus.INCLUDE
+        c.isActive = true
       }
     }
   })
@@ -50,7 +49,7 @@ export function makeCopy(items: ISiteItemList) {
     if (item.type === SiteItemType.FILTER) {
       item.value = 'all'
     } else {
-      item.status = SiteStatus.NONE
+      item.isActive = false
     }
     return item
   })
