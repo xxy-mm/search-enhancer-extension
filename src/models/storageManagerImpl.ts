@@ -1,77 +1,84 @@
-import { IStorageManager } from './storageManager.interface'
-import { ISite, SiteItemType, type IFilter, type ISiteItemList } from './base'
+import { ISite, type IFilter, type ISearchConfig } from './base'
 
-export class StorageManagerImpl implements IStorageManager {
-  private key = 'siteItemList'
+export class StorageManagerImpl {
+  private sitesKey: keyof ISearchConfig = 'sites'
+  private filtersKey: keyof ISearchConfig = 'filters'
 
-  addSite = async (site: ISite): Promise<boolean> => {
-    const siteItemList = await this.getSiteItemList()
-    const index = siteItemList.findIndex(
-      (item) => item.type === SiteItemType.SITE && item.domain === site.domain
-    )
-    if (index !== -1) return false
-    siteItemList.push(site)
-    await this.setSiteItemList(siteItemList)
-    return true
+  // get search config which containers both sites and filters
+  getSearchConfig = async (): Promise<ISearchConfig> => {
+    const data = (await browser.storage.local.get({
+      [this.filtersKey]: [],
+      [this.sitesKey]: [],
+    })) as ISearchConfig
+    return data
   }
 
-  removeSite = async (site: ISite): Promise<boolean> => {
-    const siteList = await this.getSiteItemList()
-    const index = siteList.findIndex(
-      (item) => item.type === SiteItemType.SITE && item.domain === site.domain
-    )
-    if (index === -1) return false
-    siteList.splice(index, 1)
-    await this.setSiteItemList(siteList)
-    return true
-  }
-
-  getSiteItemList = async (): Promise<ISiteItemList> => {
-    const data = await browser.storage.local.get(this.key)
-    return data[this.key] || []
-  }
-
-  setSiteItemList = async (siteItemList: ISiteItemList): Promise<void> => {
-    await browser.storage.local.set({ [this.key]: siteItemList })
-  }
-
-  toggleSiteStatus = async (site: ISite): Promise<boolean> => {
-    const siteItemList = await this.getSiteItemList()
-    const siteItem = siteItemList.find(
-      (item) => item.type === SiteItemType.SITE && item.domain === site.domain
-    ) as ISite | undefined
-    if (!siteItem) {
-      return false
-    }
-    siteItem.isActive = !siteItem.isActive
-
-    await this.setSiteItemList(siteItemList)
-    return true
-  }
-
-  setFilter = async (filter: IFilter): Promise<boolean> => {
-    const siteItemList = await this.getSiteItemList()
-    const found = siteItemList.find(
-      (f) => f.type === SiteItemType.FILTER && f.name === filter.name
-    ) as IFilter | undefined
-    if (found) {
-      found.value = filter.value
-    } else {
-      siteItemList.push(filter)
-    }
-    await this.setSiteItemList(siteItemList)
-    return true
-  }
-
-  reset = async () => {
-    const siteItems = await this.getSiteItemList()
-    siteItems.forEach((item) => {
-      if (item.type === SiteItemType.FILTER) {
-        item.value = 'all'
-      } else {
-        item.isActive = false
-      }
+  setSearchConfig = async (config: ISearchConfig) => {
+    await browser.storage.local.set({
+      [this.filtersKey]: config.filters,
+      [this.sitesKey]: config.sites,
     })
-    await this.setSiteItemList(siteItems)
+  }
+
+  // MARK: site CURD
+  // add site to storage
+  addSite = async (site: ISite) => {
+    const sites = await this.getSites()
+    const found = sites.find((item) => item.domain === site.domain)
+    if (found) return
+    sites.push(site)
+    await this.setSites(sites)
+  }
+  // remove site from storage
+  removeSite = async (site: ISite) => {
+    const sites = await this.getSites()
+    const index = sites.findIndex((item) => item.domain === site.domain)
+    if (index === -1) return
+    sites.splice(index, 1)
+    await this.setSites(sites)
+  }
+
+  // get all sites from storage
+  getSites = async (): Promise<ISite[]> => {
+    const data = await browser.storage.local.get({ [this.sitesKey]: [] })
+    return data[this.sitesKey]
+  }
+
+  // replace all sites in storage with new sites
+  setSites = async (sites: ISite[]): Promise<void> => {
+    await browser.storage.local.set({ [this.sitesKey]: sites })
+  }
+
+  // MARK: Filter CURD
+
+  getFilters = async (): Promise<IFilter[]> => {
+    const result = await browser.storage.local.get({ [this.filtersKey]: [] })
+    return result[this.filtersKey]
+  }
+
+  // add a filter to storage
+  addFilter = async (filter: IFilter) => {
+    const filters = await this.getFilters()
+    const found = filters.find((f) => f.name === filter.name)
+    if (found) {
+      filters.splice(filters.indexOf(found), 1, filter)
+    } else {
+      filters.push(filter)
+    }
+    await browser.storage.local.set({ [this.filtersKey]: filters })
+  }
+
+  // remove a filter from storage
+  removeFilter = async (filter: IFilter) => {
+    const filters = await this.getFilters()
+    const found = filters.find((f) => f.name === filter.name)
+    if (!found) return
+    filters.splice(filters.indexOf(found), 1)
+    await browser.storage.local.set({ [this.filtersKey]: filters })
+  }
+
+  // replace filters in storage with the provided filters
+  setFilters = async (filters: IFilter[]) => {
+    await browser.storage.local.set({ [this.filtersKey]: filters })
   }
 }

@@ -1,33 +1,41 @@
 import { useEffect } from 'react'
 import { getComputedItems } from '@/models/utils'
 
+import { useSessionStorage } from './useSessionStorage'
 import { useSearchInput } from './useSearchInput'
 import { useMessage } from './useMessage'
-import { useActiveItems } from './useActiveItems'
 
 const placeholder = '🔍'
 const siteItemRegexp = /(-?site:\S+|filetype:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
-  const { updateSiteItems, siteItems, resetSiteItems } = useMessage()
+  const { searchConfig } = useMessage()
+  const { setConfig, searchConfig: sessionSearchConfig } = useSessionStorage()
   const { searchInput } = useSearchInput()
-  const { fileTypes, includedSites } = useActiveItems()
+
   useEffect(() => {
     if (!searchInput) return
 
     let queryStringArray: string[] = []
 
-    const fileTypeFilters: string[] = []
-    const included: string[] = []
-    fileTypes.forEach((item) => {
-      const types = item.value.split(',')
-      types.forEach((t) => fileTypeFilters.push(`filetype:${t}`))
-    })
-    includedSites.forEach((item) => {
-      included.push(`site:${item.domain}`)
+    const activeFileFilters: string[] = []
+    const activeSites: string[] = []
+
+    const { filters, sites } = sessionSearchConfig
+
+    const fileTypeFilter = filters.find((filter) => filter.name === 'filetype')
+    if (fileTypeFilter) {
+      activeFileFilters.push(`filetype:${fileTypeFilter.value}`)
+    }
+
+    sites.forEach((site) => {
+      activeSites.push(`site:${site.domain}`)
     })
 
-    queryStringArray.push(fileTypeFilters.join(' OR '), included.join(' OR '))
+    queryStringArray.push(
+      activeFileFilters.join(' OR '),
+      activeSites.join(' OR ')
+    )
 
     queryStringArray = queryStringArray.filter((str) => str.length > 0)
 
@@ -39,27 +47,22 @@ export function useInputSync() {
     }
     queryStringArray.push(words)
     searchInput.value = queryStringArray.join(' ')
-  }, [resetSiteItems, searchInput, includedSites, fileTypes])
+  }, [searchInput, sessionSearchConfig])
 
   useEffect(() => {
+    if (!searchInput) return
+
     function searchListener(e: Event) {
       const value = (e.target as HTMLTextAreaElement).value
-      const newSiteItems = getComputedItems(value, siteItems)
-      if (newSiteItems) {
-        updateSiteItems(newSiteItems)
-      }
-    }
-    const searchForm = document.querySelector(
-      'form[action="/search"]'
-    ) as HTMLFormElement
-    const searchTextArea = searchForm.querySelector(
-      'textarea[name="q"]'
-    ) as HTMLTextAreaElement
+      const newSiteItems = getComputedItems(value, searchConfig)
 
-    searchTextArea.addEventListener('input', searchListener)
+      setConfig(newSiteItems)
+    }
+
+    searchInput.addEventListener('input', searchListener)
 
     return () => {
-      searchTextArea.removeEventListener('input', searchListener)
+      searchInput.removeEventListener('input', searchListener)
     }
-  }, [siteItems, updateSiteItems])
+  }, [searchConfig, searchInput, setConfig])
 }

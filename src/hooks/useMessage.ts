@@ -4,23 +4,20 @@ import {
   removeSiteMessage,
   ISite,
   queryMessage,
-  toggleSiteMessage,
-  ISiteItemList,
   type IMessage,
   IDataAction,
-  type IFilter,
-  changeFilterMessage,
-  sortMessage,
-  updateAllMessage,
-  reset,
+  type ISearchConfig,
 } from '@/models/base'
 
 export function useMessage() {
-  const [siteItems, setSiteItems] = useState<ISiteItemList>([])
+  const [searchConfig, setSearchConfig] = useState<ISearchConfig>({
+    filters: [],
+    sites: [],
+  })
 
   const listener = (message: IMessage) => {
     if (message.type === IDataAction.UPDATED) {
-      setSiteItems(message.data.siteItems)
+      setSearchConfig(message.data.searchConfig)
     }
   }
   const addSite = (item: ISite) => {
@@ -31,26 +28,7 @@ export function useMessage() {
     browser.runtime.sendMessage(removeSiteMessage(item))
   }
 
-  const toggleSite = (item: ISite) => {
-    browser.runtime.sendMessage(toggleSiteMessage(item))
-  }
-
-  const changeFilter = (filter: IFilter) => {
-    browser.runtime.sendMessage(changeFilterMessage(filter))
-  }
-
-  const updateSiteItems = (siteItems: ISiteItemList) => {
-    browser.runtime.sendMessage(updateAllMessage(siteItems))
-  }
-
-  const sort = (siteItems: ISiteItemList) => {
-    browser.runtime.sendMessage(sortMessage(siteItems))
-  }
-
-  const resetSiteItems = () => {
-    browser.runtime.sendMessage(reset())
-  }
-
+  // TODO: add filter, remove filter
   useEffect(() => {
     browser.runtime.sendMessage(queryMessage())
   }, [])
@@ -63,11 +41,6 @@ export function useMessage() {
   return {
     addSite,
     removeSite,
-    toggleSite,
-    changeFilter,
-    siteItems,
-    sort,
-    updateSiteItems,
-    resetSiteItems,
+    searchConfig,
   }
 }

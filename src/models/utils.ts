@@ -1,58 +1,34 @@
-import {
-  FILETYPE_FILTER_OPTIONS,
-  SiteItemType,
-  type ISiteItemList,
-} from './base'
+import { FILETYPE_FILTER_OPTIONS, type ISearchConfig } from './base'
 
-export function objectKeyMap(obj: ISiteItemList) {
-  return obj.reduce((prev, current) => {
-    if (current.type === SiteItemType.FILTER) {
-      prev[current.name] = current.value
-    } else if (current.type === SiteItemType.SITE) {
-      prev[current.domain] = current.isActive
-    }
-    return prev
-  }, {} as { [prop: string]: string | boolean })
-}
-
-export function hasChanged(source: ISiteItemList, obj: ISiteItemList) {
-  const keyMap1 = objectKeyMap(source)
-  const keyMap2 = objectKeyMap(obj)
-
-  return !Object.keys(keyMap1).every((key) => keyMap1[key] === keyMap2[key])
-}
 const fileTypeRegexp = /filetype:([\S]+)/gi
 const includedSiteRegexp = /\bsite:([\S]+)/gi
 
-export const getComputedItems = (value: string, items: ISiteItemList) => {
-  if (items.length === 0) return
-
-  const copy = makeCopy(items)
-
+export const getComputedItems = (
+  value: string,
+  config: ISearchConfig = { sites: [], filters: [] }
+) => {
+  const copy = makeCopy(config)
+  const { filters, sites } = copy
   const activeDomains: string[] = computeActiveSites(value)
 
   const activeFileType: string = computeFileType(value)
 
-  copy.forEach((c) => {
-    if (c.type === SiteItemType.FILTER) {
-      c.value = activeFileType
-    } else {
-      if (activeDomains.find((domain) => domain === c.domain)) {
-        c.isActive = true
-      }
+  const fileFilter = filters.find((filter) => filter.name === 'filetype')
+  if (fileFilter) {
+    fileFilter.value = activeFileType
+  }
+  sites.forEach((c) => {
+    if (activeDomains.find((domain) => domain === c.domain)) {
+      c.isActive = true
     }
   })
   return copy
 }
-export function makeCopy(items: ISiteItemList) {
-  return [...items].map((item) => {
-    if (item.type === SiteItemType.FILTER) {
-      item.value = 'all'
-    } else {
-      item.isActive = false
-    }
-    return item
-  })
+export function makeCopy(config: ISearchConfig): ISearchConfig {
+  return {
+    filters: config.filters.map((f) => ({ ...f, value: 'all' })),
+    sites: config.sites.map((f) => ({ ...f, isActive: false })),
+  }
 }
 // compute active domain by the string provided
 // all domains are returned, no matter it is included in config or not

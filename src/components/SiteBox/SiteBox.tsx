@@ -21,6 +21,7 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
   }
 
   const toggleStatus = () => {
+    site.isActive = !site.isActive
     if (onToggle) onToggle(site)
     if (searchInput) searchInput.focus()
   }

@@ -1,34 +1,39 @@
-import { SiteItemType } from '@/models/base'
-import { useMessage } from '@/hooks/useMessage'
+import { useSessionStorage } from '@/hooks/useSessionStorage'
 import { useInputSync } from '@/hooks/useInputSync'
-import { Button, SiteItem } from '@/components'
+import SiteBox from '@/components/SiteBox'
+import { Button, Dropdown } from '@/components'
 import deleteIcon from '@/assets/images/delete.svg'
 
 import css from './App.module.css'
 
 const App = () => {
-  const { siteItems, resetSiteItems } = useMessage()
+  const {
+    updateFilter,
+    updateSite,
+    reset,
+    searchConfig: { filters, sites },
+  } = useSessionStorage()
+
   useInputSync()
 
-  const reset = () => {
-    resetSiteItems()
-  }
   return (
     <div className={css.container}>
-      {siteItems.map((siteItem) => {
-        const key =
-          siteItem.type === SiteItemType.FILTER
-            ? siteItem.name
-            : siteItem.domain
-        return (
-          <SiteItem
-            siteItem={siteItem}
-            canToggleSite={true}
-            key={key}
-            size='sm'
-          />
-        )
-      })}
+      {filters.map((filter) => (
+        <Dropdown
+          key={filter.name}
+          filter={filter}
+          size={'sm'}
+          onSelect={updateFilter}
+        />
+      ))}
+      {sites.map((site) => (
+        <SiteBox
+          key={site.domain}
+          site={site}
+          size={'sm'}
+          onToggle={updateSite}
+        />
+      ))}
       <Button
         size='sm'
         type='warning'

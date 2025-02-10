@@ -6,9 +6,9 @@ import {
 } from './utils'
 import {
   FILETYPE_FILTER_OPTIONS,
-  FilterNames,
-  SiteItemType,
-  type ISiteItemList,
+  type IFilter,
+  type ISearchConfig,
+  type ISite,
 } from './base'
 
 describe('compute filters from string', () => {
@@ -17,40 +17,36 @@ describe('compute filters from string', () => {
     'filetype:doc OR filetype:docx site:reddit.com OR site:abc.com some words'
   const threeFiltersString =
     'filetype:pdf OR filetype:doc OR filetype:docx site:reddit.com OR site:abc.com OR site:x.com some words'
-  const siteItems: ISiteItemList = [
-    {
-      name: FilterNames.FILE_TYPE,
-      options: FILETYPE_FILTER_OPTIONS,
-      type: SiteItemType.FILTER,
-      value: 'doc,docx',
-    },
+  const emptyConfig: ISearchConfig = { filters: [], sites: [] }
+  const sites: ISite[] = [
     {
       isActive: true,
-      type: SiteItemType.SITE,
       domain: 'reddit.com',
     },
     {
       isActive: true,
-      type: SiteItemType.SITE,
       domain: 'x.com',
     },
     {
       isActive: true,
-      type: SiteItemType.SITE,
       domain: 'abc.com',
     },
   ]
+  const filters: IFilter[] = [
+    {
+      name: 'filetype',
+      options: FILETYPE_FILTER_OPTIONS,
+      value: 'doc,docx',
+    },
+  ]
+  const searchConfig: ISearchConfig = { sites, filters }
 
   describe('makeCopy', () => {
     it('reset all site item status', () => {
-      const copy = makeCopy(siteItems)
-      copy.forEach((c) => {
-        if (c.type === SiteItemType.FILTER) {
-          expect(c.value === 'all')
-        } else {
-          expect(c.isActive === false)
-        }
-      })
+      const copy = makeCopy(searchConfig)
+      copy.filters.forEach((f) => expect(f.value).toBe('all'))
+      copy.sites.forEach((s) => expect(s.isActive).toBe(false))
+      expect(copy).not.toBe(searchConfig)
     })
   })
 
@@ -90,69 +86,66 @@ describe('compute filters from string', () => {
   })
 
   describe(getComputedItems.name, () => {
-    it('returns undefined if site item list is empty', () => {
-      const result = getComputedItems(singleFilterString, [])
-      expect(result).toBe(undefined)
+    it('returns empty config if site item list is empty', () => {
+      const result = getComputedItems(singleFilterString, emptyConfig)
+      expect(result).toEqual(emptyConfig)
     })
     it('returns the computed site item list(single)', () => {
-      const result = getComputedItems(singleFilterString, siteItems)
-      expect(result).toHaveLength(siteItems.length)
-      expect(result).toContainEqual({
-        name: FilterNames.FILE_TYPE,
+      const { filters, sites } = getComputedItems(
+        singleFilterString,
+        searchConfig
+      )
+      expect(filters).toContainEqual({
+        name: 'filetype',
         options: FILETYPE_FILTER_OPTIONS,
-        type: SiteItemType.FILTER,
         value: 'pdf',
       })
-      expect(result).toContainEqual({
+      expect(sites).toContainEqual({
         domain: 'reddit.com',
         isActive: true,
-        type: SiteItemType.SITE,
       })
     })
 
     it('returns the computed site item list(multiple)', () => {
-      const result = getComputedItems(multiFiltersString, siteItems)
-      expect(result).toHaveLength(siteItems.length)
-      expect(result).toContainEqual({
-        name: FilterNames.FILE_TYPE,
+      const { filters, sites } = getComputedItems(
+        multiFiltersString,
+        searchConfig
+      )
+      expect(filters).toContainEqual({
+        name: 'filetype',
         options: FILETYPE_FILTER_OPTIONS,
-        type: SiteItemType.FILTER,
         value: 'doc,docx',
       })
-      expect(result).toContainEqual({
+      expect(sites).toContainEqual({
         domain: 'reddit.com',
         isActive: true,
-        type: SiteItemType.SITE,
       })
-      expect(result).toContainEqual({
+      expect(sites).toContainEqual({
         domain: 'abc.com',
         isActive: true,
-        type: SiteItemType.SITE,
       })
     })
     it('returns the computed site item list(treble)', () => {
-      const result = getComputedItems(threeFiltersString, siteItems)
-      expect(result).toHaveLength(siteItems.length)
-      expect(result).toContainEqual({
-        name: FilterNames.FILE_TYPE,
+      const { filters, sites } = getComputedItems(
+        threeFiltersString,
+        searchConfig
+      )
+      expect(filters).toContainEqual({
+        name: 'filetype',
         options: FILETYPE_FILTER_OPTIONS,
-        type: SiteItemType.FILTER,
         value: 'pdf',
       })
-      expect(result).toContainEqual({
+      expect(sites).toContainEqual({
         domain: 'reddit.com',
         isActive: true,
-        type: SiteItemType.SITE,
       })
-      expect(result).toContainEqual({
+      expect(sites).toContainEqual({
         domain: 'abc.com',
         isActive: true,
-        type: SiteItemType.SITE,
       })
-      expect(result).toContainEqual({
+      expect(sites).toContainEqual({
         domain: 'x.com',
         isActive: true,
-        type: SiteItemType.SITE,
       })
     })
   })

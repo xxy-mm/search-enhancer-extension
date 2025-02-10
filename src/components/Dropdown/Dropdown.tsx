@@ -15,9 +15,10 @@ export interface DropdownProps {
   onSelect: (filter: IFilter) => void
   filter: IFilter
   size?: 'sm'
+  disabled?: boolean
 }
 
-export function Dropdown({ onSelect, filter, size }: DropdownProps) {
+export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
   const { value, options } = filter
   const { searchInput } = useSearchInput()
   const dropDownRef = useRef<HTMLDivElement | null>(null)
@@ -26,6 +27,7 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
   const [left, setLeft] = useState(0)
 
   const onChange = (newOption: IFilterOption) => {
+    if (disabled) return
     const value = newOption.value
     onSelect({ ...filter, value })
     setShow(false)
@@ -35,6 +37,7 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
   }
 
   const clear = (e: MouseEvent) => {
+    if (disabled) return
     e.preventDefault()
     e.stopPropagation()
     const value = 'all'
@@ -45,6 +48,7 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
     }
   }
   const toggleDropdown = () => {
+    if (disabled) return
     const nextState = !show
     if (nextState) {
       const div = dropDownRef.current

@@ -2,20 +2,17 @@ import { StorageManagerImpl } from '@/models/storageManagerImpl'
 import {
   FILETYPE_FILTER_OPTIONS,
   IDataAction,
-  FilterNames,
   notifyUpdate,
-  SiteItemType,
   type IFilter,
   type IMessage,
-  type ISiteItemList,
+  type ISearchConfig,
 } from '@/models/base'
 
 const manager = new StorageManagerImpl()
 
 const fileTypeFilter: IFilter = {
-  name: FilterNames.FILE_TYPE,
+  name: 'filetype',
   options: FILETYPE_FILTER_OPTIONS,
-  type: SiteItemType.FILTER,
   value: 'all',
 }
 
@@ -29,41 +26,28 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
     case IDataAction.DELETE_SITE:
       await manager.removeSite(message.data)
       break
-    case IDataAction.UPDATE_SITE:
-      await manager.toggleSiteStatus(message.data)
-      break
-    case IDataAction.UPDATE_FILTER:
-      await manager.setFilter(message.data)
-      break
     case IDataAction.UPDATE_ALL:
-      await manager.setSiteItemList(message.data)
-      break
-    case IDataAction.RESET:
-      await manager.reset()
+      await manager.setSearchConfig(message.data)
       break
     default:
       throw `Unknown message: ${message}`
   }
-  const siteItems = await manager.getSiteItemList()
-  if (siteItems.length === 0) {
-    await manager.setFilter(fileTypeFilter)
-    notify([fileTypeFilter])
-  } else {
-    notify(siteItems)
+  let searchConfig = await manager.getSearchConfig()
+  if (searchConfig.filters.length === 0) {
+    await manager.addFilter(fileTypeFilter)
   }
+  searchConfig = await manager.getSearchConfig()
+  notify(searchConfig)
 })
 
-async function notify(data: ISiteItemList) {
+async function notify(data: ISearchConfig) {
   browser.runtime.sendMessage(notifyUpdate(data))
   notifyTabs(data)
 }
 
-async function notifyTabs(data: ISiteItemList) {
-  const tabs = await browser.tabs.query({
-    currentWindow: true,
-    active: true,
+async function notifyTabs(data: ISearchConfig) {
+  const tabs = await browser.tabs.query({})
+  tabs.forEach((tab) => {
+    if (tab.id) browser.tabs.sendMessage(tab.id, notifyUpdate(data))
   })
-  const id = tabs[0]?.id
-  if (id === undefined) return
-  browser.tabs.sendMessage(id, notifyUpdate(data))
 }

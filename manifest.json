@@ -40,5 +40,5 @@
     "default_icon": "images/toolbar-icon.svg"
   },
 
-  "permissions": ["storage", "activeTab"]
+  "permissions": ["storage", "activeTab", "tabs"]
 }
