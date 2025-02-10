@@ -10,26 +10,22 @@
         0 0 0 0.5px var(--shadow-color-light);
     cursor: pointer;
     background: var(--gray-color);
-    color: var(--font-dark-color);
+    color: var(--font-color-dark);
     user-select: none;
     position: relative;
     max-width: 100%;
     word-break: break-all;
     border: none;
+    font-size: 12px;
 
     img {
-
-        height: 12px;
+        width: 1em;
+        height: 1em;
         object-fit: contain;
     }
 
     &.sm {
         font-size: 10px;
-
-        img {
-
-            height: 10px;
-        }
     }
 
     &.primary {
@@ -41,6 +37,8 @@
         background: #d26e68;
         color: var(--white-color);
     }
+
+    &.rounded {}
 
 
 }

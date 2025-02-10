@@ -4,12 +4,12 @@
   width: 350px;
   max-height: 500px;
   height: auto;
-  padding: var(--page-padding);
+  padding: var(--padding-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--base-spacing);
+  gap: var(--gap-md);
   justify-content: stretch;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
 }
 
 .title {

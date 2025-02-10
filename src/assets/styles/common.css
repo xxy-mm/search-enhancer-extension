@@ -3,20 +3,48 @@
   --primary-color: #007aff;
   --secondary-color: #ffffff;
   --destructive-color: #ff3b30;
+  --gray-color: rgba(217, 217, 217, 0.47);
   --white-color: #ffffff;
+  /* shadow */
   --shadow-color-heavy: rgba(0, 0, 0, 0.3);
   --shadow-color: rgba(0, 0, 0, 0.15);
   --shadow-color-light: rgba(0, 0, 0, 0.05);
-  --gray-color: rgba(217, 217, 217, 0.47);
-  --input-outline-color: rgba(128, 188, 255, 0.5);
-  --base-spacing: 16px;
-  --page-padding: 20px;
-  --container-radius: 10px;
+  /* outline */
+  --outline-color: rgba(128, 188, 255, 0.5);
+  /* background */
+  --bg-dark: #1f1f1f;
+  /* gap */
+  --gap-sm: 4px;
+  --gap-md: 8px;
+  /* radius */
   --radius-sm: 3px;
-  --radius: 5px;
+  --radius-md: 5px;
   --radius-lg: 10px;
-  --font-dark-color: rgba(0, 0, 0, 0.85);
-  --dark-bg: #1f1f1f;
+  /* padding */
+  --padding-sm: 3px;
+  --padding-md: 5px;
+  --padding-lg: 10px;
+  /* font */
+
+  --font-color-dark: rgba(0, 0, 0, 0.85);
+  --font-color-white: var(--white-color);
+
+  /* button */
+  --button-font-size: 12px;
+  --button-font-size-sm: 10px;
+  --button-height-sm: 12px;
+  --button-height-normal: 15px;
+  --button-padding: 3px 6px;
+  --button-padding-sm: 3px 5px;
+  --button-bg-primary: var(--primary-color);
+  --button-bg-secondary: var(--gray-color);
+  --button-bg-warning: var(--destructive-color);
+  --button-text-warning: var(--font-color-white);
+  --button-text-primary: var(--font-color-white);
+  --button-text-secondary: var(--font-color-dark);
+  --button-box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
+    0 0 0 0.5px var(--shadow-color-light);
+
 }
 
 body {

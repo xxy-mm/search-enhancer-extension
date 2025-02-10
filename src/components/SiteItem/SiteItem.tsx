@@ -44,5 +44,5 @@ export function SiteItem({
     }
   }
 
-  return <div>{siteItemComponent()}</div>
+  return siteItemComponent()
 }

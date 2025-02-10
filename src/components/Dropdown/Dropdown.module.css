@@ -14,35 +14,24 @@
         0 0 0 0.5px var(--shadow-color-light);
     cursor: pointer;
     background: var(--gray-color);
-    color: var(--font-dark-color);
+    color: var(--font-color-dark);
     user-select: none;
     position: relative;
     max-width: 100%;
     word-break: break-all;
     border: none;
-
-    .dropdown-arrow {
-        position: relative;
-        margin-left: 18px;
-    }
-
-    .dropdown-arrow-down {
-        position: absolute;
-        right: 0;
-        transform: scale(0.8, 1);
-        top: -7px;
-    }
-
-    .dropdown-arrow-up {
-        position: absolute;
-        right: 0;
-        transform: scale(0.8, 1) rotate(180deg);
-        top: -12px;
-    }
+    font-size: 12px;
 
     &.sm {
         font-size: 10px;
     }
+
+    .dropdown-arrow {
+        width: 1em;
+        height: 1em;
+    }
+
+
 
     &.activate {
         background: var(--primary-color);
@@ -50,30 +39,18 @@
     }
 
     .clear-icon {
-        position: absolute;
-        right: -3px;
-        top: -3px;
-        width: 10px;
-        height: 10px;
+        width: 1em;
+        height: 1em;
+
+        background: #aea6a6;
         border-radius: 50%;
-        background: red;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: none;
-        z-index: 999;
+        margin-left: 8px;
+
+        @media (prefers-color-scheme: dark) {
+            background: #4d5156;
+        }
     }
 
-    &:hover .clear-icon {
-        display: initial;
-        animation: grow 0.2s ease forwards;
-    }
-
-    & .clear-icon:hover {
-        scale: 1.3;
-    }
 }
 
 

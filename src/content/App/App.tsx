@@ -1,7 +1,8 @@
 import { SiteItemType } from '@/models/base'
 import { useMessage } from '@/hooks/useMessage'
 import { useInputSync } from '@/hooks/useInputSync'
-import { SiteItem } from '@/components'
+import { Button, SiteItem } from '@/components'
+import deleteIcon from '@/assets/images/delete.svg'
 
 import css from './App.module.css'
 
@@ -25,6 +26,12 @@ const App = () => {
           />
         )
       })}
+      <Button
+        size='sm'
+        type='warning'
+        rounded>
+        <img src={browser.runtime.getURL(deleteIcon)} />
+      </Button>
     </div>
   )
 }

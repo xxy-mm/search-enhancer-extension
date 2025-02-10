@@ -6,23 +6,32 @@ import styles from './Button.module.css'
 export interface ButtonProps extends PropsWithChildren {
   onClick?: (e: React.MouseEvent) => void
   type?: 'primary' | 'warning'
-  sm?: boolean
+  size?: 'sm'
+  rounded?: boolean
 }
 
-export function Button({ onClick, type, sm, children }: ButtonProps) {
+export function Button({
+  onClick,
+  type,
+  rounded,
+  size,
+  children,
+}: ButtonProps) {
   const onButtonClick = (e: React.MouseEvent) => {
     if (onClick) onClick(e)
   }
   const classes = classNames(styles.button, {
     [styles.primary]: type === 'primary',
     [styles.warning]: type === 'warning',
-    [styles.sm]: sm,
+    [styles.sm]: size === 'sm',
+    [styles.rounded]: rounded,
   })
   return (
-    <div
+    <button
+      type={'button'}
       className={classes}
       onClick={onButtonClick}>
       {children}
-    </div>
+    </button>
   )
 }

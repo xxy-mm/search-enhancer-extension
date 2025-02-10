@@ -1,67 +1,48 @@
 .site-box {
   display: flex;
   align-items: center;
-  font-size: 12px;
+  font-size: var(--button-font-size);
   font-weight: 300;
-  padding: 3px 5px;
+  padding: var(--button-padding);
   border-radius: var(--radius-sm);
-  box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
-    0 0 0 0.5px var(--shadow-color-light);
+  box-shadow: var(--button-box-shadow);
   cursor: pointer;
-  background: var(--gray-color);
-  color: var(--font-dark-color);
+  background: var(--button-bg-secondary);
+  color: var(--button-text-secondary);
   user-select: none;
   position: relative;
   max-width: 100%;
-  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border: none;
 
   &.sm {
-    font-size: 10px;
+    font-size: var(--button-font-size-sm);
   }
-
-
-
 
   &.include {
     background: var(--primary-color);
     color: var(--white-color);
   }
 
-  &.exclude {
-    background: var(--destructive-color);
-    color: var(--white-color);
-  }
-
   .delete-icon {
     position: absolute;
-    right: -3px;
-    top: -3px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: red;
+    height: 100%;
+    padding: 0 1px;
+    right: -100%;
+    background: var(--button-bg-warning);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s;
-    display: none;
     z-index: 999;
+    transition: all 0.3s ease-out;
   }
 
   &:hover .delete-icon {
+    right: 0;
     display: initial;
-    animation: grow 0.3s ease-in forwards;
-  }
-}
-
-@keyframes grow {
-  from {
-    transform: scale(0.8);
-  }
-
-  to {
-    transform: scale(1.3);
+    transition: all 0.3s ease-in;
   }
 }
