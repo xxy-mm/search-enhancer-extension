@@ -2,7 +2,7 @@ import { StorageManagerImpl } from '@/models/storageManagerImpl'
 import {
   FILETYPE_FILTER_OPTIONS,
   IDataAction,
-  IFilterName,
+  FilterNames,
   notifyUpdate,
   SiteItemType,
   type IFilter,
@@ -13,7 +13,7 @@ import {
 const manager = new StorageManagerImpl()
 
 const fileTypeFilter: IFilter = {
-  name: IFilterName.FILE_TYPE,
+  name: FilterNames.FILE_TYPE,
   options: FILETYPE_FILTER_OPTIONS,
   type: SiteItemType.FILTER,
   value: 'all',

@@ -3,13 +3,13 @@
   outline: none;
   box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
     0 0 0 0.5px var(--shadow-color-light);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
 }
 
 .text-input:focus {
   box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
     0 0 0 0.5px var(--shadow-color-light),
-    0 0 0 1.5px var(--input-outline-color);
+    0 0 0 1.5px var(--outline-color);
 }
 
 .icon-input {
@@ -36,13 +36,13 @@
 
   /* Dark Mode styles go here. */
   .container {
-    background: var(--dark-bg);
+    background: var(--bg-dark);
   }
 
   .text-input {
     box-shadow: 0 0.5px 2.5px 0 rgba(255, 255, 255, 0.1),
       0 0 0 0.5px rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius);
+    border-radius: var(--radius-md);
   }
 
   .text-input:focus {

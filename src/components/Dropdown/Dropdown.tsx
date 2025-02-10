@@ -1,10 +1,12 @@
 import invariant from 'tiny-invariant'
-import { useRef, useState } from 'react'
+import { useRef, useState, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import classNames from 'classnames'
 import { type IFilter, type IFilterOption } from '@/models/base'
+import { useSearchInput } from '@/hooks/useSearchInput'
 
 import styles from './Dropdown.module.css'
+import deleteIcon from './delete.svg'
 import lightArrow from './arrow-down-light.svg'
 import darkArrow from './arrow-down-dark.svg'
 import { DropdownMenu } from '../DropdownMenu'
@@ -17,6 +19,7 @@ export interface DropdownProps {
 
 export function Dropdown({ onSelect, filter, size }: DropdownProps) {
   const { value, options } = filter
+  const { searchInput } = useSearchInput()
   const dropDownRef = useRef<HTMLDivElement | null>(null)
   const [show, setShow] = useState(false)
   const [top, setTop] = useState(0)
@@ -26,6 +29,20 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
     const value = newOption.value
     onSelect({ ...filter, value })
     setShow(false)
+    if (searchInput) {
+      searchInput.focus()
+    }
+  }
+
+  const clear = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const value = 'all'
+    onSelect({ ...filter, value })
+    setShow(false)
+    if (searchInput) {
+      searchInput.focus()
+    }
   }
   const toggleDropdown = () => {
     const nextState = !show
@@ -44,7 +61,7 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
     selectedOption = options.find((opt) => opt.value === 'all') as IFilterOption
   }
   const classes = classNames(styles.dropdown, {
-    [styles.active]: value !== 'all',
+    [styles.activate]: value !== 'all',
     [styles.sm]: size === 'sm',
   })
   return (
@@ -54,6 +71,13 @@ export function Dropdown({ onSelect, filter, size }: DropdownProps) {
         className={classes}
         onClick={toggleDropdown}>
         <span>{selectedOption.label}</span>
+        {value === 'all' ? null : (
+          <img
+            src={browser.runtime.getURL(deleteIcon)}
+            className={styles.clearIcon}
+            onClick={clear}
+          />
+        )}
         <DropDownArrow
           color={selectedOption.value === 'all' ? 'dark' : 'light'}
         />
@@ -78,15 +102,9 @@ interface DropDownArrowProps {
 function DropDownArrow({ color }: DropDownArrowProps) {
   const svg = color === 'dark' ? darkArrow : lightArrow
   return (
-    <div className={styles.dropdownArrow}>
-      <img
-        className={styles.dropdownArrowUp}
-        src={browser.runtime.getURL(svg)}
-      />
-      <img
-        className={styles.dropdownArrowDown}
-        src={browser.runtime.getURL(svg)}
-      />
-    </div>
+    <img
+      className={styles.dropdownArrow}
+      src={browser.runtime.getURL(svg)}
+    />
   )
 }

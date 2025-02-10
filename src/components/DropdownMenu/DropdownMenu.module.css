@@ -6,11 +6,11 @@
     left: 100px;
     z-index: 999;
     background-color: var(--white-color);
-    color: var(--font-dark-color);
+    color: var(--font-color-dark);
 
     @media (prefers-color-scheme: dark) {
         /* Dark Mode styles go here. */
-        background-color: var(--dark-bg);
+        background-color: var(--bg-dark);
         color: var(--white-color);
     }
 
