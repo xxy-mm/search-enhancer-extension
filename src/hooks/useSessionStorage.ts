@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { SessionStorageManager } from '@/models/sessionStorageManager'
 import {
   emptySearchConfig,
@@ -18,11 +18,12 @@ export function useSessionStorage() {
   const [computedConfig, setComputedConfig] =
     useState<ISearchConfig>(emptySearchConfig)
 
-  const updateSite = (site: ISite) => {
+  const updateSite = useCallback((site: ISite) => {
     manager.updateSite(site)
     const config = manager.getSearchConfig()
+    console.log('config', config)
     setSessionConfig(config)
-  }
+  }, [])
 
   const updateFilter = (filter: IFilter) => {
     manager.updateFilter(filter)
@@ -31,7 +32,7 @@ export function useSessionStorage() {
   }
 
   const setConfig = (config: ISearchConfig) => {
-    manager.setConfig(config)
+    manager.setSearchConfig(config)
     setSessionConfig(config)
   }
 
@@ -45,31 +46,30 @@ export function useSessionStorage() {
   }, [])
 
   useEffect(() => {
-    console.log('setcomputedconfig')
     if (!searchConfig) return
 
     const { filters, sites } = searchConfig
 
     const { filters: sessionFilters, sites: sessionSites } = sessionConfig
-    sessionFilters.forEach((sf) => {
-      const foundFilter = filters.find((f) => sf.name === f.name)
-      if (foundFilter) {
-        foundFilter.value = sf.value
-      }
+
+    const computedFilters: IFilter[] = filters.map((f) => {
+      const found = sessionFilters.find((sf) => sf.name === f.name)
+      return found ? { ...found } : { ...f }
     })
-    sessionSites.forEach((ss) => {
-      const foundSite = sites.find((s) => ss.domain === s.domain)
-      if (foundSite) {
-        foundSite.isActive = true
-      }
+    const computedSites: ISite[] = sites.map((s) => {
+      const found = sessionSites.find((ss) => ss.domain === s.domain)
+      return found ? { ...found } : { ...s }
     })
-    setComputedConfig({ filters, sites })
+    const computedConfig = { filters: computedFilters, sites: computedSites }
+    setComputedConfig(computedConfig)
   }, [searchConfig, sessionConfig])
   return {
-    searchConfig: computedConfig,
+    sessionConfig,
+    computedConfig,
     updateFilter,
     updateSite,
-    setConfig,
+    setSessionConfig: setConfig,
     reset,
+    searchConfig,
   }
 }

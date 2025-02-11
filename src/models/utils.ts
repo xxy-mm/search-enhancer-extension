@@ -7,22 +7,22 @@ export const getComputedItems = (
   value: string,
   config: ISearchConfig = { sites: [], filters: [] }
 ) => {
-  const copy = makeCopy(config)
-  const { filters, sites } = copy
+  const { filters, sites } = config
+  const result: ISearchConfig = { filters: [], sites: [] }
   const activeDomains: string[] = computeActiveSites(value)
-
   const activeFileType: string = computeFileType(value)
-
   const fileFilter = filters.find((filter) => filter.name === 'filetype')
-  if (fileFilter) {
+  if (fileFilter && activeFileType !== 'all') {
     fileFilter.value = activeFileType
+    result.filters.push(fileFilter)
   }
-  sites.forEach((c) => {
-    if (activeDomains.find((domain) => domain === c.domain)) {
-      c.isActive = true
+  sites.forEach((site) => {
+    if (activeDomains.find((domain) => domain === site.domain)) {
+      site.isActive = true
+      result.sites.push(site)
     }
   })
-  return copy
+  return result
 }
 export function makeCopy(config: ISearchConfig): ISearchConfig {
   return {

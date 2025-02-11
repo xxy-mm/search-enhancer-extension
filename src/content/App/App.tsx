@@ -1,4 +1,3 @@
-import { useSessionStorage } from '@/hooks/useSessionStorage'
 import { useInputSync } from '@/hooks/useInputSync'
 import SiteBox from '@/components/SiteBox'
 import { Button, Dropdown } from '@/components'
@@ -11,10 +10,8 @@ const App = () => {
     updateFilter,
     updateSite,
     reset,
-    searchConfig: { filters, sites },
-  } = useSessionStorage()
-
-  useInputSync()
+    computedConfig: { filters, sites },
+  } = useInputSync()
 
   return (
     <div className={css.container}>

@@ -3,16 +3,23 @@ import { getComputedItems } from '@/models/utils'
 
 import { useSessionStorage } from './useSessionStorage'
 import { useSearchInput } from './useSearchInput'
-import { useMessage } from './useMessage'
 
 const placeholder = '🔍'
 const siteItemRegexp = /(-?site:\S+|filetype:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
-  const { searchConfig } = useMessage()
-  const { setConfig, searchConfig: sessionSearchConfig } = useSessionStorage()
+  const {
+    searchConfig,
+    setSessionConfig,
+    sessionConfig,
+    computedConfig,
+    updateFilter,
+    updateSite,
+    reset,
+  } = useSessionStorage()
   const { searchInput } = useSearchInput()
 
+  console.log('sessionSearchConfig', sessionConfig)
   // BUG: filters does not sync with search input values
   useEffect(() => {
     if (!searchInput) return
@@ -22,15 +29,17 @@ export function useInputSync() {
     const activeFileFilters: string[] = []
     const activeSites: string[] = []
 
-    const { filters, sites } = sessionSearchConfig
+    const { filters, sites } = sessionConfig
 
     const fileTypeFilter = filters.find((filter) => filter.name === 'filetype')
-    if (fileTypeFilter) {
+    if (fileTypeFilter && fileTypeFilter.value !== 'all') {
       activeFileFilters.push(`filetype:${fileTypeFilter.value}`)
     }
 
     sites.forEach((site) => {
-      activeSites.push(`site:${site.domain}`)
+      if (site.isActive) {
+        activeSites.push(`site:${site.domain}`)
+      }
     })
 
     queryStringArray.push(
@@ -48,16 +57,15 @@ export function useInputSync() {
     }
     queryStringArray.push(words)
     searchInput.value = queryStringArray.join(' ')
-  }, [searchInput, sessionSearchConfig])
+  }, [searchInput, sessionConfig])
 
   useEffect(() => {
     if (!searchInput) return
 
     function searchListener(e: Event) {
       const value = (e.target as HTMLTextAreaElement).value
-      const newSiteItems = getComputedItems(value, searchConfig)
-
-      setConfig(newSiteItems)
+      const sessionConfig = getComputedItems(value, searchConfig)
+      setSessionConfig(sessionConfig)
     }
 
     searchInput.addEventListener('input', searchListener)
@@ -65,5 +73,13 @@ export function useInputSync() {
     return () => {
       searchInput.removeEventListener('input', searchListener)
     }
-  }, [searchConfig, searchInput, setConfig])
+  }, [searchConfig, searchInput, setSessionConfig])
+
+  return {
+    computedConfig,
+    updateFilter,
+    updateSite,
+    searchConfig,
+    reset,
+  }
 }

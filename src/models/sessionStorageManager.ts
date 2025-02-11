@@ -22,32 +22,37 @@ export class SessionStorageManager {
   // else remove the site from session storage
   // only active sites are stored in session storage
   updateSite = (site: ISite) => {
-    const config = this.getSearchConfig()
-    const found = config.sites.find((item) => item.domain === site.domain)
+    const { filters, sites } = this.getSearchConfig()
+    const found = sites.find((item) => item.domain === site.domain)
     if (site.isActive) {
-      if (!found) config.sites.push(site)
+      if (!found) sites.push(site)
     } else {
-      if (found) config.sites.splice(config.sites.indexOf(found), 1)
+      if (found) sites.splice(sites.indexOf(found), 1)
     }
-    this.setSearchConfig(config)
+    this.setSearchConfig({ filters, sites })
   }
 
   // the difference from sites is all updated filters are stored in session storage
   // since they always have a value
   updateFilter = (filter: IFilter) => {
-    const config = this.getSearchConfig()
-    const found = config.filters.find((f) => f.name === filter.name)
+    const { filters, sites } = this.getSearchConfig()
+    const found = filters.find((f) => f.name === filter.name)
 
-    if (found) {
-      found.value = filter.value
+    if (filter.value === 'all') {
+      if (found) {
+        filters.splice(filters.indexOf(found), 1)
+      }
     } else {
-      config.filters.push(filter)
+      if (found) {
+        found.value = filter.value
+      } else {
+        filters.push(filter)
+      }
     }
-    this.setSearchConfig(config)
-  }
-
-  setConfig = (config: ISearchConfig) => {
-    sessionStorage.setItem(this.storageKey, JSON.stringify(config))
+    this.setSearchConfig({
+      filters,
+      sites,
+    })
   }
 
   // reset all filter and sites to inactive state
