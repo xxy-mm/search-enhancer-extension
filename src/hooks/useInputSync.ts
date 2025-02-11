@@ -13,6 +13,7 @@ export function useInputSync() {
   const { setConfig, searchConfig: sessionSearchConfig } = useSessionStorage()
   const { searchInput } = useSearchInput()
 
+  // BUG: filters does not sync with search input values
   useEffect(() => {
     if (!searchInput) return
 

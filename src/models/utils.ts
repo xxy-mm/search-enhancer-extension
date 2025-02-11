@@ -45,7 +45,6 @@ export function computeActiveSites(value: string) {
 // compute active file types by the string provided
 // the file type are restricted to the values of file type options
 // unknown file types are omitted
-// todo: should support multi filetypes filter
 export function computeFileType(value: string) {
   const fileTypes = value.matchAll(fileTypeRegexp) || []
   const computedFileTypes: string[] = []
