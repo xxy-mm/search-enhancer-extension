@@ -7,21 +7,15 @@ import {
   type ISite,
 } from '@/models/base'
 
-import { useMessage } from './useMessage'
-
 const manager = new SessionStorageManager()
 
-export function useSessionStorage() {
-  const { searchConfig } = useMessage()
+export function useSessionStorage(defaultConfig: ISearchConfig) {
   const [sessionConfig, setSessionConfig] =
-    useState<ISearchConfig>(emptySearchConfig)
-  const [computedConfig, setComputedConfig] =
-    useState<ISearchConfig>(emptySearchConfig)
+    useState<ISearchConfig>(defaultConfig)
 
   const updateSite = useCallback((site: ISite) => {
     manager.updateSite(site)
     const config = manager.getSearchConfig()
-    console.log('config', config)
     setSessionConfig(config)
   }, [])
 
@@ -45,31 +39,11 @@ export function useSessionStorage() {
     setSessionConfig(manager.getSearchConfig())
   }, [])
 
-  useEffect(() => {
-    if (!searchConfig) return
-
-    const { filters, sites } = searchConfig
-
-    const { filters: sessionFilters, sites: sessionSites } = sessionConfig
-
-    const computedFilters: IFilter[] = filters.map((f) => {
-      const found = sessionFilters.find((sf) => sf.name === f.name)
-      return found ? { ...found } : { ...f }
-    })
-    const computedSites: ISite[] = sites.map((s) => {
-      const found = sessionSites.find((ss) => ss.domain === s.domain)
-      return found ? { ...found } : { ...s }
-    })
-    const computedConfig = { filters: computedFilters, sites: computedSites }
-    setComputedConfig(computedConfig)
-  }, [searchConfig, sessionConfig])
   return {
     sessionConfig,
-    computedConfig,
     updateFilter,
     updateSite,
     setSessionConfig: setConfig,
     reset,
-    searchConfig,
   }
 }

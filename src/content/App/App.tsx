@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import { useInputSync } from '@/hooks/useInputSync'
+import { ContentContext } from '@/contexts/ContentContext'
 import SiteBox from '@/components/SiteBox'
 import { Button, Dropdown } from '@/components'
 import deleteIcon from '@/assets/images/delete.svg'
@@ -11,7 +13,8 @@ const App = () => {
     updateSite,
     reset,
     computedConfig: { filters, sites },
-  } = useInputSync()
+  } = useContext(ContentContext)
+  useInputSync()
 
   return (
     <div className={css.container}>

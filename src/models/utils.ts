@@ -3,10 +3,7 @@ import { FILETYPE_FILTER_OPTIONS, type ISearchConfig } from './base'
 const fileTypeRegexp = /filetype:([\S]+)/gi
 const includedSiteRegexp = /\bsite:([\S]+)/gi
 
-export const getComputedItems = (
-  value: string,
-  config: ISearchConfig = { sites: [], filters: [] }
-) => {
+export const getComputedItems = (value: string, config: ISearchConfig) => {
   const { filters, sites } = config
   const result: ISearchConfig = { filters: [], sites: [] }
   const activeDomains: string[] = computeActiveSites(value)
