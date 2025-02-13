@@ -1,9 +1,4 @@
-import {
-  computeActiveSites,
-  computeFileType,
-  getComputedItems,
-  makeCopy,
-} from './utils'
+import { computeActiveSites, computeFileType, getComputedItems } from './utils'
 import {
   FILETYPE_FILTER_OPTIONS,
   type IFilter,
@@ -40,15 +35,6 @@ describe('compute filters from string', () => {
     },
   ]
   const searchConfig: ISearchConfig = { sites, filters }
-
-  describe('makeCopy', () => {
-    it('reset all site item status', () => {
-      const copy = makeCopy(searchConfig)
-      copy.filters.forEach((f) => expect(f.value).toBe('all'))
-      copy.sites.forEach((s) => expect(s.isActive).toBe(false))
-      expect(copy).not.toBe(searchConfig)
-    })
-  })
 
   describe('computeActiveSites', () => {
     it('returns the only site matched in string', () => {
@@ -97,12 +83,10 @@ describe('compute filters from string', () => {
       )
       expect(filters).toContainEqual({
         name: 'filetype',
-        options: FILETYPE_FILTER_OPTIONS,
         value: 'pdf',
       })
       expect(sites).toContainEqual({
         domain: 'reddit.com',
-        isActive: true,
       })
     })
 
@@ -113,16 +97,13 @@ describe('compute filters from string', () => {
       )
       expect(filters).toContainEqual({
         name: 'filetype',
-        options: FILETYPE_FILTER_OPTIONS,
         value: 'doc,docx',
       })
       expect(sites).toContainEqual({
         domain: 'reddit.com',
-        isActive: true,
       })
       expect(sites).toContainEqual({
         domain: 'abc.com',
-        isActive: true,
       })
     })
     it('returns the computed site item list(treble)', () => {
@@ -132,20 +113,16 @@ describe('compute filters from string', () => {
       )
       expect(filters).toContainEqual({
         name: 'filetype',
-        options: FILETYPE_FILTER_OPTIONS,
         value: 'pdf',
       })
       expect(sites).toContainEqual({
         domain: 'reddit.com',
-        isActive: true,
       })
       expect(sites).toContainEqual({
         domain: 'abc.com',
-        isActive: true,
       })
       expect(sites).toContainEqual({
         domain: 'x.com',
-        isActive: true,
       })
     })
   })

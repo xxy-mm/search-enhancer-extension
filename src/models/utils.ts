@@ -1,32 +1,35 @@
-import { FILETYPE_FILTER_OPTIONS, type ISearchConfig } from './base'
+import {
+  FILETYPE_FILTER_OPTIONS,
+  FILTER_OPTION_DEFAULT,
+  type ISearchConfig,
+  type ISessionSearchConfig,
+} from './base'
 
 const fileTypeRegexp = /filetype:([\S]+)/gi
 const includedSiteRegexp = /\bsite:([\S]+)/gi
 
+// FEAT: If we can store the result as a string, and compute it back to session search config in component
+// the performance can be improved.
 export const getComputedItems = (value: string, config: ISearchConfig) => {
   const { filters, sites } = config
-  const result: ISearchConfig = { filters: [], sites: [] }
+  const result: ISessionSearchConfig = { filters: [], sites: [] }
   const activeDomains: string[] = computeActiveSites(value)
   const activeFileType: string = computeFileType(value)
   const fileFilter = filters.find((filter) => filter.name === 'filetype')
-  if (fileFilter && activeFileType !== 'all') {
-    fileFilter.value = activeFileType
-    result.filters.push(fileFilter)
+  if (fileFilter && activeFileType !== FILTER_OPTION_DEFAULT) {
+    result.filters.push({ name: fileFilter.name, value: activeFileType })
   }
   sites.forEach((site) => {
     if (activeDomains.find((domain) => domain === site.domain)) {
-      site.isActive = true
-      result.sites.push(site)
+      result.sites.push({ domain: site.domain })
+    } else {
+      // FEAT: add new site to search config and make it active
+      // need discussion: how to prevent user from accidentally adding new site?
     }
   })
   return result
 }
-export function makeCopy(config: ISearchConfig): ISearchConfig {
-  return {
-    filters: config.filters.map((f) => ({ ...f, value: 'all' })),
-    sites: config.sites.map((f) => ({ ...f, isActive: false })),
-  }
-}
+
 // compute active domain by the string provided
 // all domains are returned, no matter it is included in config or not
 export function computeActiveSites(value: string) {
@@ -70,7 +73,7 @@ export function computeFileType(value: string) {
     }
   }
   if (!typeMatched) {
-    typeMatched = 'all'
+    typeMatched = FILTER_OPTION_DEFAULT
   }
 
   return typeMatched

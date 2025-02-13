@@ -7,8 +7,10 @@ import {
 } from 'react'
 import {
   emptySearchConfig,
+  FILTER_OPTION_DEFAULT,
   type IFilter,
   type ISearchConfig,
+  type ISessionSearchConfig,
   type ISite,
 } from '@/models/base'
 import { useSessionStorage } from '@/hooks/useSessionStorage'
@@ -17,11 +19,11 @@ import { useMessage } from '@/hooks/useMessage'
 interface IContextContext {
   updateSite: (site: ISite) => void
   updateFilter: (filter: IFilter) => void
-  setSessionConfig: (config: ISearchConfig) => void
+  setSessionConfig: (config: ISessionSearchConfig) => void
   reset: () => void
   defaultConfig: ISearchConfig
   computedConfig: ISearchConfig
-  sessionConfig: ISearchConfig
+  sessionConfig: ISessionSearchConfig
 }
 export const ContentContext = createContext<IContextContext>(
   {} as IContextContext
@@ -70,11 +72,11 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
 
     const computedFilters: IFilter[] = filters.map((f) => {
       const found = sessionFilters.find((sf) => sf.name === f.name)
-      return found ? { ...found } : { ...f }
+      return { ...f, value: found ? found.value : FILTER_OPTION_DEFAULT }
     })
     const computedSites: ISite[] = sites.map((s) => {
       const found = sessionSites.find((ss) => ss.domain === s.domain)
-      return found ? { ...found } : { ...s }
+      return { ...s, isActive: found ? true : false }
     })
     const computedConfig = { filters: computedFilters, sites: computedSites }
     setComputedConfig(computedConfig)

@@ -1,6 +1,7 @@
 import { StorageManagerImpl } from '@/models/storageManagerImpl'
 import {
   FILETYPE_FILTER_OPTIONS,
+  FILTER_OPTION_DEFAULT,
   IDataAction,
   notifyUpdate,
   type IFilter,
@@ -13,7 +14,7 @@ const manager = new StorageManagerImpl()
 const fileTypeFilter: IFilter = {
   name: 'filetype',
   options: FILETYPE_FILTER_OPTIONS,
-  value: 'all',
+  value: FILTER_OPTION_DEFAULT,
 }
 
 browser.runtime.onMessage.addListener(async (message: IMessage) => {

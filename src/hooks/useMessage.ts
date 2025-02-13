@@ -28,7 +28,7 @@ export function useMessage() {
     browser.runtime.sendMessage(removeSiteMessage(item))
   }
 
-  // TODO: add filter, remove filter
+  // FEAT: add filter, remove filter
   useEffect(() => {
     browser.runtime.sendMessage(queryMessage())
   }, [])

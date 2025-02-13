@@ -2,16 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { SessionStorageManager } from '@/models/sessionStorageManager'
 import {
   emptySearchConfig,
-  ISearchConfig,
+  ISessionSearchConfig,
   type IFilter,
   type ISite,
 } from '@/models/base'
 
 const manager = new SessionStorageManager()
 
-export function useSessionStorage(defaultConfig: ISearchConfig) {
+export function useSessionStorage(defaultConfig: ISessionSearchConfig) {
   const [sessionConfig, setSessionConfig] =
-    useState<ISearchConfig>(defaultConfig)
+    useState<ISessionSearchConfig>(defaultConfig)
 
   const updateSite = useCallback((site: ISite) => {
     manager.updateSite(site)
@@ -25,7 +25,7 @@ export function useSessionStorage(defaultConfig: ISearchConfig) {
     setSessionConfig(config)
   }
 
-  const setConfig = (config: ISearchConfig) => {
+  const setConfig = (config: ISessionSearchConfig) => {
     manager.setSearchConfig(config)
     setSessionConfig(config)
   }

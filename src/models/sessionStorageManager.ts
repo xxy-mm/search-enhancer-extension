@@ -1,18 +1,19 @@
 import {
   type ISite,
   type IFilter,
-  type ISearchConfig,
+  type ISessionSearchConfig,
   emptySearchConfig,
+  FILTER_OPTION_DEFAULT,
 } from './base'
 
 export class SessionStorageManager {
   private storageKey = 'searchEnhancer'
 
-  setSearchConfig = (config: ISearchConfig) => {
+  setSearchConfig = (config: ISessionSearchConfig) => {
     sessionStorage.setItem(this.storageKey, JSON.stringify(config))
   }
 
-  getSearchConfig = (): ISearchConfig => {
+  getSearchConfig = (): ISessionSearchConfig => {
     const config = sessionStorage.getItem(this.storageKey)
     return config ? JSON.parse(config) : emptySearchConfig
   }
@@ -38,7 +39,7 @@ export class SessionStorageManager {
     const { filters, sites } = this.getSearchConfig()
     const found = filters.find((f) => f.name === filter.name)
 
-    if (filter.value === 'all') {
+    if (filter.value === FILTER_OPTION_DEFAULT) {
       if (found) {
         filters.splice(filters.indexOf(found), 1)
       }
