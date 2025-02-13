@@ -1,5 +1,6 @@
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { ContentContextProvider } from '@/contexts/ContentContext'
 
 import App from './App/App'
 
@@ -18,7 +19,9 @@ function injectCustomElement() {
 
     createRoot(customElement).render(
       <StrictMode>
-        <App />
+        <ContentContextProvider>
+          <App />
+        </ContentContextProvider>
       </StrictMode>
     )
   }
