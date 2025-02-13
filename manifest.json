@@ -29,7 +29,8 @@
         "dist/assets/delete.svg",
         "dist/assets/arrow-down-dark.svg",
         "dist/assets/arrow-down-light.svg",
-        "dist/assets/plus.circle.svg"
+        "dist/assets/plus.circle.svg",
+        "dist/assets/trash.svg"
       ],
       "matches": ["https://www.google.com/search*", "https://www.google.com/*"]
     }

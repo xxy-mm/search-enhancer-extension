@@ -1,6 +1,7 @@
 .site-box {
   display: flex;
   align-items: center;
+  gap: var(--gap-sm);
   font-size: var(--button-font-size);
   font-weight: 300;
   padding: var(--button-padding);
@@ -26,23 +27,16 @@
   }
 
   .delete-icon {
-    position: absolute;
-    height: 100%;
-    padding: 0 1px;
-    right: -100%;
+    order: -1;
     background: var(--button-bg-warning);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
-    transition: all 0.3s;
-    z-index: 999;
     transition: all 0.3s ease-out;
+    width: 0;
+
   }
 
   &:hover .delete-icon {
-    right: 0;
-    display: initial;
+    width: 1.2em;
     transition: all 0.3s ease-in;
   }
 }

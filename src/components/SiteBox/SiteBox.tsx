@@ -1,9 +1,9 @@
 import * as React from 'react'
 import classNames from 'classnames'
 import { useSearchInput } from '@/hooks/useSearchInput'
+import trashIcon from '@/assets/images/trash.svg'
 
 import css from './SiteBox.module.css'
-import deleteIcon from './delete.svg'
 import { ISite } from '../../models/base'
 
 export type SiteBoxProps = {
@@ -41,7 +41,7 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
       {onRemove ? (
         <img
           className={css.deleteIcon}
-          src={browser.runtime.getURL(deleteIcon)}
+          src={browser.runtime.getURL(trashIcon)}
           onClick={remove}
         />
       ) : null}
