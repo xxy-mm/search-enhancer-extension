@@ -33,9 +33,7 @@ export function useInputSync() {
       }
 
       sites.forEach((site) => {
-        if (site.isActive) {
-          activeSites.push(`site:${site.domain}`)
-        }
+        activeSites.push(`site:${site.domain}`)
       })
 
       queryStringArray.push(

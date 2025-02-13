@@ -10,18 +10,25 @@ export type ISite = {
 }
 export type IFilter = {
   name: 'filetype'
-  value: string | 'all'
+  value: string
   options: IFilterOptions
 }
 
+export type ISessionFilter = Pick<IFilter, 'name' | 'value'>
+export type ISessionSite = Pick<ISite, 'domain'>
+export type ISessionSearchConfig = {
+  filters: ISessionFilter[]
+  sites: ISessionSite[]
+}
 export interface ISearchConfig {
   filters: IFilter[]
   sites: ISite[]
 }
 
+export const FILTER_OPTION_DEFAULT = 'all'
 // filter options
 export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [
-  { label: 'All File Types', value: 'all' },
+  { label: 'All File Types', value: FILTER_OPTION_DEFAULT },
   { label: 'PDF(.pdf)', value: 'pdf' },
   { label: 'Word(.doc,.docx)', value: 'doc,docx' },
   { label: 'Excel(.xls,.xlsx)', value: 'xls,xlsx' },

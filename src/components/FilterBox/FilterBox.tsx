@@ -1,6 +1,6 @@
 import * as React from 'react'
 import classNames from 'classnames'
-import type { IFilter } from '@/models/base'
+import { FILTER_OPTION_DEFAULT, type IFilter } from '@/models/base'
 
 import css from './FilterBox.module.css'
 
@@ -17,7 +17,7 @@ const FilterBox = ({ onSelect, filter, size }: FilterBoxProps) => {
   }
 
   const styles = classNames(css.dropdown, {
-    [css.inactive]: value === 'all',
+    [css.inactive]: value === FILTER_OPTION_DEFAULT,
     [css.sm]: size === 'sm',
   })
 

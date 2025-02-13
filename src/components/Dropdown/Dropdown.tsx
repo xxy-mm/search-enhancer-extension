@@ -2,7 +2,11 @@ import invariant from 'tiny-invariant'
 import { useRef, useState, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import classNames from 'classnames'
-import { type IFilter, type IFilterOption } from '@/models/base'
+import {
+  FILTER_OPTION_DEFAULT,
+  type IFilter,
+  type IFilterOption,
+} from '@/models/base'
 import { useSearchInput } from '@/hooks/useSearchInput'
 
 import styles from './Dropdown.module.css'
@@ -40,7 +44,7 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
     if (disabled) return
     e.preventDefault()
     e.stopPropagation()
-    const value = 'all'
+    const value = FILTER_OPTION_DEFAULT
     onSelect({ ...filter, value })
     setShow(false)
     if (searchInput) {
@@ -62,10 +66,12 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
 
   let selectedOption = options.find((opt) => opt.value === value)
   if (!selectedOption) {
-    selectedOption = options.find((opt) => opt.value === 'all') as IFilterOption
+    selectedOption = options.find(
+      (opt) => opt.value === FILTER_OPTION_DEFAULT
+    ) as IFilterOption
   }
   const classes = classNames(styles.dropdown, {
-    [styles.activate]: value !== 'all',
+    [styles.activate]: value !== FILTER_OPTION_DEFAULT,
     [styles.sm]: size === 'sm',
   })
   return (
@@ -75,7 +81,7 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
         className={classes}
         onClick={toggleDropdown}>
         <span>{selectedOption.label}</span>
-        {value === 'all' ? null : (
+        {value === FILTER_OPTION_DEFAULT ? null : (
           <img
             src={browser.runtime.getURL(deleteIcon)}
             className={styles.clearIcon}
@@ -83,7 +89,9 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
           />
         )}
         <DropDownArrow
-          color={selectedOption.value === 'all' ? 'dark' : 'light'}
+          color={
+            selectedOption.value === FILTER_OPTION_DEFAULT ? 'dark' : 'light'
+          }
         />
       </div>
       {show &&
