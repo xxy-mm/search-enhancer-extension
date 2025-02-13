@@ -92,7 +92,7 @@ export const updateAllMessage = (searchConfig: ISearchConfig): IMessage => ({
   data: searchConfig,
 })
 
-export const emptySearchConfig: ISearchConfig = {
+export const emptySearchConfig: Readonly<ISearchConfig> = {
   filters: [],
   sites: [],
 }

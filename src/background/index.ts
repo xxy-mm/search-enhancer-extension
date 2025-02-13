@@ -41,7 +41,8 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
   notify(searchConfig)
 })
 
-async function notify(data: ISearchConfig) {
+function notify(data: ISearchConfig) {
+  // FIXME: if using await, the execution hangs forever, why?
   browser.runtime.sendMessage(notifyUpdate(data))
   notifyTabs(data)
 }

@@ -13,8 +13,12 @@ const App = () => {
     updateSite,
     reset,
     computedConfig: { filters, sites },
+    sessionConfig,
   } = useContext(ContentContext)
   useInputSync()
+
+  const showRemoveBtn =
+    sessionConfig.filters.length > 0 || sessionConfig.sites.length > 0
 
   return (
     <div className={css.container}>
@@ -34,13 +38,16 @@ const App = () => {
           onToggle={updateSite}
         />
       ))}
-      <Button
-        size='sm'
-        type='warning'
-        onClick={reset}
-        rounded>
-        <img src={browser.runtime.getURL(deleteIcon)} />
-      </Button>
+
+      {showRemoveBtn ? (
+        <Button
+          size='sm'
+          type='warning'
+          onClick={reset}
+          rounded>
+          <img src={browser.runtime.getURL(deleteIcon)} />
+        </Button>
+      ) : null}
     </div>
   )
 }
