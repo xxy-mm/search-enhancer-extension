@@ -1,9 +1,9 @@
 import {
-  type ISite,
-  type IFilter,
   type ISessionSearchConfig,
   emptySearchConfig,
   FILTER_OPTION_DEFAULT,
+  type ISite,
+  type ISessionFilter,
 } from './base'
 
 export class SessionStorageManager {
@@ -26,7 +26,7 @@ export class SessionStorageManager {
     const { filters, sites } = this.getSearchConfig()
     const found = sites.find((item) => item.domain === site.domain)
     if (site.isActive) {
-      if (!found) sites.push(site)
+      if (!found) sites.push({ domain: site.domain })
     } else {
       if (found) sites.splice(sites.indexOf(found), 1)
     }
@@ -35,7 +35,7 @@ export class SessionStorageManager {
 
   // the difference from sites is all updated filters are stored in session storage
   // since they always have a value
-  updateFilter = (filter: IFilter) => {
+  updateFilter = (filter: ISessionFilter) => {
     const { filters, sites } = this.getSearchConfig()
     const found = filters.find((f) => f.name === filter.name)
 
@@ -47,7 +47,7 @@ export class SessionStorageManager {
       if (found) {
         found.value = filter.value
       } else {
-        filters.push(filter)
+        filters.push({ name: filter.name, value: filter.value })
       }
     }
     this.setSearchConfig({
