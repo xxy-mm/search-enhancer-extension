@@ -85,6 +85,23 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
     setComputedConfig(computedConfig)
   }, [searchConfig, sessionConfig])
 
+  // remove filters and sites from session config if they are no longer included in search config
+  useEffect(() => {
+    const { filters: sessionFilters, sites: sessionSites } = sessionConfig
+    const { filters, sites } = searchConfig
+    // remove session filters that not found in filters
+    const newSessionFilters = sessionFilters.filter((sf) =>
+      filters.some((f) => f.name === sf.name)
+    )
+    const newSessionSites = sessionSites.filter((sf) =>
+      sites.some((s) => s.domain === sf.domain)
+    )
+    setSessionConfig({
+      filters: newSessionFilters,
+      sites: newSessionSites,
+    })
+  }, [searchConfig, sessionConfig, setSessionConfig])
+
   return (
     <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
   )

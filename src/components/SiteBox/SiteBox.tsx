@@ -11,9 +11,16 @@ export type SiteBoxProps = {
   onRemove?: (siteItem: ISite) => void
   onToggle?: (siteItem: ISite) => void
   size?: 'sm'
+  disabled?: boolean
 }
 
-const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
+const SiteBox = ({
+  site,
+  onRemove,
+  onToggle,
+  size,
+  disabled,
+}: SiteBoxProps) => {
   const { searchInput } = useSearchInput()
   const remove: React.MouseEventHandler = (e) => {
     e.stopPropagation()
@@ -21,6 +28,7 @@ const SiteBox = ({ site, onRemove, onToggle, size }: SiteBoxProps) => {
   }
 
   const toggleStatus = () => {
+    if (disabled) return
     site.isActive = !site.isActive
     if (onToggle) onToggle(site)
     if (searchInput) searchInput.focus()

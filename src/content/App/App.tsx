@@ -1,15 +1,12 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
   rectSortingStrategy,
 } from '@dnd-kit/sortable'
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -36,10 +33,7 @@ const App = () => {
   useInputSync()
   const items = sites.map((site) => ({ ...site, id: site.domain }))
   const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   )
 
   const showRemoveBtn =

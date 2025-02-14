@@ -36,6 +36,7 @@ const App = () => {
             key={site.domain}
             site={site}
             onRemove={removeSite}
+            disabled
           />
         ))}
       </div>

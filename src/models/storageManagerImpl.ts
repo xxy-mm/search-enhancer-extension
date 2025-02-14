@@ -1,4 +1,9 @@
-import { ISite, type IFilter, type ISearchConfig } from './base'
+import {
+  FILTER_OPTION_DEFAULT,
+  ISite,
+  type IFilter,
+  type ISearchConfig,
+} from './base'
 
 export class StorageManagerImpl {
   private sitesKey: keyof ISearchConfig = 'sites'
@@ -15,14 +20,22 @@ export class StorageManagerImpl {
 
   setSearchConfig = async (config: ISearchConfig) => {
     await browser.storage.local.set({
-      [this.filtersKey]: config.filters,
-      [this.sitesKey]: config.sites,
+      [this.filtersKey]: config.filters.map(this.resetFilterStatus),
+      [this.sitesKey]: config.sites.map(this.resetSiteStatus),
     })
+  }
+
+  private resetSiteStatus = (site: ISite): ISite => {
+    return { ...site, isActive: false }
+  }
+  private resetFilterStatus = (filter: IFilter): IFilter => {
+    return { ...filter, value: FILTER_OPTION_DEFAULT }
   }
 
   // MARK: site CURD
   // add site to storage
   addSite = async (site: ISite) => {
+    site = this.resetSiteStatus(site)
     const sites = await this.getSites()
     const found = sites.find((item) => item.domain === site.domain)
     if (found) return
@@ -46,7 +59,9 @@ export class StorageManagerImpl {
 
   // replace all sites in storage with new sites
   setSites = async (sites: ISite[]): Promise<void> => {
-    await browser.storage.local.set({ [this.sitesKey]: sites })
+    await browser.storage.local.set({
+      [this.sitesKey]: sites.map(this.resetSiteStatus),
+    })
   }
 
   // MARK: Filter CURD
@@ -58,6 +73,7 @@ export class StorageManagerImpl {
 
   // add a filter to storage
   addFilter = async (filter: IFilter) => {
+    filter = this.resetFilterStatus(filter)
     const filters = await this.getFilters()
     const found = filters.find((f) => f.name === filter.name)
     if (found) {
@@ -79,6 +95,8 @@ export class StorageManagerImpl {
 
   // replace filters in storage with the provided filters
   setFilters = async (filters: IFilter[]) => {
-    await browser.storage.local.set({ [this.filtersKey]: filters })
+    await browser.storage.local.set({
+      [this.filtersKey]: filters.map(this.resetFilterStatus),
+    })
   }
 }
