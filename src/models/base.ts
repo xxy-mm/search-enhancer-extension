@@ -47,6 +47,7 @@ export enum IDataAction {
   // updated message is post from background
   UPDATED = 'updated',
   UPDATE_ALL = 'updateAll',
+  SORT_SITES = 'sort sites',
 }
 
 export type IMessage =
@@ -66,6 +67,10 @@ export type IMessage =
   | {
       type: IDataAction.UPDATE_ALL
       data: ISearchConfig
+    }
+  | {
+      type: IDataAction.SORT_SITES
+      data: ISite[]
     }
 
 // message creator
@@ -90,6 +95,10 @@ export const notifyUpdate = (searchConfig: ISearchConfig): IMessage => ({
 export const updateAllMessage = (searchConfig: ISearchConfig): IMessage => ({
   type: IDataAction.UPDATE_ALL,
   data: searchConfig,
+})
+export const sortSitesMessage = (sites: ISite[]): IMessage => ({
+  type: IDataAction.SORT_SITES,
+  data: sites,
 })
 
 export const emptySearchConfig: Readonly<ISearchConfig> = {

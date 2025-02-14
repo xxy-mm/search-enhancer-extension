@@ -19,6 +19,7 @@ import { useMessage } from '@/hooks/useMessage'
 interface IContextContext {
   updateSite: (site: ISite) => void
   updateFilter: (filter: IFilter) => void
+  sortSites: (sites: ISite[]) => void
   setSessionConfig: (config: ISessionSearchConfig) => void
   reset: () => void
   defaultConfig: ISearchConfig
@@ -30,7 +31,7 @@ export const ContentContext = createContext<IContextContext>(
 )
 
 export const ContentContextProvider = ({ children }: PropsWithChildren) => {
-  const { searchConfig } = useMessage()
+  const { searchConfig, sortSites } = useMessage()
   const { sessionConfig, setSessionConfig, updateFilter, updateSite, reset } =
     useSessionStorage(emptySearchConfig)
   const [computedConfig, setComputedConfig] =
@@ -39,6 +40,7 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
   const value = useMemo(
     () => ({
       defaultConfig: searchConfig,
+      sortSites,
       computedConfig,
       sessionConfig,
       setSessionConfig,
@@ -47,13 +49,14 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
       reset,
     }),
     [
-      computedConfig,
-      reset,
       searchConfig,
+      sortSites,
+      computedConfig,
       sessionConfig,
       setSessionConfig,
       updateFilter,
       updateSite,
+      reset,
     ]
   )
 

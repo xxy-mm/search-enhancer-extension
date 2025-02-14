@@ -13,7 +13,7 @@ const App = () => {
 
   const createSite = (domain: string) => {
     addSite({
-      domain,
+      domain: domain.toLowerCase(),
       isActive: false,
     })
   }

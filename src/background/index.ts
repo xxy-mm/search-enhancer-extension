@@ -30,6 +30,9 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
     case IDataAction.UPDATE_ALL:
       await manager.setSearchConfig(message.data)
       break
+    case IDataAction.SORT_SITES:
+      await manager.setSites(message.data)
+      break
     default:
       throw `Unknown message: ${message}`
   }
