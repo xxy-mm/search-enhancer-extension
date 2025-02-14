@@ -7,6 +7,8 @@ import {
   type IMessage,
   IDataAction,
   type ISearchConfig,
+  updateAllMessage,
+  sortSitesMessage,
 } from '@/models/base'
 
 export function useMessage() {
@@ -28,6 +30,10 @@ export function useMessage() {
     browser.runtime.sendMessage(removeSiteMessage(item))
   }
 
+  const sortSites = (sites: ISite[]) => {
+    browser.runtime.sendMessage(sortSitesMessage(sites))
+  }
+
   // FEAT: add filter, remove filter
   useEffect(() => {
     browser.runtime.sendMessage(queryMessage())
@@ -42,5 +48,6 @@ export function useMessage() {
     addSite,
     removeSite,
     searchConfig,
+    sortSites,
   }
 }
