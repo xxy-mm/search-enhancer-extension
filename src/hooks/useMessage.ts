@@ -11,10 +11,7 @@ import {
 } from '@/models/base'
 
 export function useMessage() {
-  const [searchConfig, setSearchConfig] = useState<ISearchConfig>({
-    filters: [],
-    sites: [],
-  })
+  const [searchConfig, setSearchConfig] = useState<ISearchConfig>()
 
   const listener = (message: IMessage) => {
     if (message.type === IDataAction.UPDATED) {

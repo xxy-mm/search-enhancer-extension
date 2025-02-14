@@ -9,8 +9,6 @@ import css from './App.module.css'
 const App = () => {
   const { addSite, searchConfig, removeSite } = useMessage()
 
-  const { sites, filters } = searchConfig
-
   const createSite = (domain: string) => {
     addSite({
       domain: domain.toLowerCase(),
@@ -23,7 +21,7 @@ const App = () => {
       <h1 className={css.title}>Search Enhancer</h1>
 
       <div className={css.siteList}>
-        {filters.map((filter) => (
+        {searchConfig?.filters.map((filter) => (
           <Dropdown
             key={filter.name}
             filter={filter}
@@ -31,7 +29,7 @@ const App = () => {
             disabled
           />
         ))}
-        {sites.map((site) => (
+        {searchConfig?.sites.map((site) => (
           <SiteBox
             key={site.domain}
             site={site}

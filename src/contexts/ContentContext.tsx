@@ -22,7 +22,7 @@ interface IContextContext {
   sortSites: (sites: ISite[]) => void
   setSessionConfig: (config: ISessionSearchConfig) => void
   reset: () => void
-  defaultConfig: ISearchConfig
+  defaultConfig?: ISearchConfig
   computedConfig: ISearchConfig
   sessionConfig: ISessionSearchConfig
 }
@@ -87,6 +87,7 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
 
   // remove filters and sites from session config if they are no longer included in search config
   useEffect(() => {
+    if (!searchConfig) return
     const { filters: sessionFilters, sites: sessionSites } = sessionConfig
     const { filters, sites } = searchConfig
     // remove session filters that not found in filters
