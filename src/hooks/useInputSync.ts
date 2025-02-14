@@ -28,7 +28,9 @@ export function useInputSync() {
         (filter) => filter.name === 'filetype'
       )
       if (fileTypeFilter) {
-        activeFileFilters.push(`filetype:${fileTypeFilter.value}`)
+        fileTypeFilter.value.split(',').forEach((subType) => {
+          activeFileFilters.push(`filetype:${subType}`)
+        })
       }
 
       sites.forEach((site) => {
