@@ -1,23 +1,29 @@
+import { FILETYPE_FILTER_OPTIONS } from '@/filters/filetype'
+
 import {
-  FILETYPE_FILTER_OPTIONS,
   FILTER_OPTION_DEFAULT,
   type ISearchConfig,
   type ISessionSearchConfig,
 } from './base'
 
 const fileTypeRegexp = /filetype:([\S]+)/gi
+const languageRegexp = /lr:([\S]+)/gi
 const includedSiteRegexp = /\bsite:([\S]+)/gi
 
 // FEAT: If we can store the result as a string, and compute it back to session search config in component
 // the performance can be improved.
 export const getComputedItems = (value: string, config: ISearchConfig) => {
-  const { filters, sites } = config
+  const { sites } = config
   const result: ISessionSearchConfig = { filters: [], sites: [] }
   const activeDomains: string[] = computeActiveSites(value)
-  const activeFileType: string = computeFileType(value)
-  const fileFilter = filters.find((filter) => filter.name === 'filetype')
-  if (fileFilter && activeFileType !== FILTER_OPTION_DEFAULT) {
-    result.filters.push({ name: fileFilter.name, value: activeFileType })
+  const activeFileType: string = computeActiveFileType(value)
+  const activeLanguage: string = computeActiveLanguage(value)
+
+  if (activeFileType !== FILTER_OPTION_DEFAULT) {
+    result.filters.push({ name: 'filetype', value: activeFileType })
+  }
+  if (activeLanguage != FILTER_OPTION_DEFAULT) {
+    result.filters.push({ name: 'lr', value: activeLanguage })
   }
   sites.forEach((site) => {
     if (activeDomains.find((domain) => domain === site.domain)) {
@@ -32,7 +38,7 @@ export const getComputedItems = (value: string, config: ISearchConfig) => {
 
 // compute active domain by the string provided
 // all domains are returned, no matter it is included in config or not
-export function computeActiveSites(value: string) {
+export function computeActiveSites(value: string): string[] {
   const included = value.matchAll(includedSiteRegexp) || []
   const result: string[] = []
   for (const match of included) {
@@ -45,7 +51,7 @@ export function computeActiveSites(value: string) {
 // compute active file types by the string provided
 // the file type are restricted to the values of file type options
 // unknown file types are omitted
-export function computeFileType(value: string) {
+export function computeActiveFileType(value: string): string {
   const fileTypes = value.matchAll(fileTypeRegexp) || []
   const computedFileTypes: string[] = []
   for (const match of fileTypes) {
@@ -77,4 +83,14 @@ export function computeFileType(value: string) {
   }
 
   return typeMatched
+}
+
+function computeActiveLanguage(value: string): string {
+  const matched = value.matchAll(languageRegexp)
+
+  for (const match of matched) {
+    const code = match[1]
+    if (code) return code
+  }
+  return FILTER_OPTION_DEFAULT
 }

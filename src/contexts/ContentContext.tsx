@@ -2,6 +2,7 @@ import {
   createContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type PropsWithChildren,
 } from 'react'
@@ -67,10 +68,6 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
 
     const { filters, sites } = searchConfig
 
-    if (!sessionConfig) {
-      setComputedConfig(searchConfig)
-      return
-    }
     const { filters: sessionFilters, sites: sessionSites } = sessionConfig
 
     const computedFilters: IFilter[] = filters.map((f) => {
@@ -101,7 +98,7 @@ export const ContentContextProvider = ({ children }: PropsWithChildren) => {
       filters: newSessionFilters,
       sites: newSessionSites,
     })
-  }, [searchConfig, sessionConfig, setSessionConfig])
+  }, [searchConfig, setSessionConfig])
 
   return (
     <ContentContext.Provider value={value}>{children}</ContentContext.Provider>

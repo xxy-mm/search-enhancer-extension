@@ -1,21 +1,14 @@
 import { StorageManagerImpl } from '@/models/storageManagerImpl'
 import {
-  FILETYPE_FILTER_OPTIONS,
-  FILTER_OPTION_DEFAULT,
   IDataAction,
   notifyUpdate,
-  type IFilter,
   type IMessage,
   type ISearchConfig,
 } from '@/models/base'
+import { languageFilter } from '@/filters/language'
+import { fileTypeFilter } from '@/filters/filetype'
 
 const manager = new StorageManagerImpl()
-
-const fileTypeFilter: IFilter = {
-  name: 'filetype',
-  options: FILETYPE_FILTER_OPTIONS,
-  value: FILTER_OPTION_DEFAULT,
-}
 
 browser.runtime.onMessage.addListener(async (message: IMessage) => {
   switch (message.type) {
@@ -38,7 +31,7 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
   }
   let searchConfig = await manager.getSearchConfig()
   if (searchConfig.filters.length === 0) {
-    await manager.addFilter(fileTypeFilter)
+    await manager.setFilters([languageFilter, fileTypeFilter])
   }
   searchConfig = await manager.getSearchConfig()
   notify(searchConfig)

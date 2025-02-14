@@ -9,7 +9,7 @@ export type ISite = {
   isActive: boolean
 }
 export type IFilter = {
-  name: 'filetype'
+  name: 'filetype' | 'lr'
   value: string
   options: IFilterOptions
 }
@@ -26,17 +26,6 @@ export interface ISearchConfig {
 }
 
 export const FILTER_OPTION_DEFAULT = 'all'
-// filter options
-export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [
-  { label: 'All File Types', value: FILTER_OPTION_DEFAULT },
-  { label: 'PDF(.pdf)', value: 'pdf' },
-  { label: 'Word(.doc,.docx)', value: 'doc,docx' },
-  { label: 'Excel(.xls,.xlsx)', value: 'xls,xlsx' },
-  { label: 'PPT(.ppt,.pptx)', value: 'ppt,pptx' },
-  { label: 'Adobe Postscript(.ps)', value: 'ps' },
-  { label: 'Rich Text Format(.rtf)', value: 'rtf' },
-  { label: 'Google Earth KML(.kml)', value: 'kml' },
-]
 
 // messages
 export enum IDataAction {

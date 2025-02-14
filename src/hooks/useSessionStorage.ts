@@ -25,10 +25,10 @@ export function useSessionStorage(defaultConfig: ISessionSearchConfig) {
     setSessionConfig(config)
   }
 
-  const setConfig = (config: ISessionSearchConfig) => {
+  const setConfig = useCallback((config: ISessionSearchConfig) => {
     manager.setSearchConfig(config)
     setSessionConfig(config)
-  }
+  }, [])
 
   const reset = () => {
     manager.reset()

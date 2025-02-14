@@ -6,12 +6,12 @@ import { ContentContext } from '@/contexts/ContentContext'
 import { useSearchInput } from './useSearchInput'
 
 const placeholder = '🔍'
-const siteItemRegexp = /(-?site:\S+|filetype:\S+)(\s+(OR)\s*)?/g
+const siteItemRegexp = /(-?site:\S+|filetype:\S+|lr:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
   const { setSessionConfig, sessionConfig, defaultConfig } =
     useContext(ContentContext)
-  const { searchInput } = useSearchInput()
+  const { searchInput, searchForm } = useSearchInput()
 
   useEffect(() => {
     if (!searchInput) return
@@ -20,24 +20,29 @@ export function useInputSync() {
 
     const activeFileFilters: string[] = []
     const activeSites: string[] = []
-
+    const activeLangFilters: string[] = []
     if (sessionConfig) {
       const { filters, sites } = sessionConfig
 
-      const fileTypeFilter = filters.find(
-        (filter) => filter.name === 'filetype'
-      )
-      if (fileTypeFilter) {
-        fileTypeFilter.value.split(',').forEach((subType) => {
-          activeFileFilters.push(`filetype:${subType}`)
-        })
-      }
+      filters.forEach((filter) => {
+        switch (filter.name) {
+          case 'filetype':
+            filter.value.split(',').forEach((subType) => {
+              activeFileFilters.push(`${filter.name}:${subType}`)
+            })
+            break
+          case 'lr':
+            activeLangFilters.push(`${filter.name}:${filter.value}`)
+            break
+        }
+      })
 
       sites.forEach((site) => {
         activeSites.push(`site:${site.domain}`)
       })
 
       queryStringArray.push(
+        activeLangFilters.join(' OR '),
         activeFileFilters.join(' OR '),
         activeSites.join(' OR ')
       )
@@ -72,4 +77,18 @@ export function useInputSync() {
       searchInput.removeEventListener('input', searchListener)
     }
   }, [defaultConfig, searchInput, setSessionConfig])
+
+  useEffect(() => {
+    if (!searchForm) return
+    const onSubmit = (e: Event) => {
+      e.preventDefault()
+      console.log(e.target)
+    }
+
+    searchForm.addEventListener('submit', onSubmit)
+
+    return () => {
+      searchForm.removeEventListener('submit', onSubmit)
+    }
+  }, [searchForm])
 }

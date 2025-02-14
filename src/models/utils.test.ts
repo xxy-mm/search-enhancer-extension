@@ -1,10 +1,11 @@
-import { computeActiveSites, computeFileType, getComputedItems } from './utils'
+import { FILETYPE_FILTER_OPTIONS } from '@/filters/filetype'
+
 import {
-  FILETYPE_FILTER_OPTIONS,
-  type IFilter,
-  type ISearchConfig,
-  type ISite,
-} from './base'
+  computeActiveSites,
+  computeActiveFileType,
+  getComputedItems,
+} from './utils'
+import { type IFilter, type ISearchConfig, type ISite } from './base'
 
 describe('compute filters from string', () => {
   const singleFilterString = 'filetype:pdf site:reddit.com some words'
@@ -56,17 +57,17 @@ describe('compute filters from string', () => {
 
   describe('computeFileType', () => {
     it('returns the only matched filetype', () => {
-      const filetype = computeFileType(singleFilterString)
+      const filetype = computeActiveFileType(singleFilterString)
       expect(filetype).toBe('pdf')
     })
 
     it('returns combined filetype in string', () => {
-      const filetype = computeFileType(multiFiltersString)
+      const filetype = computeActiveFileType(multiFiltersString)
 
       expect(filetype).toBe('doc,docx')
     })
     it('returns first matched filetype in string', () => {
-      const filetype = computeFileType(threeFiltersString)
+      const filetype = computeActiveFileType(threeFiltersString)
       expect(filetype).toBe('pdf')
     })
   })
