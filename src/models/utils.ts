@@ -1,10 +1,9 @@
-import { FILETYPE_FILTER_OPTIONS } from '@/filters/filetype'
+import type { ISessionConfig } from '@/store/sessionConfig.slice'
+import type { IAppConfig } from '@/store/appConfig.slice'
+import { languageFilter } from '@/filters/language'
+import { FILETYPE_FILTER_OPTIONS, fileTypeFilter } from '@/filters/filetype'
 
-import {
-  FILTER_OPTION_DEFAULT,
-  type ISearchConfig,
-  type ISessionSearchConfig,
-} from './base'
+import { FILTER_OPTION_DEFAULT } from './base'
 
 const fileTypeRegexp = /filetype:([\S]+)/gi
 const languageRegexp = /lr:([\S]+)/gi
@@ -12,22 +11,22 @@ const includedSiteRegexp = /\bsite:([\S]+)/gi
 
 // FEAT: If we can store the result as a string, and compute it back to session search config in component
 // the performance can be improved.
-export const getComputedItems = (value: string, config: ISearchConfig) => {
+export const getComputedItems = (value: string, config: IAppConfig) => {
   const { sites } = config
-  const result: ISessionSearchConfig = { filters: [], sites: [] }
+  const result: ISessionConfig = { filters: [], sites: [] }
   const activeDomains: string[] = computeActiveSites(value)
   const activeFileType: string = computeActiveFileType(value)
   const activeLanguage: string = computeActiveLanguage(value)
 
   if (activeFileType !== FILTER_OPTION_DEFAULT) {
-    result.filters.push({ name: 'filetype', value: activeFileType })
+    result.filters.push({ ...fileTypeFilter, value: activeFileType })
   }
   if (activeLanguage != FILTER_OPTION_DEFAULT) {
-    result.filters.push({ name: 'lr', value: activeLanguage })
+    result.filters.push({ ...languageFilter, value: activeLanguage })
   }
   sites.forEach((site) => {
     if (activeDomains.find((domain) => domain === site.domain)) {
-      result.sites.push({ domain: site.domain })
+      result.sites.push({ ...site, isActive: true })
     } else {
       // FEAT: add new site to search config and make it active
       // need discussion: how to prevent user from accidentally adding new site?
