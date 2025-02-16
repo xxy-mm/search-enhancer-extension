@@ -1,6 +1,8 @@
+import { PersistGate } from 'redux-persist/integration/react'
 import React, { StrictMode } from 'react'
+import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
-import { ContentContextProvider } from '@/contexts/ContentContext'
+import { persistor, store } from '@/store/store'
 
 import App from './App/App'
 
@@ -19,9 +21,13 @@ function injectCustomElement() {
 
     createRoot(customElement).render(
       <StrictMode>
-        <ContentContextProvider>
-          <App />
-        </ContentContextProvider>
+        <Provider store={store}>
+          <PersistGate
+            loading={null}
+            persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
       </StrictMode>
     )
   }

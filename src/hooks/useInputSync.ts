@@ -1,7 +1,11 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  replaceSessionConfig,
+  selectSessionConfig,
+} from '@/store/sessionConfig.slice'
+import { selectAppConfig } from '@/store/appConfig.slice'
 import { getComputedItems } from '@/models/utils'
-import { emptySearchConfig } from '@/models/base'
-import { ContentContext } from '@/contexts/ContentContext'
 
 import { useSearchInput } from './useSearchInput'
 
@@ -9,46 +13,43 @@ const placeholder = '🔍'
 const siteItemRegexp = /(-?site:\S+|filetype:\S+|lr:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
-  const { setSessionConfig, sessionConfig, defaultConfig } =
-    useContext(ContentContext)
+  const dispatch = useDispatch()
+  const appConfig = useSelector(selectAppConfig)
+  const sessionConfig = useSelector(selectSessionConfig)
   const { searchInput, searchForm } = useSearchInput()
 
   useEffect(() => {
     if (!searchInput) return
-
     let queryStringArray: string[] = []
-
     const activeFileFilters: string[] = []
     const activeSites: string[] = []
     const activeLangFilters: string[] = []
-    if (sessionConfig) {
-      const { filters, sites } = sessionConfig
+    const { filters, sites } = sessionConfig
 
-      filters.forEach((filter) => {
-        switch (filter.name) {
-          case 'filetype':
-            filter.value.split(',').forEach((subType) => {
-              activeFileFilters.push(`${filter.name}:${subType}`)
-            })
-            break
-          case 'lr':
-            activeLangFilters.push(`${filter.name}:${filter.value}`)
-            break
-        }
-      })
+    filters.forEach((filter) => {
+      switch (filter.name) {
+        case 'filetype':
+          filter.value.split(',').forEach((subType) => {
+            activeFileFilters.push(`${filter.name}:${subType}`)
+          })
+          break
+        case 'lr':
+          activeLangFilters.push(`${filter.name}:${filter.value}`)
+          break
+      }
+    })
 
-      sites.forEach((site) => {
-        activeSites.push(`site:${site.domain}`)
-      })
+    sites.forEach((site) => {
+      activeSites.push(`site:${site.domain}`)
+    })
 
-      queryStringArray.push(
-        activeLangFilters.join(' OR '),
-        activeFileFilters.join(' OR '),
-        activeSites.join(' OR ')
-      )
+    queryStringArray.push(
+      activeLangFilters.join(' OR '),
+      activeFileFilters.join(' OR '),
+      activeSites.join(' OR ')
+    )
 
-      queryStringArray = queryStringArray.filter((str) => str.length > 0)
-    }
+    queryStringArray = queryStringArray.filter((str) => str.length > 0)
 
     let words = searchInput.value.replace(siteItemRegexp, '').trimStart()
     if (words === '') {
@@ -65,10 +66,8 @@ export function useInputSync() {
 
     function searchListener(e: Event) {
       const value = (e.target as HTMLTextAreaElement).value
-      const sessionConfig = defaultConfig
-        ? getComputedItems(value, defaultConfig)
-        : emptySearchConfig
-      setSessionConfig(sessionConfig)
+      const sessionConfig = getComputedItems(value, appConfig)
+      dispatch(replaceSessionConfig(sessionConfig))
     }
 
     searchInput.addEventListener('input', searchListener)
@@ -76,7 +75,7 @@ export function useInputSync() {
     return () => {
       searchInput.removeEventListener('input', searchListener)
     }
-  }, [defaultConfig, searchInput, setSessionConfig])
+  }, [appConfig, dispatch, searchInput, sessionConfig])
 
   useEffect(() => {
     if (!searchForm) return

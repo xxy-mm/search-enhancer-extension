@@ -14,12 +14,6 @@ export type IFilter = {
   options: IFilterOptions
 }
 
-export type ISessionFilter = Pick<IFilter, 'name' | 'value'>
-export type ISessionSite = Pick<ISite, 'domain'>
-export type ISessionSearchConfig = {
-  filters: ISessionFilter[]
-  sites: ISessionSite[]
-}
 export interface ISearchConfig {
   filters: IFilter[]
   sites: ISite[]
