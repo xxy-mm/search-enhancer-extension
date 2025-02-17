@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'prod' ? true : false
 module.exports = {
@@ -31,6 +32,9 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(
         isProd ? 'production' : 'development'
       ),
+    }),
+    new CopyPlugin({
+      patterns: [{ from: 'images', to: 'images' }],
     }),
   ],
   output: {
