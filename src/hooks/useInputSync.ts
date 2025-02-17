@@ -1,23 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   replaceSessionConfig,
   selectSessionConfig,
 } from '@/store/sessionConfig.slice'
 import { selectAppConfig } from '@/store/appConfig.slice'
-import { getComputedItems } from '@/models/utils'
+import { computeUserInput, getComputedItems } from '@/models/utils'
 
 import { useSearchInput } from './useSearchInput'
-
-const placeholder = '🔍'
-const siteItemRegexp = /(-?site:\S+|filetype:\S+|lr:\S+)(\s+(OR)\s*)?/g
 
 export function useInputSync() {
   const dispatch = useDispatch()
   const appConfig = useSelector(selectAppConfig)
   const sessionConfig = useSelector(selectSessionConfig)
   const { searchInput, searchForm } = useSearchInput()
-
+  const isComposing = useRef(false)
   useEffect(() => {
     if (!searchInput) return
     let queryStringArray: string[] = []
@@ -51,12 +48,7 @@ export function useInputSync() {
 
     queryStringArray = queryStringArray.filter((str) => str.length > 0)
 
-    let words = searchInput.value.replace(siteItemRegexp, '').trimStart()
-    if (words === '') {
-      words = placeholder
-    } else if (words.trim() !== placeholder && words.includes(placeholder)) {
-      words = words.replace(placeholder, '')
-    }
+    const { words } = computeUserInput(searchInput.value)
     queryStringArray.push(words)
     searchInput.value = queryStringArray.join(' ')
   }, [searchInput, sessionConfig])
@@ -65,17 +57,36 @@ export function useInputSync() {
     if (!searchInput) return
 
     function searchListener(e: Event) {
-      const value = (e.target as HTMLTextAreaElement).value
-      const sessionConfig = getComputedItems(value, appConfig)
+      const input = e.target as HTMLTextAreaElement
+      console.log(isComposing.current)
+      if (!isComposing.current) {
+        const { words, match } = computeUserInput(input.value)
+        input.value = match ? match + ' ' + words : words
+      }
+
+      const sessionConfig = getComputedItems(input.value, appConfig)
       dispatch(replaceSessionConfig(sessionConfig))
+    }
+    function onStart() {
+      console.log('start')
+
+      isComposing.current = true
+    }
+    function onEnd() {
+      console.log('end')
+      isComposing.current = false
     }
 
     searchInput.addEventListener('input', searchListener)
+    searchInput.addEventListener('compositionstart', onStart)
+    searchInput.addEventListener('compositionend', onEnd)
 
     return () => {
       searchInput.removeEventListener('input', searchListener)
+      searchInput.removeEventListener('compositionstart', onStart)
+      searchInput.removeEventListener('compositionend', onEnd)
     }
-  }, [appConfig, dispatch, searchInput, sessionConfig])
+  }, [appConfig, dispatch, searchInput])
 
   useEffect(() => {
     if (!searchForm) return

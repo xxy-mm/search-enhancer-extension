@@ -8,11 +8,11 @@ import {
   type IFilterOption,
 } from '@/models/base'
 import { useSearchInput } from '@/hooks/useSearchInput'
+import deleteIcon from '@/assets/images/delete.svg'
+import lightArrow from '@/assets/images/arrow-down-light.svg'
+import darkArrow from '@/assets/images/arrow-down-dark.svg'
 
 import styles from './Dropdown.module.css'
-import deleteIcon from './delete.svg'
-import lightArrow from './arrow-down-light.svg'
-import darkArrow from './arrow-down-dark.svg'
 import { DropdownMenu } from '../DropdownMenu'
 
 export interface DropdownProps {

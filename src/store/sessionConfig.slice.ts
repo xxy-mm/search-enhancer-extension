@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { isEqual } from '@/models/utils'
 import { FILTER_OPTION_DEFAULT, type IFilter, type ISite } from '@/models/base'
 
 import type { RootState } from './store'
@@ -39,7 +40,11 @@ export const sessionConfigSlice = createSlice({
       }
     },
     replaceSessionConfig: (state, action: PayloadAction<ISessionConfig>) => {
-      return action.payload
+      if (!isEqual(state, action.payload)) {
+        return action.payload
+      } else {
+        return state
+      }
     },
     resetSessionConfig: () => {
       return initialState

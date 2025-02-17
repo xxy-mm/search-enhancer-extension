@@ -93,3 +93,52 @@ function computeActiveLanguage(value: string): string {
   }
   return FILTER_OPTION_DEFAULT
 }
+
+export function isEqual(source: IAppConfig, target: IAppConfig) {
+  const { filters: sourceFilters, sites: sourceSites } = source
+  const { filters: targetFilters, sites: targetSites } = target
+  if (
+    sourceFilters.length !== targetFilters.length ||
+    sourceSites.length !== targetSites.length
+  ) {
+    return false
+  }
+  for (let index = 0; index < sourceFilters.length; index++) {
+    const sf = sourceFilters[index]
+    if (
+      !targetFilters.some((tf) => tf.name === sf.name && tf.value === sf.value)
+    ) {
+      return false
+    }
+  }
+  for (let index = 0; index < sourceSites.length; index++) {
+    const ss = sourceSites[index]
+    if (
+      !targetSites.some(
+        (ts) => ts.domain === ss.domain && ts.isActive === ss.isActive
+      )
+    ) {
+      return false
+    }
+  }
+  return true
+}
+const placeholder = '🔍'
+const siteItemRegexp = /(-?site:\S+|filetype:\S+|lr:\S+)(\s+(OR)\s*)?/g
+export function computeUserInput(value: string): {
+  words: string
+  match: string | null
+} {
+  const match = value.match(siteItemRegexp)
+  let words = value.replace(siteItemRegexp, '').trimStart()
+  if (words === '') {
+    words = placeholder
+  } else if (words.trim() !== placeholder && words.includes(placeholder)) {
+    words = words.replace(placeholder, '')
+  }
+  let matchString: string | null = null
+  if (match) {
+    matchString = match.map((m) => m.trim()).join(' ')
+  }
+  return { words, match: matchString }
+}

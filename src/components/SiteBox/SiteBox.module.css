@@ -9,13 +9,15 @@
   box-shadow: var(--button-box-shadow);
   cursor: pointer;
   background: var(--button-bg-secondary);
-  color: var(--button-text-secondary);
+  color: var(--button-text-dark);
   user-select: none;
   position: relative;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   border: none;
+
+
 
   &.sm {
     font-size: var(--button-font-size-sm);
@@ -27,16 +29,19 @@
   }
 
   .delete-icon {
+    position: absolute;
+    width: 1.4em;
+    height: 100%;
+    top: 0;
+    right: -100%;
     order: -1;
     background: var(--button-bg-warning);
     cursor: pointer;
-    transition: all 0.3s ease-out;
-    width: 0;
-
+    transition: all 0.1s ease-out;
   }
 
   &:hover .delete-icon {
-    width: 1.2em;
-    transition: all 0.3s ease-in;
+    right: 0;
+    transition: all 0.1s ease-in;
   }
 }
