@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import classNames from 'classnames'
 import {
   arrayMove,
   SortableContext,
@@ -21,6 +22,7 @@ import {
   updateSessionSite,
 } from '@/store/sessionConfig.slice'
 import { setAppConfig } from '@/store/appConfig.slice'
+import { isIphone } from '@/models/utils'
 import {
   IDataAction,
   queryMessage,
@@ -46,6 +48,7 @@ const App = () => {
   const { filters, sites } = useSelector(selectComputedConfig)
   const { filters: sessionFilters, sites: sessionSites } =
     useSelector(selectSessionConfig)
+  const isMobile = useRef(isIphone())
   const items = useMemo(
     () =>
       sites.map((site) => ({
@@ -60,16 +63,24 @@ const App = () => {
 
   const showRemoveBtn = sessionFilters.length > 0 || sessionSites.length > 0
 
+  const focusInput = () => {
+    if (searchInput) {
+      searchInput.focus()
+      searchInput.scrollTop = searchInput.scrollHeight
+    }
+  }
   const clear = () => {
     dispatch(resetSessionConfig())
-    if (searchInput) searchInput.focus()
+    focusInput()
   }
   const onFilterChange = (filter: IFilter) => {
     dispatch(updateSessionFilter(filter))
+    focusInput()
   }
 
   const onSiteChange = (site: ISite) => {
     dispatch(updateSessionSite(site))
+    focusInput()
   }
   useEffect(() => {
     const listener = (message: IMessage) => {
@@ -85,6 +96,9 @@ const App = () => {
     browser.runtime.sendMessage(queryMessage())
   }, [])
 
+  const containerStyle = classNames(css.container, {
+    [css.mobile]: isMobile.current,
+  })
   return (
     <DndContext
       sensors={sensors}
@@ -93,7 +107,7 @@ const App = () => {
       <SortableContext
         items={items}
         strategy={rectSortingStrategy}>
-        <div className={css.container}>
+        <div className={containerStyle}>
           {filters.map((filter) => (
             <Dropdown
               key={filter.name}
@@ -120,8 +134,7 @@ const App = () => {
             <Button
               size='sm'
               type='warning'
-              onClick={clear}
-              rounded>
+              onClick={clear}>
               <img src={browser.runtime.getURL(deleteIcon)} />
             </Button>
           ) : null}

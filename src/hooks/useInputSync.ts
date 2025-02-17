@@ -72,9 +72,10 @@ export function useInputSync() {
 
       isComposing.current = true
     }
-    function onEnd() {
+    function onEnd(e: Event) {
       console.log('end')
       isComposing.current = false
+      searchListener(e)
     }
 
     searchInput.addEventListener('input', searchListener)

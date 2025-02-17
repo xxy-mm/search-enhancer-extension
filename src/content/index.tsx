@@ -9,16 +9,37 @@ import App from './App/App'
 function injectCustomElement() {
   // Find the search dialog container
   const searchContainer = document.querySelector('.RNNXgb') // Update selector as needed
-
+  const customElement = document.createElement('div')
+  customElement.id = 'search-enhancer-root'
   if (searchContainer) {
-    const customElement = document.createElement('div')
-    customElement.id = 'search-enhancer-root'
-
     searchContainer.parentNode?.insertBefore(
       customElement,
       searchContainer.nextSibling
     )
 
+    createRoot(customElement).render(
+      <StrictMode>
+        <Provider store={store}>
+          <PersistGate
+            loading={null}
+            persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
+      </StrictMode>
+    )
+  } else {
+    const form = document.querySelector(`form[action="/search"]`)
+    const textarea = form?.querySelector('textarea')
+    const textareaContainer =
+      textarea?.parentElement?.parentElement?.parentElement
+
+    if (!textareaContainer) return
+
+    textareaContainer.parentElement?.insertBefore(
+      customElement,
+      textareaContainer.nextElementSibling
+    )
     createRoot(customElement).render(
       <StrictMode>
         <Provider store={store}>

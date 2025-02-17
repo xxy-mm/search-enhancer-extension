@@ -65,3 +65,20 @@ body {
 @media (prefers-color-scheme: dark) {
   /* Dark Mode styles go here. */
 }
+
+@media screen and (max-width: 480px) {
+
+  header {
+    :global(#search-enhancer-root) {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  :global(header.noscroll) {
+    :global(#search-enhancer-root) {
+      height: auto;
+    }
+  }
+
+}

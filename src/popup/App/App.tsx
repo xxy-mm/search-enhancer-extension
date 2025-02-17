@@ -1,5 +1,8 @@
+import { useRef } from 'react'
 import { useSelector } from 'react-redux'
+import classNames from 'classnames'
 import { selectAppConfig } from '@/store/appConfig.slice'
+import { isIphone } from '@/models/utils'
 import { useMessage } from '@/hooks/useMessage'
 import { useInit } from '@/hooks/useInit'
 import { useDetectTheme } from '@/hooks/useDetectTheme'
@@ -14,7 +17,7 @@ const App = () => {
   const { isDark } = useDetectTheme()
   const searchConfig = useSelector(selectAppConfig)
   const { addSite, removeSite } = useMessage()
-
+  const isMobile = useRef(isIphone())
   const createSite = (domain: string) => {
     addSite({
       domain: domain.replace(/\s+/g, '').toLocaleLowerCase(),
@@ -24,11 +27,19 @@ const App = () => {
 
   useInit()
 
-  return (
-    <div className={css.container}>
-      <h1 className={css.title}>Search Enhancer</h1>
+  const containerStyle = classNames(css.container, {
+    [css.mobile]: isMobile.current,
+  })
 
-      <div className={css.siteList}>
+  const siteListStyle = classNames(css.siteList, {
+    [css.mobile]: isMobile.current,
+  })
+
+  return (
+    <div className={containerStyle}>
+      {isMobile.current ? null : <h1 className={css.title}>Search Enhancer</h1>}
+
+      <div className={siteListStyle}>
         {searchConfig?.sites.map((site) => (
           <SiteBox
             key={site.domain}

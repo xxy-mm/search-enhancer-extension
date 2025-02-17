@@ -1,16 +1,21 @@
 @import '@/assets/styles/common.css';
 
 .container {
-  width: 350px;
-  max-height: 500px;
-  height: auto;
+  min-width: 350px;
   padding: var(--padding-lg);
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
   justify-content: stretch;
   border-radius: var(--radius-md);
+
+  &.mobile {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
 }
+
 
 .title {
   text-align: center;
@@ -19,11 +24,6 @@
   padding: 0;
   margin: 0;
   text-shadow: 0 0.5px 0.5px var(--shadow-color-light);
-}
-
-.explain {
-  display: flex;
-  justify-content: flex-start;
 }
 
 .action-group {
@@ -35,6 +35,7 @@
   display: flex;
   padding: 16px;
   min-height: 100px;
+  max-height: 300px;
   overflow: scroll;
   flex-wrap: wrap;
   gap: 8px;
@@ -42,6 +43,11 @@
   align-content: start;
   border-radius: var(--radius-lg);
   border: 1px dotted red;
+
+  &.mobile {
+    padding: 0;
+    border: none;
+  }
 }
 
 .flex-end {

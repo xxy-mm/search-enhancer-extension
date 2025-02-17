@@ -46,7 +46,9 @@ const IconInput: FunctionComponent<IconInputProps> = ({
         autoFocus={autoFocus}
         spellCheck='false'
       />
-      <label htmlFor={inputId}>
+      <label
+        htmlFor={inputId}
+        className={css.inputLabel}>
         <img
           className={css.inputIcon}
           src={icon}

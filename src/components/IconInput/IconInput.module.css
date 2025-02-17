@@ -14,22 +14,30 @@
 
 .icon-input {
   position: relative;
+
+  .input-label {
+    display: flex;
+    height: 100%;
+    top: 0;
+    position: absolute;
+    left: 5px;
+    align-items: center;
+  }
+
+  .text-input {
+    width: 214px;
+    height: 22px;
+    text-indent: 24px;
+  }
+
+  .input-icon {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 
-.icon-input .text-input {
-  width: 214px;
-  height: 22px;
-  text-indent: 24px;
-}
 
-.icon-input .input-icon {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 14px;
-  height: 14px;
-}
 
 
 @media (prefers-color-scheme: dark) {

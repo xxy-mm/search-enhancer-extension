@@ -1,6 +1,5 @@
 import * as React from 'react'
 import classNames from 'classnames'
-import { useSearchInput } from '@/hooks/useSearchInput'
 import trashIcon from '@/assets/images/trash.svg'
 
 import css from './SiteBox.module.css'
@@ -21,7 +20,6 @@ const SiteBox = ({
   size,
   disabled,
 }: SiteBoxProps) => {
-  const { searchInput } = useSearchInput()
   const remove: React.MouseEventHandler = (e) => {
     e.stopPropagation()
     if (onRemove) onRemove(site)
@@ -31,7 +29,6 @@ const SiteBox = ({
     if (disabled) return
     site.isActive = !site.isActive
     if (onToggle) onToggle(site)
-    if (searchInput) searchInput.focus()
   }
 
   const styles = classNames(css.siteBox, {

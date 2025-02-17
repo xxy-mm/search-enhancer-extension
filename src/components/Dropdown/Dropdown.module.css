@@ -10,8 +10,6 @@
     font-weight: 300;
     padding: 3px 0px 3px 5px;
     border-radius: var(--radius-sm);
-    box-shadow: 0 0.5px 2.5px 0 var(--shadow-color-heavy),
-        0 0 0 0.5px var(--shadow-color-light);
     cursor: pointer;
     background: var(--gray-color);
     color: var(--font-color-dark);

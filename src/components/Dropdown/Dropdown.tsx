@@ -7,7 +7,6 @@ import {
   type IFilter,
   type IFilterOption,
 } from '@/models/base'
-import { useSearchInput } from '@/hooks/useSearchInput'
 import deleteIcon from '@/assets/images/delete.svg'
 import lightArrow from '@/assets/images/arrow-down-light.svg'
 import darkArrow from '@/assets/images/arrow-down-dark.svg'
@@ -24,7 +23,6 @@ export interface DropdownProps {
 
 export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
   const { value, options } = filter
-  const { searchInput } = useSearchInput()
   const dropDownRef = useRef<HTMLDivElement | null>(null)
   const [show, setShow] = useState(false)
   const [top, setTop] = useState(0)
@@ -35,9 +33,6 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
     const value = newOption.value
     onSelect({ ...filter, value })
     setShow(false)
-    if (searchInput) {
-      searchInput.focus()
-    }
   }
 
   const clear = (e: MouseEvent) => {
@@ -47,9 +42,6 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
     const value = FILTER_OPTION_DEFAULT
     onSelect({ ...filter, value })
     setShow(false)
-    if (searchInput) {
-      searchInput.focus()
-    }
   }
   const toggleDropdown = () => {
     if (disabled) return

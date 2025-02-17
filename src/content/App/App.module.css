@@ -7,16 +7,23 @@
   gap: 4px;
   justify-content: flex-start;
   align-content: start;
-  max-height: 16px;
+  max-height: 18px;
   overflow: hidden;
   background-color: transparent;
   transition: all 0.2s ease-out;
   background-color: transparent;
   backdrop-filter: blur(10px);
+
+  &.mobile {
+    max-height: none;
+    height: auto;
+  }
 }
 
+
 .container:hover {
-  max-height: 200px;
+  max-height: none;
+  height: auto;
   overflow: scroll;
   transition: all 0.15s ease-in;
 }

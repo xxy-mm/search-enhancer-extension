@@ -142,3 +142,7 @@ export function computeUserInput(value: string): {
   }
   return { words, match: matchString }
 }
+
+export function isIphone() {
+  return navigator.userAgent.match(/IPhone/i)
+}
