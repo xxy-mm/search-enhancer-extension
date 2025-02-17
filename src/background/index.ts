@@ -5,7 +5,6 @@ import {
   type IMessage,
   type ISearchConfig,
 } from '@/models/base'
-import { languageFilter } from '@/filters/language'
 import { fileTypeFilter } from '@/filters/filetype'
 
 const manager = new StorageManagerImpl()
@@ -31,7 +30,7 @@ browser.runtime.onMessage.addListener(async (message: IMessage) => {
   }
   let searchConfig = await manager.getSearchConfig()
   if (searchConfig.filters.length === 0) {
-    await manager.setFilters([languageFilter, fileTypeFilter])
+    await manager.setFilters([fileTypeFilter])
   }
   searchConfig = await manager.getSearchConfig()
   notify(searchConfig)
