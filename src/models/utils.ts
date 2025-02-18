@@ -12,18 +12,21 @@ const includedSiteRegexp = /\bsite:([\S]+)/gi
 // FEAT: If we can store the result as a string, and compute it back to session search config in component
 // the performance can be improved.
 export const getComputedItems = (value: string, config: IAppConfig) => {
-  const { sites } = config
+  const { sites, filters } = config
   const result: ISessionConfig = { filters: [], sites: [] }
   const activeDomains: string[] = computeActiveSites(value)
   const activeFileType: string = computeActiveFileType(value)
-  const activeLanguage: string = computeActiveLanguage(value)
+  // const activeLanguage: string = computeActiveLanguage(value)
 
-  if (activeFileType !== FILTER_OPTION_DEFAULT) {
+  if (
+    filters.find((filter) => filter.name === 'filetype') &&
+    activeFileType !== FILTER_OPTION_DEFAULT
+  ) {
     result.filters.push({ ...fileTypeFilter, value: activeFileType })
   }
-  if (activeLanguage != FILTER_OPTION_DEFAULT) {
-    result.filters.push({ ...languageFilter, value: activeLanguage })
-  }
+  // if (activeLanguage != FILTER_OPTION_DEFAULT) {
+  //   result.filters.push({ ...languageFilter, value: activeLanguage })
+  // }
   sites.forEach((site) => {
     if (activeDomains.find((domain) => domain === site.domain)) {
       result.sites.push({ ...site, isActive: true })

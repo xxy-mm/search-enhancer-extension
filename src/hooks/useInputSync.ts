@@ -13,7 +13,7 @@ export function useInputSync() {
   const dispatch = useDispatch()
   const appConfig = useSelector(selectAppConfig)
   const sessionConfig = useSelector(selectSessionConfig)
-  const { searchInput, searchForm } = useSearchInput()
+  const { searchInput } = useSearchInput()
   const isComposing = useRef(false)
   useEffect(() => {
     if (!searchInput) return
@@ -58,7 +58,6 @@ export function useInputSync() {
 
     function searchListener(e: Event) {
       const input = e.target as HTMLTextAreaElement
-      console.log(isComposing.current)
       if (!isComposing.current) {
         const { words, match } = computeUserInput(input.value)
         input.value = match ? match + ' ' + words : words
@@ -68,12 +67,9 @@ export function useInputSync() {
       dispatch(replaceSessionConfig(sessionConfig))
     }
     function onStart() {
-      console.log('start')
-
       isComposing.current = true
     }
     function onEnd(e: Event) {
-      console.log('end')
       isComposing.current = false
       searchListener(e)
     }
@@ -88,18 +84,4 @@ export function useInputSync() {
       searchInput.removeEventListener('compositionend', onEnd)
     }
   }, [appConfig, dispatch, searchInput])
-
-  useEffect(() => {
-    if (!searchForm) return
-    const onSubmit = (e: Event) => {
-      e.preventDefault()
-      console.log(e.target)
-    }
-
-    searchForm.addEventListener('submit', onSubmit)
-
-    return () => {
-      searchForm.removeEventListener('submit', onSubmit)
-    }
-  }, [searchForm])
 }

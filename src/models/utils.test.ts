@@ -1,4 +1,4 @@
-import { FILETYPE_FILTER_OPTIONS } from '@/filters/filetype'
+import { fileTypeFilter } from '@/filters/filetype'
 
 import {
   computeActiveSites,
@@ -28,13 +28,7 @@ describe('compute filters from string', () => {
       domain: 'abc.com',
     },
   ]
-  const filters: IFilter[] = [
-    {
-      name: 'filetype',
-      options: FILETYPE_FILTER_OPTIONS,
-      value: 'doc,docx',
-    },
-  ]
+  const filters: IFilter[] = [fileTypeFilter]
   const searchConfig: ISearchConfig = { sites, filters }
 
   describe('computeActiveSites', () => {
@@ -83,11 +77,12 @@ describe('compute filters from string', () => {
         searchConfig
       )
       expect(filters).toContainEqual({
-        name: 'filetype',
+        ...fileTypeFilter,
         value: 'pdf',
       })
       expect(sites).toContainEqual({
         domain: 'reddit.com',
+        isActive: true,
       })
     })
 
@@ -97,14 +92,16 @@ describe('compute filters from string', () => {
         searchConfig
       )
       expect(filters).toContainEqual({
-        name: 'filetype',
+        ...fileTypeFilter,
         value: 'doc,docx',
       })
       expect(sites).toContainEqual({
         domain: 'reddit.com',
+        isActive: true,
       })
       expect(sites).toContainEqual({
         domain: 'abc.com',
+        isActive: true,
       })
     })
     it('returns the computed site item list(treble)', () => {
@@ -113,17 +110,20 @@ describe('compute filters from string', () => {
         searchConfig
       )
       expect(filters).toContainEqual({
-        name: 'filetype',
+        ...fileTypeFilter,
         value: 'pdf',
       })
       expect(sites).toContainEqual({
         domain: 'reddit.com',
+        isActive: true,
       })
       expect(sites).toContainEqual({
         domain: 'abc.com',
+        isActive: true,
       })
       expect(sites).toContainEqual({
         domain: 'x.com',
+        isActive: true,
       })
     })
   })

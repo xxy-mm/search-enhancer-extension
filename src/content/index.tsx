@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
 import { persistor, store } from '@/store/store'
 
-import App from './App/App'
+import App from './App'
 
 function injectCustomElement() {
   // Find the search dialog container
