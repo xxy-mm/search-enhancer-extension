@@ -50,7 +50,7 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
       const div = dropDownRef.current
       invariant(div, 'can not find the div in the dom tree')
       const rect = div.getBoundingClientRect()
-      setTop(rect.top + rect.height)
+      setTop(rect.top + rect.height + window.scrollY)
       setLeft(rect.left)
     }
     setShow(nextState)
