@@ -1,12 +1,11 @@
 import type { ISessionConfig } from '@/store/sessionConfig.slice'
 import type { IAppConfig } from '@/store/appConfig.slice'
-import { languageFilter } from '@/filters/language'
 import { FILETYPE_FILTER_OPTIONS, fileTypeFilter } from '@/filters/filetype'
 
 import { FILTER_OPTION_DEFAULT } from './base'
 
 const fileTypeRegexp = /filetype:([\S]+)/gi
-const languageRegexp = /lr:([\S]+)/gi
+// const languageRegexp = /lr:([\S]+)/gi
 const includedSiteRegexp = /\bsite:([\S]+)/gi
 
 // FEAT: If we can store the result as a string, and compute it back to session search config in component
@@ -87,15 +86,15 @@ export function computeActiveFileType(value: string): string {
   return typeMatched
 }
 
-function computeActiveLanguage(value: string): string {
-  const matched = value.matchAll(languageRegexp)
+// function computeActiveLanguage(value: string): string {
+//   const matched = value.matchAll(languageRegexp)
 
-  for (const match of matched) {
-    const code = match[1]
-    if (code) return code
-  }
-  return FILTER_OPTION_DEFAULT
-}
+//   for (const match of matched) {
+//     const code = match[1]
+//     if (code) return code
+//   }
+//   return FILTER_OPTION_DEFAULT
+// }
 
 export function isEqual(source: IAppConfig, target: IAppConfig) {
   const { filters: sourceFilters, sites: sourceSites } = source
