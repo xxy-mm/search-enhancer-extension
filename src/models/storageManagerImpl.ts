@@ -11,7 +11,7 @@ export class StorageManagerImpl {
 
   // get search config which containers both sites and filters
   getSearchConfig = async (): Promise<ISearchConfig> => {
-    const data = (await browser.storage.local.get({
+    const data = (await chrome.storage.local.get({
       [this.filtersKey]: [],
       [this.sitesKey]: [],
     })) as ISearchConfig
@@ -19,7 +19,7 @@ export class StorageManagerImpl {
   }
 
   setSearchConfig = async (config: ISearchConfig) => {
-    await browser.storage.local.set({
+    await chrome.storage.local.set({
       [this.filtersKey]: config.filters.map(this.resetFilterStatus),
       [this.sitesKey]: config.sites.map(this.resetSiteStatus),
     })
@@ -53,13 +53,13 @@ export class StorageManagerImpl {
 
   // get all sites from storage
   getSites = async (): Promise<ISite[]> => {
-    const data = await browser.storage.local.get({ [this.sitesKey]: [] })
+    const data = await chrome.storage.local.get({ [this.sitesKey]: [] })
     return data[this.sitesKey]
   }
 
   // replace all sites in storage with new sites
   setSites = async (sites: ISite[]): Promise<void> => {
-    await browser.storage.local.set({
+    await chrome.storage.local.set({
       [this.sitesKey]: sites.map(this.resetSiteStatus),
     })
   }
@@ -67,7 +67,7 @@ export class StorageManagerImpl {
   // MARK: Filter CURD
 
   getFilters = async (): Promise<IFilter[]> => {
-    const result = await browser.storage.local.get({ [this.filtersKey]: [] })
+    const result = await chrome.storage.local.get({ [this.filtersKey]: [] })
     return result[this.filtersKey]
   }
 
@@ -81,7 +81,7 @@ export class StorageManagerImpl {
     } else {
       filters.push(filter)
     }
-    await browser.storage.local.set({ [this.filtersKey]: filters })
+    await chrome.storage.local.set({ [this.filtersKey]: filters })
   }
 
   // remove a filter from storage
@@ -90,12 +90,12 @@ export class StorageManagerImpl {
     const found = filters.find((f) => f.name === filter.name)
     if (!found) return
     filters.splice(filters.indexOf(found), 1)
-    await browser.storage.local.set({ [this.filtersKey]: filters })
+    await chrome.storage.local.set({ [this.filtersKey]: filters })
   }
 
   // replace filters in storage with the provided filters
   setFilters = async (filters: IFilter[]) => {
-    await browser.storage.local.set({
+    await chrome.storage.local.set({
       [this.filtersKey]: filters.map(this.resetFilterStatus),
     })
   }

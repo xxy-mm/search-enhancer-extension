@@ -6,12 +6,23 @@ import pluginJs from '@eslint/js'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ['src/**/*.{ts,tsx}'] },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+  },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  { ignores: ['*.config.js', 'dist/'] },
+  {
+    ...pluginReact.configs.flat.recommended,
+    ...pluginReact.configs.flat['jsx-runtime'],
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+
+  { ignores: ['*.config.js', 'dist/', 'chrome/'] },
   {
     rules: {
       'react/react-in-jsx-scope': 'off',

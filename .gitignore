@@ -1,4 +1,10 @@
 node_modules
 /dist
+/chrome
 /images
 .idea
+.DS_Store
+
+*.crx
+*.pem
+*.zip

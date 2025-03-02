@@ -8,16 +8,29 @@ import { type IMessage, IDataAction, queryMessage } from '@/models/base'
 export function useInit() {
   const dispatch = useAppDispatch()
   useEffect(() => {
-    const listener = (message: IMessage) => {
+    const listener = (
+      message: IMessage,
+      sender: chrome.runtime.MessageSender,
+      sendResponse: () => void
+    ): boolean | undefined => {
       if (message.type === IDataAction.UPDATED) {
         dispatch(setAppConfig(message.data.searchConfig))
       }
+      sendResponse()
+      return false
     }
-    browser.runtime.onMessage.addListener(listener)
-    return () => browser.runtime.onMessage.removeListener(listener)
+    chrome.runtime.onMessage.addListener(listener)
+    return () => chrome.runtime.onMessage.removeListener(listener)
   }, [dispatch])
 
   useEffect(() => {
-    browser.runtime.sendMessage(queryMessage())
+    chrome.runtime.sendMessage(queryMessage()).then(
+      (res) => {
+        console.log(res)
+      },
+      (reason) => {
+        console.error(reason)
+      }
+    )
   }, [])
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import classNames from 'classnames'
 import {
@@ -21,18 +21,12 @@ import {
   updateSessionFilter,
   updateSessionSite,
 } from '@/store/sessionConfig.slice'
-import { setAppConfig } from '@/store/appConfig.slice'
 import { isIphone } from '@/models/utils'
-import {
-  IDataAction,
-  queryMessage,
-  type IFilter,
-  type IMessage,
-  type ISite,
-} from '@/models/base'
+import { type IFilter, type ISite } from '@/models/base'
 import { useSearchInput } from '@/hooks/useSearchInput'
 import { useMessage } from '@/hooks/useMessage'
 import { useInputSync } from '@/hooks/useInputSync'
+import { useInit } from '@/hooks/useInit'
 import SiteBox from '@/components/SiteBox'
 import { Button, Dropdown } from '@/components'
 import { SortableItem } from '@/components'
@@ -44,6 +38,7 @@ const App = () => {
   const dispatch = useAppDispatch()
   const { searchInput } = useSearchInput()
   useInputSync()
+  useInit()
   const { sortSites } = useMessage()
   const { filters, sites } = useSelector(selectComputedConfig)
   const { filters: sessionFilters, sites: sessionSites } =
@@ -82,19 +77,6 @@ const App = () => {
     dispatch(updateSessionSite(site))
     focusInput()
   }
-  useEffect(() => {
-    const listener = (message: IMessage) => {
-      if (message.type === IDataAction.UPDATED) {
-        dispatch(setAppConfig(message.data.searchConfig))
-      }
-    }
-    browser.runtime.onMessage.addListener(listener)
-    return () => browser.runtime.onMessage.removeListener(listener)
-  }, [dispatch])
-
-  useEffect(() => {
-    browser.runtime.sendMessage(queryMessage())
-  }, [])
 
   const containerStyle = classNames(css.container, {
     [css.mobile]: isMobile.current,
@@ -135,7 +117,7 @@ const App = () => {
               size='sm'
               type='warning'
               onClick={clear}>
-              <img src={browser.runtime.getURL(deleteIcon)} />
+              <img src={chrome.runtime.getURL(deleteIcon)} />
             </Button>
           ) : null}
         </div>

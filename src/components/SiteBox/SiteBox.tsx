@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import classNames from 'classnames'
 import trashIcon from '@/assets/images/trash.svg'
 
@@ -46,7 +46,7 @@ const SiteBox = ({
       {onRemove ? (
         <img
           className={css.deleteIcon}
-          src={browser.runtime.getURL(trashIcon)}
+          src={chrome.runtime.getURL(trashIcon)}
           onClick={remove}
         />
       ) : null}

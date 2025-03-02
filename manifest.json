@@ -252,7 +252,7 @@
   "action": {
     "default_title": "Search Enhancer",
     "default_popup": "dist/popup.html",
-    "default_icon": "dist/images/toolbar-icon.svg"
+    "default_icon": "dist/images/toolbar-icon.png"
   },
 
   "permissions": ["storage", "activeTab", "tabs"]

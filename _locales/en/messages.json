@@ -1,10 +1,10 @@
 {
-    "extension_name": {
-        "message": "Search Enhancer",
-        "description": "The display name for the extension."
-    },
-    "extension_description": {
-        "message": "This is Search Enhancer. You should tell us what your extension does here.",
-        "description": "Description of what the extension does."
-    }
+  "extension_name": {
+    "message": "Search Enhancer",
+    "description": "The display name for the extension."
+  },
+  "extension_description": {
+    "message": "Supercharge your Google Search with site filters and filetype filters",
+    "description": "Description of what the extension does."
+  }
 }

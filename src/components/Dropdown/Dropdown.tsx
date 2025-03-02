@@ -75,7 +75,7 @@ export function Dropdown({ onSelect, filter, size, disabled }: DropdownProps) {
         <span>{selectedOption.label}</span>
         {value === FILTER_OPTION_DEFAULT ? null : (
           <img
-            src={browser.runtime.getURL(deleteIcon)}
+            src={chrome.runtime.getURL(deleteIcon)}
             className={styles.clearIcon}
             onClick={clear}
           />
@@ -108,7 +108,7 @@ function DropDownArrow({ color }: DropDownArrowProps) {
   return (
     <img
       className={styles.dropdownArrow}
-      src={browser.runtime.getURL(svg)}
+      src={chrome.runtime.getURL(svg)}
     />
   )
 }
