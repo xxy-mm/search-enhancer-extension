@@ -73,7 +73,7 @@ export const selectComputedConfig = createSelector(
       )
       return {
         ...s,
-        isActive: foundInSession ? foundInSession.isActive : s.isActive,
+        isActive: !!foundInSession,
       }
     })
 

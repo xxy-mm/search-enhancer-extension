@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useAppDispatch } from '@/store/store'
 import { setAppConfig } from '@/store/appConfig.slice'
 import { type IMessage, IDataAction, queryMessage } from '@/models/base'
+import { pureSessionConfig } from '@/store/sessionConfig.slice'
 
 // init app data and add listener for data update
 // should only be called exactly once in root app
@@ -15,6 +16,7 @@ export function useInit() {
     ): boolean | undefined => {
       if (message.type === IDataAction.UPDATED) {
         dispatch(setAppConfig(message.data.searchConfig))
+        dispatch(pureSessionConfig(message.data.searchConfig))
       }
       sendResponse()
       return false

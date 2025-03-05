@@ -8,3 +8,5 @@ node_modules
 *.crx
 *.pem
 *.zip
+*storybook.log
+stats.json

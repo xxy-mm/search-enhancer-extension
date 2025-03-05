@@ -3,13 +3,22 @@ import { StrictMode } from 'react'
 import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
 import { persistor, store } from '@/store/store'
-
+import '@/assets/styles/common.css'
 import App from './App'
 
 function injectCustomElement() {
   // Find the search dialog container
+  const container = document.createElement('div')
+  const shadowRoot = container.attachShadow({ mode: 'open' })
+
   const customElement = document.createElement('div')
   customElement.id = 'search-enhancer-root'
+  // create a style tag and copy css content into it
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = chrome.runtime.getURL('dist/content.css')
+  shadowRoot.appendChild(link)
+  shadowRoot.appendChild(customElement)
 
   const form = document.querySelector(`form[action="/search"]`)
   const textarea = form?.querySelector('textarea')
@@ -19,7 +28,7 @@ function injectCustomElement() {
   if (!textareaContainer) return
 
   textareaContainer.parentElement?.insertBefore(
-    customElement,
+    container,
     textareaContainer.nextElementSibling
   )
   createRoot(customElement).render(
@@ -27,7 +36,8 @@ function injectCustomElement() {
       <Provider store={store}>
         <PersistGate
           loading={null}
-          persistor={persistor}>
+          persistor={persistor}
+        >
           <App />
         </PersistGate>
       </Provider>

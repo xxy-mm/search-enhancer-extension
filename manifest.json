@@ -238,13 +238,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "dist/assets/delete.svg",
-        "dist/assets/arrow-down-dark.svg",
-        "dist/assets/arrow-down-light.svg",
-        "dist/assets/plus.circle.svg",
-        "dist/assets/trash.svg"
-      ],
+      "resources": ["dist/assets/delete.svg", "dist/content.css"],
       "matches": ["*://*/*"]
     }
   ],
@@ -255,5 +249,5 @@
     "default_icon": "dist/images/toolbar-icon.png"
   },
 
-  "permissions": ["storage", "activeTab", "tabs"]
+  "permissions": ["storage"]
 }

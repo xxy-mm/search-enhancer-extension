@@ -3,6 +3,7 @@ import { isEqual } from '@/models/utils'
 import { FILTER_OPTION_DEFAULT, type IFilter, type ISite } from '@/models/base'
 
 import type { RootState } from './store'
+import type { IAppConfig } from './appConfig.slice'
 
 export interface ISessionConfig {
   filters: IFilter[]
@@ -22,10 +23,10 @@ export const sessionConfigSlice = createSlice({
       const site = action.payload
       const index = state.sites.findIndex((s) => s.domain === site.domain)
       const found = index !== -1
-      if (!site.isActive) {
-        if (found) state.sites.splice(index, 1)
-      } else if (site.isActive) {
-        if (!found) state.sites.push(site)
+      if (found) {
+        state.sites.splice(index, 1)
+      } else {
+        state.sites.push({ ...site, isActive: true })
       }
     },
     updateSessionFilter: (state, action: PayloadAction<IFilter>) => {
@@ -49,6 +50,16 @@ export const sessionConfigSlice = createSlice({
     resetSessionConfig: () => {
       return initialState
     },
+
+    pureSessionConfig: (state, action: PayloadAction<IAppConfig>) => {
+      const { sites, filters } = action.payload
+      state.sites = state.sites.filter((ss) =>
+        sites.some((s) => s.domain === ss.domain)
+      )
+      state.filters = state.filters.filter((sf) =>
+        filters.some((f) => f.name === sf.name)
+      )
+    },
   },
 })
 
@@ -57,6 +68,7 @@ export const {
   updateSessionFilter,
   resetSessionConfig,
   replaceSessionConfig,
+  pureSessionConfig,
 } = sessionConfigSlice.actions
 export const selectSessionConfig = (state: RootState) => state.sessionConfig
 export default sessionConfigSlice.reducer

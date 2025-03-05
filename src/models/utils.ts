@@ -148,3 +148,22 @@ export function computeUserInput(value: string): {
 export function isIphone() {
   return navigator.userAgent.match(/IPhone/i)
 }
+
+export const domainRegex =
+  /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,62}[a-zA-Z0-9]?\.)+([a-zA-Z]{2,}$)/
+
+export function transformURL(urlString: string): string | null {
+  let value = urlString.trim().toLowerCase()
+  if (!value.length) return null
+
+  if (!value.startsWith('https://')) {
+    value = 'https://' + value
+  }
+  try {
+    const hostname = new URL(value).hostname
+    if (!domainRegex.test(hostname)) return null
+    return hostname
+  } catch {
+    return null
+  }
+}

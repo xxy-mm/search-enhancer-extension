@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 
-import css from './SortableItem.module.css'
+import './SortableItem.css'
 
 export interface SortableItemProps extends PropsWithChildren {
   id: string
@@ -25,11 +25,12 @@ export function SortableItem({ id, children }: SortableItemProps) {
   }
   return (
     <div
-      className={css.sortableItem}
+      className='sortable-item'
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}>
+      {...listeners}
+    >
       {children}
     </div>
   )

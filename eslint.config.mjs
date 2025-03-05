@@ -37,4 +37,9 @@ export default [
       'react-hooks/exhaustive-deps': 'error',
     },
   },
+  {
+    plugins: {
+      storybook: {},
+    },
+  },
 ]

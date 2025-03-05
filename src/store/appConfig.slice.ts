@@ -17,7 +17,7 @@ export const appConfigSlice = createSlice({
   name: 'appConfig',
   initialState,
   reducers: {
-    setAppConfig: (state, action: PayloadAction<IAppConfig>) => {
+    setAppConfig: (_, action: PayloadAction<IAppConfig>) => {
       return action.payload
     },
   },
