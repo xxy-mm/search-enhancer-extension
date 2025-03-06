@@ -18,12 +18,17 @@ import deleteIcon from '@/assets/images/delete.svg'
 
 import { SiteItem } from '@/components/SiteItem'
 import { Select } from '@/components/Select'
+import { useEffect, useRef, useState } from 'react'
+import clsx from 'clsx'
 
 const App = () => {
   const dispatch = useAppDispatch()
   const { searchInput } = useSearchInput()
+  const [hasMultipleRows, setHasMultipleRows] = useState(false)
+
   useInputSync()
   useInit()
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const { filters, sites } = useSelector(selectComputedConfig)
   const { filters: sessionFilters, sites: sessionSites } =
@@ -52,8 +57,32 @@ const App = () => {
     focusInput()
   }
 
+  useEffect(() => {
+    const containerElement = containerRef.current
+    if (!containerElement) return
+    const checkOverflow = () => {
+      const hasOverflow = containerElement.scrollHeight > 26
+      setHasMultipleRows(hasOverflow)
+    }
+
+    checkOverflow()
+    const resizeObserver = new ResizeObserver(checkOverflow)
+
+    resizeObserver.observe(containerRef.current)
+
+    return () => {
+      resizeObserver.unobserve(containerElement)
+    }
+  }, [filters, sites])
+
+  const containerClasses = clsx(
+    hasMultipleRows && 'hover:bg-base-100/20 backdrop-blur-sm '
+  )
   return (
-    <div className='rounded overflow-hidden flex flex-wrap max-h-6 gap-1 pt-1 pb-1 hover:max-h-max bg-base-100'>
+    <div
+      ref={containerRef}
+      className={`rounded overflow-hidden flex flex-wrap max-h-6 gap-1 pt-1 pb-1 hover:max-h-max ${containerClasses} `}
+    >
       <button
         className='xxy-btn xxy-btn-xs bg-error xxy-text-primary-content p-1'
         onClick={clear}
