@@ -6,5 +6,8 @@ Looking to find all related products on Shopify? Searching for topics on x.com o
 
 Plus, easily filter by file types like PDF, Word, PPT, Excel, and more.
 
+[Chrome WebStore](https://chromewebstore.google.com/detail/ljbaeblipgehfgkpolahidbekhbojdod?utm_source=item-share-cb)
+
 [website](https://www.xxy-mm.com/search-enhancer)
+
 [youtube](https://youtu.be/gNwXm8cDGEk)
