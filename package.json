@@ -1,6 +1,6 @@
 {
   "name": "search-enhancer",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "A browser extension which can apply filters to your google search",
   "private": true,
   "scripts": {
