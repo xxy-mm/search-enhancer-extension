@@ -3,8 +3,33 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const AnalyzePlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const isProd = process.env.NODE_ENV === 'prod' ? true : false
+
+const plugins = [
+  new MiniCssExtractPlugin({}),
+  new HtmlWebpackPlugin({
+    title: 'Search Enhancer',
+    filename: 'popup.html',
+    chunks: ['popup'],
+  }),
+
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(
+      isProd ? 'production' : 'development'
+    ),
+  }),
+  new CopyPlugin({
+    patterns: [{ from: 'images', to: 'images' }],
+  }),
+]
+
+if (process.env.analyze === 'true') {
+  plugins.push(new AnalyzePlugin())
+}
+
 module.exports = {
   mode: isProd ? 'production' : 'development',
 
@@ -17,23 +42,7 @@ module.exports = {
   devServer: {
     static: './dist',
   },
-  plugins: [
-    new MiniCssExtractPlugin(),
-    new HtmlWebpackPlugin({
-      title: 'Search Enhancer',
-      filename: 'popup.html',
-      chunks: ['popup'],
-    }),
-
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(
-        isProd ? 'production' : 'development'
-      ),
-    }),
-    new CopyPlugin({
-      patterns: [{ from: 'images', to: 'images' }],
-    }),
-  ],
+  plugins,
   output: {
     clean: true,
     filename: '[name].js',
@@ -72,5 +81,9 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
+  },
+
+  optimization: {
+    minimizer: ['...', new CssMinimizerPlugin()],
   },
 }

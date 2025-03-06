@@ -3,7 +3,7 @@ node_modules
 /chrome
 /images
 .idea
-.DS_Store
+**/.DS_Store
 
 *.crx
 *.pem
