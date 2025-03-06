@@ -76,3 +76,22 @@
   --depth: 1;
   --noise: 0;
 }
+
+:root {
+  color-scheme: light dark;
+}
+
+@media screen and (max-width: 480px) {
+  header {
+    #search-enhancer-root {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  header.noscroll {
+    #search-enhancer-root {
+      height: auto;
+    }
+  }
+}

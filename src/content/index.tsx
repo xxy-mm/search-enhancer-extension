@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { persistor, store } from '@/store/store'
 import '@/assets/styles/common.css'
 import App from './App'
+import { IPhoneProvider } from '@/hooks/IPhoneProvider'
 
 function injectCustomElement() {
   // Find the search dialog container
@@ -17,7 +18,7 @@ function injectCustomElement() {
   // MARK: browser incompatible
   const link = document.createElement('link')
   link.rel = 'stylesheet'
-  link.href = browser.runtime.getURL('content.css')
+  link.href = browser.runtime.getURL('dist/content.css')
   shadowRoot.appendChild(link)
   shadowRoot.appendChild(customElement)
 
@@ -39,7 +40,9 @@ function injectCustomElement() {
           loading={null}
           persistor={persistor}
         >
-          <App />
+          <IPhoneProvider rootElement={customElement}>
+            <App />
+          </IPhoneProvider>
         </PersistGate>
       </Provider>
     </StrictMode>

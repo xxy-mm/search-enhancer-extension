@@ -18,14 +18,15 @@ import deleteIcon from '@/assets/images/delete.svg'
 
 import { SiteItem } from '@/components/SiteItem'
 import { Select } from '@/components/Select'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
+import { IPhoneContext } from '@/hooks/IPhoneProvider'
 
 const App = () => {
   const dispatch = useAppDispatch()
   const { searchInput } = useSearchInput()
   const [hasMultipleRows, setHasMultipleRows] = useState(false)
-
+  const { isIPhone: isIphone, showFilters } = useContext(IPhoneContext)
   useInputSync()
   useInit()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -76,12 +77,16 @@ const App = () => {
   }, [filters, sites])
 
   const containerClasses = clsx(
-    hasMultipleRows && 'hover:bg-base-100/20 backdrop-blur-sm '
+    !isIphone &&
+      hasMultipleRows &&
+      'hover:bg-base-100/20 hover:max-h-50 overflow-scroll',
+    isIphone && showFilters && 'bg-base-100/20 max-h-50 overflow-scroll',
+    isIphone && !showFilters && 'hidden'
   )
   return (
     <div
       ref={containerRef}
-      className={`rounded overflow-hidden flex flex-wrap max-h-6 gap-1 pt-1 pb-1 hover:max-h-max ${containerClasses} `}
+      className={`rounded overflow-hidden backdrop-blur-sm flex flex-wrap  max-h-6 gap-1 pt-1 pb-1  ${containerClasses} `}
     >
       <button
         className='xxy-btn xxy-btn-xs bg-error xxy-text-primary-content p-1'

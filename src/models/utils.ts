@@ -145,10 +145,6 @@ export function computeUserInput(value: string): {
   return { words, match: matchString }
 }
 
-export function isIphone() {
-  return navigator.userAgent.match(/IPhone/i)
-}
-
 export const domainRegex =
   /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,62}[a-zA-Z0-9]?\.)+([a-zA-Z]{2,}$)/
 

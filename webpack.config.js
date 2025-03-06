@@ -22,11 +22,7 @@ const plugins = [
     ),
   }),
   new CopyPlugin({
-    patterns: [
-      { from: 'images', to: 'images' },
-      { from: '_locales', to: '_locales' },
-      'manifest.json',
-    ],
+    patterns: [{ from: 'images', to: 'images' }],
   }),
 ]
 
@@ -51,7 +47,7 @@ module.exports = {
     clean: true,
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
+    publicPath: '/dist/',
     assetModuleFilename: 'assets/[name][ext]',
   },
   module: {

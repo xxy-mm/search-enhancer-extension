@@ -10,7 +10,7 @@ const App = () => {
   const { addSite, removeSite, sortSites } = useMessage()
 
   return (
-    <div className='p-4 bg-base-100'>
+    <div className='p-4 bg-base-100 w-96'>
       <Popup
         sortSites={sortSites}
         addSite={addSite}

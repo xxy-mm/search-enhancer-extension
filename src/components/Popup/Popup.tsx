@@ -22,12 +22,14 @@ type PopupProps = {
   addSite: (site: ISite) => void
   removeSite: (site: ISite) => void
   sortSites: (sites: ISite[]) => void
+  showHeader?: boolean
 }
 export const Popup = ({
   sites,
   addSite,
   removeSite,
   sortSites,
+  showHeader = true,
 }: PopupProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -43,9 +45,14 @@ export const Popup = ({
       })),
     [sites]
   )
+
   return (
-    <div className='flex flex-col gap-2 text- min-w-96 max-w-[100%]'>
-      <h1 className='text-center text-lg text-base-content'>Search Enhancer</h1>
+    <div className='flex flex-col gap-2'>
+      {showHeader ? (
+        <h1 className='text-center text-lg text-base-content'>
+          Search Enhancer
+        </h1>
+      ) : null}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

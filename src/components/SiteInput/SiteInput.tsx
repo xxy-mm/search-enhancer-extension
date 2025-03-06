@@ -33,6 +33,10 @@ export function SiteInput(props: SiteInputProps) {
           onKeyDown={onKeydown}
           onChange={props.onChange}
           placeholder={props.placeholder}
+          autoCapitalize='false'
+          autoComplete='false'
+          autoCorrect='false'
+          spellCheck={false}
           type='text'
         />
         <svg

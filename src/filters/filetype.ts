@@ -11,9 +11,6 @@ export const FILETYPE_FILTER_OPTIONS: IFilterOptions = [
   { label: 'Word', value: 'doc,docx' },
   { label: 'Excel', value: 'xls,xlsx' },
   { label: 'PPT', value: 'ppt,pptx' },
-  // { label: 'Adobe Postscript(.ps)', value: 'ps' },
-  // { label: 'Rich Text Format(.rtf)', value: 'rtf' },
-  // { label: 'Google Earth KML(.kml)', value: 'kml' },
 ]
 
 export const fileTypeFilter: IFilter = {
