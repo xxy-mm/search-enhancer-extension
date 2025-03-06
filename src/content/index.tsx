@@ -14,9 +14,10 @@ function injectCustomElement() {
   const customElement = document.createElement('div')
   customElement.id = 'search-enhancer-root'
   // create a style tag and copy css content into it
+  // MARK: browser incompatible
   const link = document.createElement('link')
   link.rel = 'stylesheet'
-  link.href = chrome.runtime.getURL('dist/content.css')
+  link.href = browser.runtime.getURL('content.css')
   shadowRoot.appendChild(link)
   shadowRoot.appendChild(customElement)
 

@@ -9,32 +9,28 @@ import { fileTypeFilter } from '@/filters/filetype'
 
 const manager = new StorageManagerImpl()
 
-chrome.runtime.onMessage.addListener(
-  (message: IMessage, sender, sendResponse): boolean | undefined => {
-    let promise = Promise.resolve()
-    switch (message.type) {
-      case IDataAction.QUERY:
-        break
-      case IDataAction.CREATE_SITE:
-        promise = manager.addSite(message.data)
-        break
-      case IDataAction.DELETE_SITE:
-        promise = manager.removeSite(message.data)
-        break
-      case IDataAction.UPDATE_ALL:
-        promise = manager.setSearchConfig(message.data)
-        break
-      case IDataAction.SORT_SITES:
-        promise = manager.setSites(message.data)
-        break
-      default:
-        throw `Unknown message: ${message}`
-    }
-
-    promise.then(queryAndNotify).then(sendResponse)
-    return true
+browser.runtime.onMessage.addListener(async (message: IMessage) => {
+  switch (message.type) {
+    case IDataAction.QUERY:
+      break
+    case IDataAction.CREATE_SITE:
+      await manager.addSite(message.data)
+      break
+    case IDataAction.DELETE_SITE:
+      await manager.removeSite(message.data)
+      break
+    case IDataAction.UPDATE_ALL:
+      await manager.setSearchConfig(message.data)
+      break
+    case IDataAction.SORT_SITES:
+      await manager.setSites(message.data)
+      break
+    default:
+      throw `Unknown message: ${message}`
   }
-)
+
+  await queryAndNotify()
+})
 
 async function queryAndNotify(): Promise<void> {
   let searchConfig = await manager.getSearchConfig()
@@ -48,17 +44,17 @@ async function queryAndNotify(): Promise<void> {
 
 async function notifyPopup(data: ISearchConfig): Promise<void> {
   try {
-    await chrome.runtime.sendMessage(notifyUpdate(data))
+    await browser.runtime.sendMessage(notifyUpdate(data))
   } catch (e: unknown) {
     console.log('Failed to send message to popup', e)
   }
 }
 async function notifyTabs(data: ISearchConfig): Promise<void> {
-  const tabs = await chrome.tabs.query({})
+  const tabs = await browser.tabs.query({})
   tabs.forEach(async (tab) => {
     if (tab.id) {
       try {
-        await chrome.tabs.sendMessage(tab.id, notifyUpdate(data))
+        await browser.tabs.sendMessage(tab.id, notifyUpdate(data))
       } catch (e: unknown) {
         console.log('Failed to send message to tab', tab.id, e)
       }

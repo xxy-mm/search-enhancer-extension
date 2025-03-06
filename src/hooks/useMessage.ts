@@ -7,7 +7,7 @@ import {
 
 export function useMessage() {
   const addSite = (item: ISite) => {
-    chrome.runtime.sendMessage(addSiteMessage(item)).then(
+    browser.runtime.sendMessage(addSiteMessage(item)).then(
       (res) => {
         console.log(res)
       },
@@ -18,7 +18,7 @@ export function useMessage() {
   }
 
   const removeSite = (item: ISite) => {
-    chrome.runtime.sendMessage(removeSiteMessage(item)).then(
+    browser.runtime.sendMessage(removeSiteMessage(item)).then(
       (res) => {
         console.log(res)
       },
@@ -29,7 +29,7 @@ export function useMessage() {
   }
 
   const sortSites = (sites: ISite[]) => {
-    chrome.runtime.sendMessage(sortSitesMessage(sites)).then(
+    browser.runtime.sendMessage(sortSitesMessage(sites)).then(
       (res) => {
         console.log(res)
       },

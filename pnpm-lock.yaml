@@ -87,6 +87,9 @@ importers:
       '@storybook/test':
         specifier: ^8.6.3
         version: 8.6.3(storybook@8.6.3)
+      '@types/firefox-webext-browser':
+        specifier: ^120.0.4
+        version: 120.0.4
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
@@ -102,9 +105,6 @@ importers:
       '@types/webpack':
         specifier: ^5.28.5
         version: 5.28.5(@swc/core@1.11.5)(esbuild@0.25.0)(webpack-cli@6.0.1)
-      chrome-types:
-        specifier: ^0.1.344
-        version: 0.1.344
       copy-webpack-plugin:
         specifier: ^12.0.2
         version: 12.0.2(webpack@5.97.1)
@@ -1441,6 +1441,9 @@ packages:
   '@types/express@4.17.21':
     resolution: {integrity: sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==}
 
+  '@types/firefox-webext-browser@120.0.4':
+    resolution: {integrity: sha512-lBrpf08xhiZBigrtdQfUaqX1UauwZ+skbFiL8u2Tdra/rklkKadYmIzTwkNZSWtuZ7OKpFqbE2HHfDoFqvZf6w==}
+
   '@types/graceful-fs@4.1.9':
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
 
@@ -2001,9 +2004,6 @@ packages:
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
-
-  chrome-types@0.1.344:
-    resolution: {integrity: sha512-5FAteb83ssZ+w+oK+jgbYcGCNdNnC2bRhBuPnHKfOFNnfhejNe8sukUaqk734z/MyPX0HDpVvvDIgSZa+BTAmw==}
 
   ci-info@3.9.0:
     resolution: {integrity: sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==}
@@ -6784,6 +6784,8 @@ snapshots:
       '@types/qs': 6.9.17
       '@types/serve-static': 1.15.7
 
+  '@types/firefox-webext-browser@120.0.4': {}
+
   '@types/graceful-fs@4.1.9':
     dependencies:
       '@types/node': 22.10.6
@@ -7480,8 +7482,6 @@ snapshots:
   chromatic@11.27.0: {}
 
   chrome-trace-event@1.0.4: {}
-
-  chrome-types@0.1.344: {}
 
   ci-info@3.9.0: {}
 

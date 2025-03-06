@@ -89,7 +89,7 @@ const App = () => {
         disabled={!shouldClearBtnActive}
       >
         <img
-          src={chrome.runtime.getURL(deleteIcon)}
+          src={browser.runtime.getURL(deleteIcon)}
           className='w-3'
         />
       </button>

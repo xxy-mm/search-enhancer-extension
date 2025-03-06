@@ -11,11 +11,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "profile": "ANALYZE=true webpack --profile --json > stats.json",
-    "analyze": "webpack-bundle-analyzer stats.json",
-    "chrome": "./copy.sh"
+    "analyze": "webpack-bundle-analyzer stats.json"
   },
   "keywords": [
-    "chrome extension, browser extension, google search, search, google, search enhance"
+    "web extension, browser extension, google search, search, google, search enhance"
   ],
   "author": "xxy-mm",
   "license": "ISC",
@@ -31,12 +30,12 @@
     "@storybook/react": "^8.6.3",
     "@storybook/react-webpack5": "^8.6.3",
     "@storybook/test": "^8.6.3",
+    "@types/firefox-webext-browser": "^120.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.6",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/webpack": "^5.28.5",
-    "chrome-types": "^0.1.344",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",

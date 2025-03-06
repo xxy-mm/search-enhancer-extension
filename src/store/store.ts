@@ -25,7 +25,6 @@ import appConfigReducer, {
   type IAppConfig,
 } from './appConfig.slice'
 
-// MARK: redux-persist
 export const sessionStorageKey = '__SEARCH_ENHANCER__'
 const persistConfig = {
   key: sessionStorageKey,
